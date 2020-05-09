@@ -1,3 +1,1 @@
-rm -r docs/demo
-mkdir docs/demo
-cp -r app nort docs/demo
+rsync -av --delete app nort docs/demo
