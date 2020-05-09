@@ -1,0 +1,109 @@
+html{
+    min-height: 100%;
+    height: 100%;
+    color: #303030;
+}
+
+body {
+    margin: 0px;
+    min-height: 100%;
+    font: 12pt sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+
+body>header {
+    position: sticky;
+    top: 0;
+    font-size: 16px;
+    background-color: #f0f0f0;
+    color: #606060;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    flex-grow: 0;
+    z-index: 10;
+}
+
+body>header a {
+    color: #606060;
+    text-decoration: none;
+}
+
+body>header a:hover {
+    color: #40A040;
+}
+
+body>header a:visited {
+    color: #606060;
+}
+
+body>header a:active {
+    color: #606060;
+}
+
+body>footer{
+    background-color: #303030;
+    color: #d0d0d0;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+div.container {
+    min-width: 850px;
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+div.hflex{
+    display: flex;
+    flex-direction: row;
+}
+
+div.hflex>div{
+    align-self: top;
+}
+
+div.hflex-centered{
+    display: flex;
+    flex-direction: row;
+}
+div.hflex-centered>div{
+    align-self: center;
+}
+
+
+body>section{
+    flex-grow: 1;
+}
+
+.nort-green{
+    color: #208020;
+}
+
+a {
+    text-decoration: none;
+    color: #208020;
+}
+
+a:visited {
+    color: #106010;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+a.green-button {
+    display: inline-block;
+    color: white;
+    background-color: #208020;
+    padding: 20px;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+a.green-button:hover{
+    text-decoration: none;
+    background-color: #106010
+} 
