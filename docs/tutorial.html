@@ -3,16 +3,24 @@
 <head>
 <title>NORT Tutorial</title>  
 <script src="js/csi.js"></script>  
+<script src="js/autotoc.js"></script>  
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body onload="setTimeout( function() {alert('loaded')}, 100);">
     <script>include("header.html")</script>  
     <section>
         <div class="container">
+        <div id="toc"></div> 
+        </div>
+        <div class="container" id="contents">
         <h1>NORT Tutorial</h1>
         <p>This page is under construction</p>
+        <h2>Prerequisites</h2>
+        <h2>Getting ready</h2>
+        <h2>Your first application</h2>
         </div>
     </section>
     <script>include("footer.html")</script>  
+    <script>document.getElementById("toc") = generateToc(document.getElementById("contents")) </script>  
 </body>
 </html>

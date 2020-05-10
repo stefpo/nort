@@ -10,9 +10,97 @@
     <section>
         <div class="container">
         <h1>NORT API</h1>
-        <p>This page is under construction</p>
+        <div id="toc" style="width: 20%; float: left;"></div> 
+        <div style="width: 75%; float: right;" id="contents">
+            <h2>DOM Manupulation</h2>
+            <h3>Element manupulation</h3>
+                <h4>nort.createElement( tagname, attributes, [ innerELements .... ])</h4>
+                <ul>
+                    <li>returns: the DOM element created.</li>
+                    <li>tagname: &lt;string&gt; HTML tag of the element to create</li>
+                    <li>attributes: &lt;object&gt; attributes of the element</li>
+                    <li>innerELements: child elements of the new created element. This can be
+                        <ul>
+                            <li>Individual parameters each specifying a DOM element or a NORT component with a render() method.</li>
+                            <li>And array of children. This is a alternate way of passing children list.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>createElement() is the core of the NORT framework. It is an improved version of document.createElement that can 
+                   create a DOM element and its child nodes in one function call. Most developers should not need tu use createElement
+                   directly and use the HTML5 element generators. 
+                </p>
+                <h4>nort.addElement(parent, innerELements)</h4>
+                <ul>
+                    <li>returns: nothing</li>
+                    <li>parent: the parent element.</li>
+                    <li>innerELements: the new child element or a NORT component with a render() method to append, 
+                        or an array containing a combination of the two types of objects</li>
+                </ul>
+                <p>addElement() is an improved version of element.appendChild that can handle both DOM element and NORT components in a single way.
+                    Its primary use is to be a helper function for createElement()
+                </p>
+                <h4>nort.emptyElement(elt)</h4>
+                <ul>
+                    <li>returns: nothing</li>
+                    <li>elt: the parent element.</li>
+                </ul>
+                <p>emptyElement(elt) complely removes the inner content of an element without removing the element itself.</p>
+
+                <h4>nort.setInnerContent(parent, innerELements)</h4>
+                <li>returns: nothing</li>
+                <li>parent: the parent element.</li>
+                <li>innerELements: the new child element or a NORT component with a render() method to append, 
+                    or an array containing a combination of the two types of objects</li>
+                </ul>
+                <p>setInnerContent() replaces the inner contents of an element with a new one. This functionality
+                    is especially useful for refreshing contents.</p>                
+                <h4>nort.destroyElement(elt)</h4>
+                <ul>
+                    <li>returns: nothing</li>
+                    <li>elt: the element to remove.</li>
+                </ul>
+                <p>destroyElement(elt) complely removes an element from the DOM.</p>
+            <h3>CSS manupulation</h3>
+                <h4>nort.getClasses</h4>
+                <h4>nort.hasCssClass</h4>
+                <h4>nort.addCssClass</h4>
+                <h4>nort.removeCssClass</h4>
+                <h4>nort.getStyle</h4>
+            <h3>Popup placement utility functions</h3>
+                <h4>nort.getParentPane</h4>
+                <h4>nort.showFieldPopup</h4>
+                <h4>nort.hideFieldPopup</h4>
+            <h2>HTML5 elements</h2>
+            <p>NORT includes a full set of generator function for all HTML5 elements. The functions are friendly wrappers 
+                of createElement() that make your Javascript UI as readeable as HTML. They eleminate the need for 
+                a meta-language, transpiliing, and a complex development toolchain.
+            </p>
+            <h4>${tagname}(attributes, [ innerELements .... ])</h4>
+            <p>{tagname} is the name of the DOM element to create. For example, to create a new DIV element containing a 
+                header and some paragraph, the code looks like this:
+                <pre>
+    my element = $div( {style: "background-color: silver" },
+                    $hl({},"This is the title"),
+                    $p({}, "This is the paragraph content")
+                        )
+                </pre>
+                <p>Which is the NORT equivalent for of the following HTML:</p>
+                <pre>
+    &lt;div style="background-color: silver"&gt;
+        &lt;h1&gt;This is the title&lt;/h1&gt;
+        &lt;p&gt;This is the paragraph content&lt;/p&gt;
+    &lt;/div&gt;
+                </pre>
+            </p>
+            <h2>Custom elements</h2>
+            <h2>Components</h2>
+            <h2>Networking</h2>
+            <h2>Internationalization</h2>
+        </div>
         </div>
     </section>
     <script>include("footer.html")</script>  
+    <script>document.getElementById("toc").innerHTML = generateToc(document.getElementById("contents"),"h2") </script>  
 </body>
 </html>

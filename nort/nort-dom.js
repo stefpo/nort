@@ -129,7 +129,7 @@ nort.getStyle = function (el,styleProp)
     return y;
 }
 
-nort.mergeAttributes= function (dest, attr) {
+nort.mergeAttributes = function (dest, attr) {
         for (let k of Object.keys(attr)) {
             dest[0][k] = attr[k]
         }
@@ -157,40 +157,6 @@ nort.getParentPane = function(e) {
     if ( ! e.parentNode ) return e
     else if ( nort.hasCssClass (e, "content-pane") || nort.hasCssClass (e, "scroll-pane") ) return e
     else return nort.getParentPane(e.parentNode)
-}
-
-nort.showFieldPopupGood = function(e, popup, location) {
-    let cp = nort.getParentPane(e)
-
-    popup.style.position = "fixed"
-    popup.style.visibility = "hidden"
-    e.parentNode.insertBefore(popup, e);   
-    
-    eRect = e.getBoundingClientRect()
-    cpRect = cp.getBoundingClientRect()
-
-    tx = e.offsetWidth - popup.offsetWidth+"px"
-    ty = e.offsetHeight + "px"
-
-    if (location.substr(0,1) == "n" ) {
-        if ( eRect.top - popup.offsetHeight > cpRect.top )  ty = -popup.offsetHeight + "px"
-        else ty = e.offsetHeight + "px"
-    } else {
-        if ( eRect.bottom + popup.offsetHeight > cpRect.height) ty = -popup.offsetHeight + "px"
-        else ty = e.offsetHeight + "px"
-    }
-
-    if (location.substr(1,1) == "e" ) {
-        tx = e.offsetWidth - popup.offsetWidth+"px"
-    } else {
-        tx = "0px"
-    }        
-
-    popup.style.top = eRect.top + "px"
-    popup.style.left = eRect.left + "px" 
-
-    popup.style.transform = "translate("+ tx +","+ ty +")"           
-    popup.style.visibility = "visible"
 }
 
 nort.activePopup = undefined

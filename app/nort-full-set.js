@@ -25,7 +25,7 @@ var f3 = new GraphDemo()
 nort.main = function() {
     nort.render(
         nort.elements.scrollPane({style: 'padding: 20px; display: flex; flex-direction:column; max-width: 1024px; margin:auto;'}, 
-            $h2({},"Nort full set demo"),
+            $div ({style: "display: flex "}, $img({src:"css/nort-logo.png",style:"align-self: center;"} ), $h2({style:"align-self: center;"}," Nort full set demo") ),
             nort.elements.tabber({}, [
                     { label: "A form",  page: f1 },
                     { label: "Another form",  page: f2 },
