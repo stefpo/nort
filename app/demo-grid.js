@@ -14,11 +14,18 @@ class GridDemo extends nort.components.containers.Form {
             else return s!="" ? "["+s+"]":"" 
         }
 
+        this.tableDef= { status: { visible: true, 
+                                   transformFunc: statusTransform
+                                },
+                         LocShortName: { visible: false},
+                         _defaultHeaderTransform: nort.makeTranslatable
+                       }
+
         this.fields.btn1.on("click", function() {
             nort.http.jsonRequest("GET","wsdata.json",{},function(err, result){
                 if (err) { nort.alert("Error "+ err) }
                 else {
-                    me.grid.setData(result.data, {status: statusTransform })
+                    me.grid.setData(result.data, me.tableDef )
                 }
             })
         })
@@ -27,7 +34,7 @@ class GridDemo extends nort.components.containers.Form {
             nort.http.jsonRequest("GET","wsdatalong.json",{},function(err, result){
                 if (err) { nort.alert("Error "+ err) }
                 else {
-                    me.grid.setData(result.data, {status: statusTransform })
+                    me.grid.setData(result.data, me.tableDef)
                     }
             })
         })

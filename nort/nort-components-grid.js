@@ -4,8 +4,6 @@
  * MIT Licensed
 */
 
-console.log("Loaded grid")
-
 nort.components.Grid =  class extends nort.Component{
     constructor(properties) {
         super(properties)
@@ -14,24 +12,28 @@ nort.components.Grid =  class extends nort.Component{
     }
 
     clear() {
+        function identity(s) {return s}
+
         this.filters = []
         this.groupValues = []
         this.rowVisible = []
-        this.transformFuncs = []
+        this.columnDefs = []
         this.data = new  nort.data.DataTable()
         this.initialWidthSaved = false
+        this.defaultTransform = identity
+        this.defaultHeaderTransform = identity
     }
 
-    setData(o, transforms) {
+    setData(o, columns) {
         this.clear()
+        if (columns == undefined) columns={}
+        if ( typeof(columns._defaultTransform) =="function" ) this.defaultTransform = columns._defaultTransform 
+        if ( typeof(columns._defaultHeaderTransform) =="function" ) this.defaultHeaderTransform = columns._defaultHeaderTransform 
         if (Array.isArray(o)) {
             for (let i in o) {
                 let r = o[i]
                 for (let c in r) {
-                    if (this.data.addColumn(c)) {
-                        this.groupValues.push([""])
-                        this.transformFuncs.push(  function( s ) { return s } )
-                    }
+                    this.data.addColumn(c)
                 }
                 let nr = this.data.newRow() 
                 for (let c in r) {
@@ -39,8 +41,6 @@ nort.components.Grid =  class extends nort.Component{
                     let v = r[c]
                     if (v == null || v == undefined) v ="" 
                     else v = v.toString()
-
-                    if ( this.groupValues[cix].length<20 && ! this.groupValues[cix].includes(v)) this.groupValues[cix].push(v)
                     nr[cix] = v
                 }
                 this.data.addRow(nr)
@@ -50,17 +50,44 @@ nort.components.Grid =  class extends nort.Component{
             this.data = o
         }
 
-        if ( typeof(transforms) == "object") {
-            for (let k in transforms) {
-                if (typeof(transforms[k] == "function"))  this.setColumnTransform(k, transforms[k])
+        /* Initialize group values and filters*/
+        this.groupValues = new Array(this.data.columns.length)
+        this.columnDefs = new Array(this.data.columns.length)
+        this.data.ColumnTypes = new Array(this.data.columns.length)
+
+        for (let c in this.data.columns ) {
+            this.columnDefs[c]= { visible: true, 
+                transformFunc: this.defaultTransform,
+                headerTransformFunc: this.defaultHeaderTransform,
+               }
+            this.groupValues[c] = [""]
+            this.data.ColumnTypes[c] = null
+        } 
+
+        for(let r in this.data.rows) {
+            let row = this.data.rows[r]
+            for (let c in this.data.columns ) {
+                let v = row[c]
+                if (v == null || v == undefined) v ="" 
+                else v = v.toString()
+                if ( this.groupValues[c].length<20 && ! this.groupValues[c].includes(v)) this.groupValues[c].push(v)
+            }
+        }
+
+        if ( typeof(columns) == "object") {
+            for (let k in columns) {
+                if (typeof(columns[k] == "object"))  this.setColumnDef(k, columns[k])
             }
         }        
         this.refresh()
     }
 
-    setColumnTransform(col, transformFunc) {
+    setColumnDef(col, columnDef) {
         let ci = this.data.getColumnIndex(col)
-        this.transformFuncs[ci] = transformFunc
+        if (columnDef.visible == undefined ) columnDef.visible = true
+        if (columnDef.transformFunc == undefined) columnDef.transformFunc = this.defaultTransform
+        if (columnDef.headerTransformFunc == undefined) columnDef.headerTransformFunc = this.defaultHeaderTransform
+        this.columnDefs[ci] = columnDef
     }
 
     saveInitialColumnWidth() {
@@ -78,55 +105,29 @@ nort.components.Grid =  class extends nort.Component{
         }
     }
 
-    applyFiltersGood(me) {
-        me.saveInitialColumnWidth()
-
-        for( let r=0; r < me.data.rows.length; r++) {
-            this.rowVisible[r] = true
-            //console.log(`filter row ${r}`)
-            for( let c in me.data.columns) {
-                let fltr = me.filters[c]
-                let fv = fltr.getValue()
-                if (fv !="") {
-                    if (fltr.tagName=="SELECT") {
-                        if (fv != me.data.rows[r][c]) {
-                            this.rowVisible[r] = false
-                        } 
-                    } else {
-                        if (! (""+me.data.rows[r][c]).toUpperCase().includes(fv.toUpperCase())) {
-                            this.rowVisible[r] = false
-                        } 
-                    }
-                }
-            }
-        }
-        let newBody = this.renderBody()
-        this.table.replaceChild(newBody, this.tbody )
-        this.tbody = newBody        
-    }    
-
     applyFilters(me) {
         me.saveInitialColumnWidth()
 
         for( let r=0; r < me.data.rows.length; r++) {
             this.rowVisible[r] = true
         }            
-            //console.log(`filter row ${r}`)
         for( let c in me.data.columns) {
-            let fltr = me.filters[c]
-            let fv = fltr.getValue()
-            if (fv !="") {
-                if (fltr.tagName=="SELECT") {
-                    for( let r=0; r < me.data.rows.length; r++) { 
-                        if (fv != me.data.rows[r][c]) {
-                            this.rowVisible[r] = false
-                        } 
-                    }
-                } else {
-                    for( let r=0; r < me.data.rows.length; r++) { 
-                            if (! (""+me.data.rows[r][c]).toUpperCase().includes(fv.toUpperCase())) {
-                            this.rowVisible[r] = false
-                        } 
+            if (this.columnDefs[c].visible) {
+                let fltr = me.filters[c]
+                let fv = fltr.getValue()
+                if (fv !="") {
+                    if (fltr.tagName=="SELECT") {
+                        for( let r=0; r < me.data.rows.length; r++) { 
+                            if (fv != me.data.rows[r][c]) {
+                                this.rowVisible[r] = false
+                            } 
+                        }
+                    } else {
+                        for( let r=0; r < me.data.rows.length; r++) { 
+                                if (! (""+me.data.rows[r][c]).toUpperCase().includes(fv.toUpperCase())) {
+                                this.rowVisible[r] = false
+                            } 
+                        }
                     }
                 }
             }
@@ -148,10 +149,12 @@ nort.components.Grid =  class extends nort.Component{
             let row=[]
             if ( this.rowVisible[r]) {
                 for (let c in this.data.columns ) {
-                    let v = this.data.rows[r][c]
-                    let newTableRow = $td({}, this.transformFuncs[c](v))
-                    newTableRow.onclick = function() { me.onClickCell(r, c) }
-                    row.push(newTableRow)
+                    if (this.columnDefs[c].visible) {
+                        let v = this.data.rows[r][c]
+                        let newTableRow = $td({}, this.columnDefs[c].transformFunc(v))
+                        newTableRow.onclick = function() { me.onClickCell(r, c) }
+                        row.push(newTableRow)
+                    }
                 }
                 displayedRows++
                 rows.push($tr({},row))
@@ -168,6 +171,10 @@ nort.components.Grid =  class extends nort.Component{
         return options
     }
 
+    getColumnHeader(c) {
+        return nort.translate(this.columnDefs[c].headerTransformFunc(this.data.columns[c]))
+    }
+
     render() {
         document.body.style.cursor = "progress"
         let row=[]
@@ -176,16 +183,20 @@ nort.components.Grid =  class extends nort.Component{
         let css = (" " + this.properties.class ) || ""
         for (let c in this.data.columns ) {
             let f
-            if (this.groupValues[c].length<20) {
-                f = nort.elements.select({style:"width: 100%"},this.getFilterOptions(this.groupValues[c], this.transformFuncs[c]))
-                f.onchange = function() { me.applyFilters(me) }
-                f.setValue("")
+            if (this.columnDefs[c].visible) {
+                if (this.groupValues[c].length<20) {
+                    f = nort.elements.select({style:"width: 100%"},this.getFilterOptions(this.groupValues[c], this.columnDefs[c].transformFunc))
+                    f.onchange = function() { me.applyFilters(me) }
+                    f.setValue("")
+                } else {
+                    f = nort.elements.textbox({style:"width: 100%"} )
+                    f.onchange = function() { me.applyFilters(me) }
+                }
+                this.filters.push(f)            
+                row.push($th({}, this.getColumnHeader(c), f))
             } else {
-                f = nort.elements.textbox({style:"width: 100%"} )
-                f.onchange = function() { me.applyFilters(me) }
+                this.filters.push(null) 
             }
-            this.filters.push(f)            
-            row.push($th({}, nort.translate(this.data.columns[c]), f))
         }
         let thead = $thead({}, $tr({},row))
 

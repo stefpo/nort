@@ -12,6 +12,10 @@ nort.getBrowserLanguage = function() {
     return lang
 }
 
+nort.makeTranslatable = function(s) {
+    return "[" + s + "]"
+}
+
 nort.translate = function(s) {
     let re = /\[([a-z]|[0-9]|[_ .])+\]/i
     let match=re.exec(s)

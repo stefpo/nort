@@ -4,6 +4,10 @@
 <title>NORT API</title>  
 <script src="js/csi.js"></script>  
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
     <script>include("header.html")</script>  
@@ -80,19 +84,19 @@
             <h4>${tagname}(attributes, [ innerELements .... ])</h4>
             <p>{tagname} is the name of the DOM element to create. For example, to create a new DIV element containing a 
                 header and some paragraph, the code looks like this:
-                <pre>
+                <pre><code class="javascript">
     my element = $div( {style: "background-color: silver" },
                     $hl({},"This is the title"),
                     $p({}, "This is the paragraph content")
                         )
-                </pre>
+                    </code></pre>
                 <p>Which is the NORT equivalent for of the following HTML:</p>
-                <pre>
+                <pre><code class="html">
     &lt;div style="background-color: silver"&gt;
         &lt;h1&gt;This is the title&lt;/h1&gt;
         &lt;p&gt;This is the paragraph content&lt;/p&gt;
     &lt;/div&gt;
-                </pre>
+            </code></pre>
             </p>
             <h2>Custom elements</h2>
             <h2>Components</h2>
