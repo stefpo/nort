@@ -7,7 +7,8 @@
 class nortComponent {
     constructor(properties) {
         this.element = null
-        this.properties = properties || {}
+        this.properties = properties != undefined ? properties : {}
+        this.display = ""
     }
 
     destroy(rootElt) {
@@ -32,6 +33,19 @@ class nortComponent {
             parent.replaceChild(this.element = this.render(), v1) 
         }
     }
+
+    setRendered(b) {
+        if ( this.element.style.display == "none" ) this.display = "inline-block"
+        if (b) this.element.style.display = this.display
+        else this.element.style.display = "none"
+        return this      
+    }
+
+    setVisible(b) { 
+        if (b) this.style.visibility = "hidden"
+        else this.style.visibility = "visible"        
+        return e
+    }    
     
     render() {
         return this.element = $p({}, "Nort Component base class must be extended ")
@@ -77,10 +91,12 @@ nort.main = function() {
 document.addEventListener("DOMContentLoaded",function() { nort.main() })
 
 
+loadJS("nort-object.js")
 loadJS("nort-dom.js")
 loadJS("nort-html-tags.js")
 loadJS("nort-elements.js")
 loadJS("nort-elements-windows.js")
+loadJS("nort-elements-menu.js")
 loadJS("nort-components-grid.js")
 loadJS("nort-containers.js")
 loadJS("nort-i18n.js")
@@ -90,4 +106,5 @@ loadJS("nort-data.js")
 
 loadStyleSheet("nort-default.css") 
 loadStyleSheet("nort-windows.css") 
+loadStyleSheet("nort-menu.css") 
 

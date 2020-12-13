@@ -175,8 +175,9 @@ class DataRow {
 
     toObject() {
         let ret = {};
-        for (let i=0 ; i < this.datatable.columns.length; i++) {
-            ret[this.datatable.columns[i]] = this.items[i];
+        //for (let i=0 ; i < this.datatable.columns.length; i++) {
+        for (let i in this.datatable.columns) {
+            ret[this.datatable.columns[i]] = this[i];
         }
         return ret;
     }

@@ -44,6 +44,7 @@ nort.createElement = function (tn, fixedAttr, rest) {
 
 nort.addElement = function (elt, e) {
     let t = typeof(e)
+    if (e == null ) console.log(elt.tagName)
     if (t == "object" && typeof(e.render) == "function") {
         let he = e.render()
         elt.appendChild(e.element = he)
@@ -57,6 +58,14 @@ nort.addElement = function (elt, e) {
     } else if (t.startsWith("object")) {
         elt.appendChild(e)
     } else {
+    }
+}
+
+
+nort.replaceElement = function(elt, newElt) {
+    if (elt) {
+        parent = elt.parentNode
+        parent.replaceChild(newElt, elt) 
     }
 }
 

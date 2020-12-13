@@ -26,7 +26,7 @@ nort.elements.tabber = function (attributes, tabPages) {
 
         let removable =  tab.removable || false
         let he = $div({},nort.translate(tab.label), 
-            ! removable ? undefined: delButton= $button({type: "button"},"x"))
+            ! removable ? undefined: delButton= $div({ class: "tabberbutton"},"x"))
         let pe
         let i = tabs.length
 
@@ -35,12 +35,12 @@ nort.elements.tabber = function (attributes, tabPages) {
         if (delButton)  delButton.on("click", function(){tabberElement.delPage(this.parentElement.tabberPageNo)})
 
         if (tab.page.tagName == "DIV") pe = tab.page
-        else pe = $div({},tab.page)
-        tabs.push({heading: he, delButton: delButton, page: pe, removable: removable})
+        else pe = $div({ class: "content-pane"},tab.page)
+        tabs.push({heading: he, delButton: delButton, page: pe, removable: removable, component: tab.page })
 
         th.appendChild(he)
         tp.appendChild(pe)
-        pe.addClass("content-pane")
+        //pe.addClass("content-pane")
         tabberElement.setPage(tabs.length-1)
     }
 
@@ -57,6 +57,10 @@ nort.elements.tabber = function (attributes, tabPages) {
 
             tabberElement.setPage(n) 
         }
+    }
+
+    tabberElement.delCurrentPage = function() {
+        tabberElement.delPage(currentPage)
     }
 
     tabberElement.setAttribute("nort-element","tabber")
@@ -88,6 +92,10 @@ nort.elements.tabber = function (attributes, tabPages) {
 
             if (hscroll < 0 ) hscroll = 0 
             ct.parentElement.style.left = -hscroll + "px"
+
+            if ( typeof(tabs[currentPage].component.onActivate) == "function" ) {
+                tabs[currentPage].component.onActivate()
+            }
         }
     }        
 

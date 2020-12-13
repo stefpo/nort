@@ -19,9 +19,15 @@ nort.WM = {
 }
 
 nort.WM.getWindowElement = function(elt) {
-    if ( (elt.className+' ').indexOf('wm-window')>-1 ) return elt
+    if ( nort.getClasses(elt).includes('wm-window') ) return elt
     else if ( elt===document.body) return null
     else return nort.WM.getWindowElement (elt.parentElement)
+}
+
+nort.WM.getTabberElement = function(elt) {
+    if ( nort.getClasses(elt).includes('tabber') ) return elt
+    else if ( elt===document.body) return null
+    else return nort.WM.getTabberElement (elt.parentElement)
 }
 
 nort.WM.reduceZindex = function() {
@@ -56,7 +62,7 @@ nort.WM.setFocusTo = function (elt) {
         w.style.zIndex = ++nort.WM.zIndex
         nort.WM.activeWindow = w
     }    
-    w.setTitle(w.title )
+    w.setTitle(w.windowTitle )
 }
 
 nort.WM.delayedSetFocusTo = function (elt) {
@@ -303,6 +309,11 @@ nort.WM.createWindow = function(options) {
         return w
     }
 
+    w.onClose = function( handler ) {
+        w.onCloseHandler = handler
+        return w
+    }
+
     w.setMaximized = function(state) {
         w.maximized = state
         if (state) {
@@ -341,12 +352,13 @@ nort.WM.createWindow = function(options) {
         if (this.locker != null ) this.parentNode.removeChild(this.locker)
         this.parentNode.removeChild(this)
         nort.WM.activeWindow = 0
+        if (typeof(w.onCloseHandler) == "function") {
+            w.onCloseHandler()
+        }
     }
 
     if ( !options ) options={}
-    w.className='wm-window'
-    w.innerHTML=nort.WM.windowTemplate()
-    w.contentPane = w.getElementsByClassName("content-pane")[0]
+
 
     w.cssClass = options.cssClass || ''
     w.resizable = options.resizable != undefined ? options.resizable : true
@@ -356,8 +368,11 @@ nort.WM.createWindow = function(options) {
     w.minWidth =options.minWidth || 400
     w.minHeight = options.minHeight || 250       
     w.modal = options.modal != undefined ? options.modal : false
-    w.title = options.title || options.title || ""
+    w.windowTitle = options.title || options.title || ""
 
+    w.className='wm-window'
+    w.innerHTML=nort.WM.windowTemplate(w)
+    w.contentPane = w.getElementsByClassName("content-pane")[0]    
 
     if (nort.WM.activeWindow)  if (nort.WM.activeWindow.modal) w.modal = true
 
@@ -365,7 +380,7 @@ nort.WM.createWindow = function(options) {
     w.addClass(w.cssClass)
     if (w.moveable) w.addClass('wm-moveable'); else w.addClass('wm-unmoveable')
     if (w.resizable) w.addClass('wm-resizable'); else w.addClass('wm-unresizable')
-    w.setTitle(w.title)
+    w.setTitle(w.windowTitle)
     w.place(nort.WM.minLeft +nort.WM.positionCounter * 30,nort.WM.minTop +nort.WM.positionCounter * 30,w.width,w.height)
 
     nort.WM.positionCounter++
@@ -393,7 +408,10 @@ nort.WM.createWindow = function(options) {
     return w
 }
 
-nort.WM.windowTemplate = function (){
+nort.WM.windowTemplate = function (w){
+    let maxBtn = ""
+    if (w.resizable ) maxBtn=`<div class="wm-window-button" onmousedown="nort.WM.onWindowButton(this,&#39;max&#39;)">&circledcirc;</div>`
+
     return `
     <table cellpadding=0 cellspacing=0 onmouseover="this.fi=nort.WM.delayedSetFocusTo(this);" onmouseout="window.clearTimeout(this.fi)" >
     <tbody>
@@ -401,8 +419,8 @@ nort.WM.windowTemplate = function (){
     <tr><td onmousedown="nort.WM.OnMouseDown(this,event,&#39;rw&#39;)"></td><td>
     <table>
     <tr><td class="wm-title-bar"  onmousedown="nort.WM.OnMouseDown(this,event,&#39;mv&#39;)"><div class="wm-title">Title bar</div>
-    <input class="wm-close-button" type=button value="X" onmousedown="nort.WM.onWindowButton(this,&#39;close&#39;)">
-    <input class="wm-max-button" type=button value="O" onmousedown="nort.WM.onWindowButton(this,&#39;max&#39;)">
+    <div class="wm-window-button" onmousedown="nort.WM.onWindowButton(this,&#39;close&#39;)">&CircleTimes;</div>
+    ${maxBtn}
     </td></tr>
     <tr><td class="content-pane" id="content"></td></tr>
     </table>

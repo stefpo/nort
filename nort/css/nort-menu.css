@@ -1,0 +1,113 @@
+button.dd-menu:focus {
+	outline: none;
+}
+
+button.dd-menu {
+	display: inline-block;
+	padding: 0px;
+	margin: 0px;
+	box-sizing: border-box;
+	text-align: left;
+	cursor: pointer;
+}
+
+button.dd-menu > label {
+	padding: 8px;
+	padding-top: 4px;
+	padding-right: 4px;
+	margin: 0px;
+	display: block;
+	text-align: left;
+	cursor: pointer;
+}
+
+button.dd-menu button {
+	color: black;
+	text-decoration: none;
+	padding: 8px;
+	display: block;
+	width: 100%;
+	border: none;
+	outline: none;
+	background: none;
+	text-align: left;
+}
+
+button.dd-menu button:hover {
+	background-color: #e0e0e0;
+}
+
+button.dd-menu > div {
+	display: none;
+	position: static;
+	margin-left: -1px; 
+	margin-top: 4px;
+	padding: 0px;
+	border: 1px solid silver;
+	background: white;
+	text-align: left;
+}
+
+button.dd-menu.right-align {
+	text-align: right;
+}
+
+button.dd-menu:focus > div {
+	display: inline-block;
+	opacity:1;
+	position: absolute;
+    /* z-index: 3; */
+}
+
+button.dd-menu.right-align:focus > div {
+	margin: 0px;
+	margin-right: -1px;
+	transform: translate(-100%, 4px)
+}	
+
+button.dd-menu > div a  {
+    display: block;
+}
+
+button.dd-menu > div > div {
+	display: none;
+	margin-left: 100%;
+	min-width: 100%;
+}
+
+button.dd-menu > div > div > a::after {
+	content: " >";
+}
+
+button.dd-menu > div > div:focus > div {
+	display: inline-block;
+	position: absolute;
+}
+
+
+
+button.dd-menu.aspect-app-main-menu {
+	border: none;
+	background: none;
+	padding: 0px;
+    margin-left: 0px;
+}
+
+button.dd-menu.aspect-app-main-menu label{ 
+	padding: 0px;
+}
+
+button.dd-menu.aspect-app-main-menu:focus > div {
+	display: inline-block;
+	opacity:1;
+	position: absolute;
+	
+}
+
+button.dd-menu.right-align.aspect-app-main-menu:focus > div {
+	margin: 0px;
+	transform: translateX(-100%)
+}	
+
+
+

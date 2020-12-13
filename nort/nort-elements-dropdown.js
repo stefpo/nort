@@ -10,6 +10,7 @@ nort.elements.listMenu = function(attributes, optionList) {
     //if ( ! attributes.size ) attributes.size = options.length < 8 ? options.length : 8
     if ( attributes.size < 2 ) attributes.size = 2
     let element = $select(attributes) 
+    element.hasOptions = false
 
 
     element.setValue = function(v) {
@@ -23,30 +24,31 @@ nort.elements.listMenu = function(attributes, optionList) {
 
     element.addOption = function(p1, p2) {
         if (p2) {
-            element.appendChild ($option({value: p1}, nort.translate(p2)))
+            element.appendChild ($option({value: p1}, p2))
         } else {
-            element.appendChild ($option({}, nort.translate(p1)))
+            element.appendChild ($option({value: p1}, p1))
         }
+        element.hasOptions = true
         return element
     }
 
     element.setOptions = function (optionList) {
+        element.hasOptions = false
         let v = element.value || attributes.value
         element.textContent = ""
-        if (typeof(optionList) == "object") {
-            for (let k of Object.keys(optionList)) {
+        if (Array.isArray(optionList)) {
+            for (o of optionList) {
+                element.addOption(o)
+            } 
+        } else if (typeof(optionList) == "object") {
+            for (let k in optionList) {
                 element.addOption(k,optionList[k] )
             }
     
-        } else if (Array.isArray(optionList)) {
-            let p = optionList
-            for (let i=0; i< p.length; i++) {
-                element.addOption(p[i] )
-            }
         } else if (typeof (optionList) == "string") {
             let p = optionList.split(';')
-            for (let i=0; i< p.length; i++) {
-                element.addOption(p[i] )
+            for (o of p) {
+                element.addOption(o )
             }
         }
         element.value = v
@@ -80,6 +82,7 @@ nort.elements.comboBox = function(attributes, optionList) {
     let hoveringPopup = false
     let justFocused = false
     let inhibitFocusEvent = false
+    e.options = optionList
 
     e.setValue = function(v) {
         e.value = v
@@ -93,6 +96,10 @@ nort.elements.comboBox = function(attributes, optionList) {
     e.getValue = function() {
         return e.value
     }        
+
+    e.setOptions =function (options) {
+        e.options = options
+    }
     
     function showPopup () { 
         cal = nort.elements.listMenu()
@@ -104,15 +111,17 @@ nort.elements.comboBox = function(attributes, optionList) {
                 } )  
 
         hoveringPopup = false
-        cal.setOptions(optionList)
+        cal.setOptions(e.options)
+        if ( cal.hasOptions ) {
 
-        nort.showFieldPopup(e, cal, "sw")
-        
-        cal.onSelect = function(v) {
-            e.value = v
-            e.hidePopup()
-            inhibitFocusEvent = true
-            e.focus()
+            nort.showFieldPopup(e, cal, "sw")
+            
+            cal.onSelect = function(v) {
+                e.value = v
+                e.hidePopup()
+                inhibitFocusEvent = true
+                e.focus()
+            }
         }
     }
 
