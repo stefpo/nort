@@ -26,10 +26,14 @@ input, select {
     box-sizing: border-box; 
     font-family: Arial, sans-serif;
     font-size: 100%;
-    color: black;
+    color: #404040;
     padding: 2px;
     background-color: white;
-    border: 1px solid #e0e0e0;  
+    background-color: #f0f0f0;
+    border: 1px solid #c0c0c0;  
+    padding: 4px;
+    border-bottom: 1px solid #a0a0a0;
+    border-radius: 0px;
 }
 
 select {
@@ -48,6 +52,8 @@ option {
     color: black;
 }
 
+
+
 input.required-field, select.required-field { border-bottom : 1px solid orange ;}
 input.missing-field, select.missing-field { border : 1px solid red ;}    
 
@@ -60,13 +66,11 @@ button {
     /* border-radius: 3px; */
     color: #404040;
     background-color: #f0f0f0;
-    margin: 0px;
     padding: 5px;
     padding-left: 12px;
     padding-right: 12px;
     cursor: pointer;
 }
-
 
 button:hover {
     background-color: #e0e0e0;
@@ -100,7 +104,6 @@ button.main:active {
     /* border-color: silver; */
 }
 
-
 a, .link { color : #165d79; text-decoration: none; }
 a:visited { color : #4d327e }
 a:hover, .link:hover { text-decoration: underline; cursor: pointer; }
@@ -108,7 +111,8 @@ a:hover, .link:hover { text-decoration: underline; cursor: pointer; }
 
 
 
-div.fieldbox { display: inline-block; 
+div.fieldbox { 
+    display: inline-block; 
     width: 180px;
     margin-right: 1em;
     margin-bottom: 0.9em;
@@ -218,12 +222,20 @@ div.form>form {
 
 div.tabber {
     display: flex;
+    flex-direction: column; 
+    flex-grow: 1;
+    
+    flex-shrink: 0;
+    
     width: 100%;
-    xheight: 100%;
     padding: 0px;
-    flex-flow: column; 
-    /* box-sizing: border-box; */
     overflow: hidden;
+    
+}
+
+div.tabberbutton {
+    display: inline-block;
+    color: gray;
 }
 
 div.tabber>div {
@@ -243,12 +255,6 @@ div.tabber>div:first-child>div{
     display: inline-block;
 }
 
-div.tabberbutton {
-    display: inline-block;
-    color: gray;
-}
-
-
 div.tabber>div:first-child>div:nth-child(2){
     display: inline-block;
     border: 1px solid silver;
@@ -259,7 +265,7 @@ div.tabber>div:first-child>div:nth-child(2){
     position: relative;
     visibility: visible;
     text-align: center;
-    font-size: 90%;;
+    font-size: 90%;
     padding-top: 0px;
     padding-bottom: 0px;
     cursor: pointer;
@@ -275,7 +281,7 @@ div.tabber>div:first-child>div:last-child{
     position: relative;
     visibility: visible;
     text-align: center;
-    font-size: 90%;;
+    font-size: 90%;
     padding-top: 0px;
     padding-bottom: 0px;
     cursor: pointer;
@@ -322,9 +328,9 @@ div.tabber>div:first-child>div>div.tabber-active {
 
 div.tabber>div:last-child {
     flex-grow : 1;
-    align-self: stretch;
-    flex-shrink: 0 ;
-    flex-basis: 0;
+    /* align-self: stretch; */
+    flex-shrink: 0 ; 
+    /*flex-basis: 0;*/
     overflow: auto;
     /* box-sizing: border-box; */
     border-style: solid; 
@@ -363,7 +369,6 @@ div.calendar {  border: 1px solid silver;
     background-color: #f0f0f0; 
     font-size: 100%;
     color: black;
-    /* font-family: helvetica; font-size: 9pt; */
     display: inline-block;
     font-weight: normal;
     cursor: pointer;
@@ -426,24 +431,29 @@ div.nort-grid>table{
     border: none;
     border-collapse: collapse;
     min-width: 100%;
-    border-spacing: 0px;
+
 }
 
 div.nort-grid>table th{ 
-    background-color: #f0f0f0;
-    text-align: left;
+    background-color: #e0e0e0;
     position: sticky;
     top: 0;
-    z-index: 2;
+    /* z-index: 2; */
+    font-weight: normal;
     white-space: nowrap;
+}
+
+div.nort-grid>table th select, 
+div.nort-grid>table th input {
+    background-color: white;
 }
 
 div.nort-grid>table th{ 
     padding: 4px;
     padding-top: 6px;
     padding-bottom: 6px;
-    font-size: 95%;
-    color: #404040;
+    font-size: 100%;
+    text-align: left;
 }
 
 div.nort-grid>table tr:hover{ 
@@ -452,8 +462,7 @@ div.nort-grid>table tr:hover{
 
 div.nort-grid>table td{ 
     padding: 4px;
-    margin: 0px;
-    font-size: 95%;;
+    font-size: 100%;
     border-bottom: 1px solid silver;
     white-space: nowrap;
 }
@@ -462,17 +471,26 @@ div.nort-grid>table td:hover{
     background-color: #e0e0f0;
 }
 
+div.nort-grid>table select{
+    border: none;
+}
+
+div.nort-grid>table input[type=text]{
+    border: none;
+}
 
 div.nort-grid.fix-first-col>table th:first-child{ 
     position: sticky;
     top: 0;
     left: 0;
-    background-color: #f0f0f0ed;
-    z-index: 3;
+    background-color: #e0e0e0;
+    z-index: 2; 
 }
 
 div.nort-grid.fix-first-col>table td:first-child{ 
     position: sticky;
     left: 0;
-    background-color: #f0f0f0;
+    background-color: #e0e0e0;
 }
+
+

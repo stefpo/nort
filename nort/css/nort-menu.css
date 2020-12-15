@@ -1,4 +1,4 @@
-button.dd-menu:focus {
+button.dd-menu:hover {
 	outline: none;
 }
 
@@ -52,7 +52,7 @@ button.dd-menu.right-align {
 	text-align: right;
 }
 
-button.dd-menu:focus > div {
+button.dd-menu:hover > div {
 	display: inline-block;
 	opacity:1;
 	position: absolute;

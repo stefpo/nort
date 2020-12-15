@@ -128,6 +128,13 @@ nort.components.Grid =  class extends nort.Component{
 
     applyFilters() {
         let me = this
+        document.body.style.cursor = "hourglass"
+        setTimeout( function() {me.applyFiltersReal()},50 )
+    }
+
+    applyFiltersReal() {
+        let me = this
+        
 
         for( let r of me.data) {
             r._visible = true
@@ -168,32 +175,42 @@ nort.components.Grid =  class extends nort.Component{
         
         let newBody = this.renderBody()
         this.table.replaceChild(newBody, this.tbody )
-        this.tbody = newBody        
+        this.tbody = newBody      
+        document.body.style.cursor = ""  
     }    
 
-    sort(column) {
-        try {
-        let prevCol = this.sortColumn
 
-        if ( this.sortColumn === column ) {
-            this.sortDescending = ! this.sortDescending
-            this.sortColumn.labelElement.innerHTML = this.getColumnHeader(this.sortColumn)
-        } else {
+    sort(column) {
+        let me = this
+        document.body.style.cursor = "hourglass"
+        setTimeout( function() {me.sortReal(column)},50 )
+    }    
+
+    sortReal(column) {
+        try {
+            let prevCol = this.sortColumn
+
+            if ( this.sortColumn === column ) {
+                this.sortDescending = ! this.sortDescending
+                this.sortColumn.labelElement.innerHTML = this.getColumnHeader(this.sortColumn)
+            } else {
+                
+                this.sortColumn = column
+                this.sortDescending = false
+                prevCol.labelElement.innerHTML = this.getColumnHeader(prevCol)
+                this.sortColumn.labelElement.innerHTML = this.getColumnHeader(this.sortColumn)
+            }
             
-            this.sortColumn = column
-            this.sortDescending = false
-            prevCol.labelElement.innerHTML = this.getColumnHeader(prevCol)
-            this.sortColumn.labelElement.innerHTML = this.getColumnHeader(this.sortColumn)
+            this.sortData()
+            
+            let newBody = this.renderBody()
+            this.table.replaceChild(newBody, this.tbody )
+            this.tbody = newBody    
+            document.body.style.cursor = ""  
+        } catch(e)       {
+            document.body.style.cursor = ""  
+            nort.alert(e.stack)
         }
-        
-        this.sortData()
-        
-        let newBody = this.renderBody()
-        this.table.replaceChild(newBody, this.tbody )
-        this.tbody = newBody    
-    } catch(e)       {
-        alert(e.stack)
-    }
     }
     
     sortData() {
@@ -302,7 +319,6 @@ nort.components.Grid =  class extends nort.Component{
                 }
                 col.filter=f
                 col.labelElement = $label({},this.getColumnHeader(col) ).on("click", function(evt) { me.sort(col)} )
-                console.log(JSON.stringify(col))
                 row.push($th({}, col.labelElement , f, $div({style: `display: block; width: ${col.maxColTextLength*.6}em`})))
             } 
         }
