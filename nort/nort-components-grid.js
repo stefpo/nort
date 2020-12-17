@@ -62,15 +62,15 @@ nort.components.Grid =  class extends nort.Component{
         for ( let c in this.columns ) {
             let col = this.columns[c]
             col.groupValues=[]
-            if (col.enableDropdown)  {
+            //if (col.enableDropdown)  {
                 col.groupValues.push("")
                 col.maxColTextLength = 4
                 for (let r of this.data) {
                     v = r[c] != null ? r[c] : ""
-                    if ( ! col.groupValues.includes(v)) col.groupValues.push(v)
+                    if ( col.enableDropdown && ! col.groupValues.includes(v)) col.groupValues.push(v)
                     if ( v.length > col.maxColTextLength ) col.maxColTextLength = v.length
                 }
-            }
+            //}
         }
     }
 
@@ -271,7 +271,9 @@ nort.components.Grid =  class extends nort.Component{
                     if (col.visible) {
                         let v = this.data[r][c]
                         if ( v == null ) v=""
-                        let cell = $td({ class: col.css }, col.transformFunc(v))
+                        //let cell = $td({ class: col.css || "", style: `width: ${col.maxColTextLength*.3}em` }, col.transformFunc(v))
+                        let cell = $td({ class: col.css || "" }, col.transformFunc(v))
+
                         cell.onclick = function() { me._onclickCell(r, c) }
                         row.push(cell)
                     }
@@ -299,7 +301,7 @@ nort.components.Grid =  class extends nort.Component{
                     rcb.setChecked(cb.checked)
                 }
             })
-            row.push($td({}, cb))                    
+            row.push($th({}, cb))                    
         }             
         for (let c in this.columns ) {
             let f
@@ -313,13 +315,13 @@ nort.components.Grid =  class extends nort.Component{
                     f.onchange = function() { me.applyFilters() }
                     f.setValue("")
                 } else {
-                    f = nort.elements.textbox({style: `display: block; width: 100%` } )
+                    f = nort.elements.textbox({style: `display: block; width: 100%`, autocomplete: "off" } )
                     f.onchange = function() { me.applyFilters() }
                     f.setValue("")
                 }
                 col.filter=f
                 col.labelElement = $label({},this.getColumnHeader(col) ).on("click", function(evt) { me.sort(col)} )
-                row.push($th({}, col.labelElement , f, $div({style: `display: block; width: ${col.maxColTextLength*.6}em`})))
+                row.push($th({}, col.labelElement , f, $div({style: `display: block; min-width: ${col.maxColTextLength*.6}em`})))
             } 
         }
         return $thead({}, $tr({},row))

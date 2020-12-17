@@ -75,7 +75,7 @@ class AssetForm extends nort.components.containers.Form {
                 this.fields.btn3," ", this.fields.btn5,  " ", this.fields.btn6, " ", this.fields.btn7,
                 $div({style: "height: 10px;"}),
                 $div({ style: "width: 720px; height: 200px; margin-bottom: 0.5em"},
-                    this.tabber = nort.elements.tabber({ class:"toto"}, 
+                    this.tabber = nort.elements.tabber({ style: "height: 100%;"}, 
                         [{ label:"[STATUS]", 
                             page: $div({style: "padding: 4px;"}, 
                                 nort.elements.fieldbox({}, this.fields.status),

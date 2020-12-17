@@ -41,7 +41,7 @@ button.dd-menu > div {
 	display: none;
 	position: static;
 	margin-left: -1px; 
-	margin-top: 4px;
+	margin-top: 0px;
 	padding: 0px;
 	border: 1px solid silver;
 	background: white;
@@ -59,7 +59,7 @@ button.dd-menu:hover > div {
     /* z-index: 3; */
 }
 
-button.dd-menu.right-align:focus > div {
+button.dd-menu.right-align > div {
 	margin: 0px;
 	margin-right: -1px;
 	transform: translate(-100%, 4px)
