@@ -212,7 +212,7 @@ nort.showFieldPopup = function(e, popup, location) {
 
     nort.activePopup = anchorDiv
     popup.style.visibility = "visible"
-    popup.style.position =  "fixed"
+    //popup.style.position =  "fixed"
 }
 
 nort.hideFieldPopup = function(e) {
