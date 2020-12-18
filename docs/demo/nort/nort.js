@@ -5,6 +5,7 @@
 */
 
 const nort = {}
+nort.app = {}
 const notDevMode = true
 window.nort=nort
 

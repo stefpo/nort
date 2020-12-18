@@ -65,13 +65,16 @@ nort.http.request = function(method, url, options, callback) {
     }
 }
 
+
 nort.http.get = function(url, options, callback) {
     nort.http.request("GET", url,  options, callback)
 }
 
 nort.http.jsonRequest = function(method, url, options, callback) {
+    if ( ! options ) options = {}
     if ( ! options.headers) options.headers={}
-    options.headers["content-type"] = "application.json"
+    options.headers["content-type"] = "application/json"
+    if ( options.postData ) options.postData = JSON.stringify(options.postData)
 
     document.body.style.cursor = "progress"
 
@@ -79,15 +82,52 @@ nort.http.jsonRequest = function(method, url, options, callback) {
         if (e) callback(e)
         else {
             let em = undefined
-            try {
-                let jsdata = JSON.parse(data.data) 
-                data.data = jsdata
-            } catch (e) {
-                em = "ERR_NOT_JSON_RESPONSE"
+            if ( data.status == 200 ) {
+                try {
+                    let jsdata = JSON.parse(data.data) 
+                    data.data = jsdata
+                } catch (e) {
+                    em = "ERR_NOT_JSON_RESPONSE"
+                }
+            } else {
+                em = data.status
             }
             document.body.style.cursor = "initial"
             callback(em, data)
         }
     }) 
+}
+
+nort.http.requestAsync = function(method, url, options) {
+    let prom = new Promise((resolve, reject) => {
+        nort.http.request(method, url, options, function(err, result) {
+            if (err) reject(err) 
+            else resolve(result)
+        }
+        )
+    } )
+    return prom 
+}
+
+nort.http.getAsync = function(method, url, options) {
+    let prom = new Promise((resolve, reject) => {
+        nort.http.get(method, url, options, function(err, result) {
+            if (err) reject(err) 
+            else resolve(result)
+        }
+        )
+    } )
+    return prom 
+}
+
+nort.http.jsonRequestAsync = function(method, url, options) {
+    let prom = new Promise((resolve, reject) => {
+        nort.http.jsonRequest(method, url, options, function(err, result) {
+            if (err) reject(err) 
+            else resolve(result)
+        }
+        )
+    } )
+    return prom 
 }
 

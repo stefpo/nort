@@ -34,7 +34,7 @@ nort.elements.lib.bindFieldMethods = function(e) {
 
     e.isRequired = function() { 
         return e.hasClass("required-field") 
-     }    
+    }    
 
 
     e.isValid = function() {
@@ -46,7 +46,7 @@ nort.elements.lib.bindFieldMethods = function(e) {
         return e.validationErrorMsg 
     }
 
-    e.on("blur", function() {e.isValid()} )
+    e.on("blur",  function() { if ( e.isValid ) e.isValid()} )
     return e
 }
 
@@ -81,8 +81,10 @@ nort.elements.textbox = function(attributes) {
             e.validationErrorMsg = e.validate(fieldValue)
             if ( e.hasClass ("type-decimal2") ) e.value = parseFloat(e.value, 10).toFixed(2) 
             if ( e.hasClass ("type-decimal4") ) e.value = parseFloat(e.value, 10).toFixed(4) 
+            e.title = ""
             return true
-        }       
+        }      
+        e.title =  nort.translate(`[${e.validationErrorMsg}]`)
         return false
     }        
 
@@ -98,6 +100,22 @@ nort.elements.textbox = function(attributes) {
     
     return e
 }
+
+nort.elements.passwordbox = function(attributes) {
+    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "password", "nort-element":"textbox"}, [attributes])) 
+
+    e.setValue = function(v) {
+        e.value = v
+        return e
+    }
+
+    e.getValue = function() {
+        return e.value
+    }
+    
+    return e
+}
+
 
 nort.elements.checkbox = function(attributes) {
     let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkbox", "nort-element":"checkbox"}, [attributes])) 
@@ -121,6 +139,7 @@ nort.elements.button = function(attributes) {
     return e    
 }
 
+
 nort.elements.select = function(attributes, optionList) {
     let options = []
     if (Array.isArray(optionList)) {
@@ -138,15 +157,35 @@ nort.elements.select = function(attributes, optionList) {
             options.push ($option({}, nort.translate(p[i])))
         }
     } 
+    let fieldValue = ""
 
     if (! attributes) attributes = {}
 
-    let element = $select(attributes) 
+    let element = nort.elements.lib.bindFieldMethods( $select(attributes) )
 
     element.setValueOrig = function(v) {
         element.value = v
         return element
     }
+
+    element.isValid = function() {
+        element.validationErrorMsg = ""
+        fieldValue = element.value
+        if (element.isRequired() && element.value =="") {
+            element.validationErrorMsg = "REQUIRED"
+        } else if (typeof( element.validate) == "function" ) {
+            element.validationErrorMsg = element.validate(fieldValue)
+        }      
+        if (element.validationErrorMsg != "" ) {
+            element.addClass ("missing-field")
+            element.title =  nort.translate(`[${element.validationErrorMsg}]`)
+            return false
+        } else {
+            element.removeClass ("missing-field")
+            element.title = ""
+            return true
+        }
+    }          
 
     element.setValue = function(v) {
         for (let i=0; i< element.options.length; i++) {
@@ -175,15 +214,21 @@ nort.elements.select = function(attributes, optionList) {
         let v = element.value || attributes.value
         element.textContent = ""
         if (Array.isArray(optionList)) {
-            let p = optionList
-            for (let i=0; i< p.length; i++) {
-                element.addOption(p[i] )
+            for (let p of optionList) {
+                if (p || p=="") {
+                    if(typeof(p) == "object") {
+                        let keys = Object.keys(p)
+                        if (keys.length == 1 ) element.addOption(p[keys[0]] ) 
+                        else element.addOption(p[keys[0]],p[keys[1]]  ) 
+
+                    } else { element.addOption(p ) }
+                }
             }
         } else  if (typeof(optionList) == "object") {
             for (let k of Object.keys(optionList)) {
                 element.addOption(k,optionList[k] )
             } 
-        } else if (typeof (optionList == "string")) {
+        } else if (typeof (optionList) == "string") {
             let p = optionList.split(';')
             for (let i=0; i< p.length; i++) {
                 element.addOption(p[i] )
@@ -197,7 +242,7 @@ nort.elements.select = function(attributes, optionList) {
 
 
     element.setAttribute("nort-element","select")            
-    return nort.elements.lib.bindFieldMethods(element)
+    return element
 }
 
 nort.elements.fieldbox = function (attributes, fieldElement) { 

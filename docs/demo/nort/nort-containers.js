@@ -41,6 +41,10 @@ nort.components.containers.Form =  class extends nort.Component{
         return elements
     }
 
+    isValid() {
+        return this.isValid
+    }
+
     toObject() {
         let fo = new Object()
         let errors = []
@@ -53,6 +57,7 @@ nort.components.containers.Form =  class extends nort.Component{
                 if (id !=null && id != "") {
                     
                     fo[id] = e.getValue()
+                    e.isValid()
                     if (e.getValidationError() !="" ) { 
                         this.isValid = false
                         errors.push({field: id, label: e.name, msg: e.getValidationError()})

@@ -1,163 +1,234 @@
 /*!
- * NORT web UI component library
+ * NORT web UI component library_defaultEnableDropdown
  * Copyright(c) 2019-2020 Stephane Potelle 
  * MIT Licensed
 */
 
-console.log("Loaded grid")
-
 nort.components.Grid =  class extends nort.Component{
-    constructor(properties) {
+    constructor(properties, tabledef) {
         super(properties)
-        this.rowLimit = 1000
         this.clear()
+        this.setTabledef(tabledef) 
     }
 
     clear() {
-        this.filters = []
-        this.groupValues = []
-        this.rowVisible = []
-        this.transformFuncs = []
-        this.data = new  nort.data.DataTable()
+        this.data = []
+        this.columns={}
+        this.fullTextSearch = ""
+        this.sortColumn = undefined
+        this.sortDescending = false
         this.initialWidthSaved = false
     }
 
-    setData(o, transforms) {
-        this.clear()
-        if (Array.isArray(o)) {
-            for (let i in o) {
-                let r = o[i]
-                for (let c in r) {
-                    if (this.data.addColumn(c)) {
-                        this.groupValues.push([""])
-                        this.transformFuncs.push(  function( s ) { return s } )
-                    }
-                }
-                let nr = this.data.newRow() 
-                for (let c in r) {
-                    let cix=this.data.getColumnIndex(c)
-                    let v = r[c]
-                    if (v == null || v == undefined) v ="" 
-                    else v = v.toString()
+    setTabledef(tabledef) {
+        function identity(s) {return s}
 
-                    if ( this.groupValues[cix].length<20 && ! this.groupValues[cix].includes(v)) this.groupValues[cix].push(v)
-                    nr[cix] = v
-                }
-                this.data.addRow(nr)
-                this.rowVisible.push(true)
+        this.conf = {
+            columns : {},
+            options : {
+                defaultTransform : identity,
+                defaultHeaderTransform : identity,
+                defaultEnableDropdown : false,
+                rowLimit : 1000,
+                addSelectBox : false
             }
-        } else if( o && Array.isArray(o.columns) && Array.isArray(o.rows) ) {
-            this.data = o
         }
 
-        if ( typeof(transforms) == "object") {
-            for (let k in transforms) {
-                if (typeof(transforms[k] == "function"))  this.setColumnTransform(k, transforms[k])
+        if (tabledef) {
+            nort.object.merge(this.conf.columns, tabledef.columns, true )
+            nort.object.merge(this.conf.options, tabledef.options, false )        
+        }
+    }
+
+    refreshData(o, tabledef) {
+        if (this.dataLoadedOnce ) {
+            this.data = o
+
+            this.loadGroupValues() 
+            for ( let c in this.columns ) {
+                let e
+                if ( e = this.columns[c].filterElement) {
+                    e.setOptions(this.columns[c].groupValues)
+                } 
             }
-        }        
+
+            this.applyFilters()
+        } else {
+            this.setData(o, tabledef)
+        }
+    }
+
+    loadGroupValues() {
+        for ( let c in this.columns ) {
+            let col = this.columns[c]
+            col.groupValues=[]
+            //if (col.enableDropdown)  {
+                col.groupValues.push("")
+                col.maxColTextLength = 4
+                for (let r of this.data) {
+                    v = r[c] != null ? r[c] : ""
+                    if ( col.enableDropdown && ! col.groupValues.includes(v)) col.groupValues.push(v)
+                    if ( v.length > col.maxColTextLength ) col.maxColTextLength = v.length
+                }
+            //}
+        }
+    }
+
+    setData(o, tabledef) {
+
+        if (tabledef) this.setTabledef(tabledef)
+        this.clear()
+        // Create columns
+        if (Array.isArray(o) && o.length>0) {
+            this.data = o
+            this.dataLoadedOnce = true
+
+            for (let k in o[0]) {
+                
+                let col = {
+                    name: k,
+                    visible: true,
+                    groupValues: [],
+                    visible: true,
+                    transformFunc: this.conf.options.defaultTransform,
+                    headerTransformFunc: this.conf.options.defaultHeaderTransform
+                }
+                
+                nort.object.merge(col, this.conf.columns[k] || {}, true)
+                if ( ! this.sortColumn && col.visible )  this.sortColumn = col
+                this.columns[k] = col
+            }
+        }
+
+
+        /* Collect group values */
+        this.loadGroupValues()
+
+        for (let r of this.data) {
+            r._visible = true
+            r._checked = false
+        }
+         
+        this.sortData()        
         this.refresh()
     }
 
-    setColumnTransform(col, transformFunc) {
-        let ci = this.data.getColumnIndex(col)
-        this.transformFuncs[ci] = transformFunc
-    }
-
-    saveInitialColumnWidth() {
-        let theadr = this.table.childNodes[0].childNodes[0]
-
-        if ( ! this.initialWidthSaved) {
-            this.table.style.width = this.table.offsetWidth + "px"
-            
-            for (let c=0; c < theadr.childNodes.length; c++ ){
-                theadr.childNodes[c].style.width = theadr.childNodes[c].offsetWidth + "px"
-                theadr.childNodes[c].style.boxSizing = "border-box"
-            }
-            this.table.style.tableLayout = "fixed"
-            this.initialWidthSaved = true
+    clearFilters() {
+        this.fullTextSearch = ""
+        for (let c in this.columns ) {
+            if (this.columns[c].filter) this.columns[c].filter.setValue("")
         }
+        this.applyFilters()
     }
 
-    applyFiltersGood(me) {
-        me.saveInitialColumnWidth()
+    setFullTextSearch(v) {
+        this.fullTextSearch = v
+        this.applyFilters() 
+    }
 
-        for( let r=0; r < me.data.rows.length; r++) {
-            this.rowVisible[r] = true
-            //console.log(`filter row ${r}`)
-            for( let c in me.data.columns) {
-                let fltr = me.filters[c]
+    applyFilters() {
+        let me = this
+        document.body.style.cursor = "hourglass"
+        setTimeout( function() {me.applyFiltersReal()},50 )
+    }
+
+    applyFiltersReal() {
+        let me = this
+        
+
+        for( let r of me.data) {
+            r._visible = true
+            r._checked = false
+            if ( this.fullTextSearch != "") {
+                r._visible  = false
+                for( let c in me.columns) {
+                    if ( !r._visible && (""+r[c]).toUpperCase().includes(this.fullTextSearch.toUpperCase() )) {
+                        r._visible = true
+                    }
+                }
+            }
+        }            
+        for( let c in me.columns) {
+            if (this.columns[c].visible) {
+                let fltr = this.columns[c].filter
                 let fv = fltr.getValue()
-                if (fv !="") {
+
+                let selected = false
+                if (fv !="" ) {
                     if (fltr.tagName=="SELECT") {
-                        if (fv != me.data.rows[r][c]) {
-                            this.rowVisible[r] = false
-                        } 
+                        for( let r=0; r < me.data.length; r++) { 
+                            if (fv != me.data[r][c]) {
+                                this.data[r]._visible = false
+                            } 
+                        }
                     } else {
-                        if (! (""+me.data.rows[r][c]).toUpperCase().includes(fv.toUpperCase())) {
-                            this.rowVisible[r] = false
-                        } 
+                        for( let r=0; r < me.data.length; r++) { 
+                                if (! (""+me.data[r][c]).toUpperCase().includes(fv.toUpperCase())) {
+                                this.data[r]._visible = false
+                            } 
+                        }
                     }
                 }
             }
         }
+        this.sortData()
+        
         let newBody = this.renderBody()
         this.table.replaceChild(newBody, this.tbody )
-        this.tbody = newBody        
+        this.tbody = newBody      
+        document.body.style.cursor = ""  
     }    
 
-    applyFilters(me) {
-        me.saveInitialColumnWidth()
 
-        for( let r=0; r < me.data.rows.length; r++) {
-            this.rowVisible[r] = true
-        }            
-            //console.log(`filter row ${r}`)
-        for( let c in me.data.columns) {
-            let fltr = me.filters[c]
-            let fv = fltr.getValue()
-            if (fv !="") {
-                if (fltr.tagName=="SELECT") {
-                    for( let r=0; r < me.data.rows.length; r++) { 
-                        if (fv != me.data.rows[r][c]) {
-                            this.rowVisible[r] = false
-                        } 
-                    }
-                } else {
-                    for( let r=0; r < me.data.rows.length; r++) { 
-                            if (! (""+me.data.rows[r][c]).toUpperCase().includes(fv.toUpperCase())) {
-                            this.rowVisible[r] = false
-                        } 
-                    }
-                }
+    sort(column) {
+        let me = this
+        document.body.style.cursor = "hourglass"
+        setTimeout( function() {me.sortReal(column)},50 )
+    }    
+
+    sortReal(column) {
+        try {
+            let prevCol = this.sortColumn
+
+            if ( this.sortColumn === column ) {
+                this.sortDescending = ! this.sortDescending
+                this.sortColumn.labelElement.innerHTML = this.getColumnHeader(this.sortColumn)
+            } else {
+                
+                this.sortColumn = column
+                this.sortDescending = false
+                prevCol.labelElement.innerHTML = this.getColumnHeader(prevCol)
+                this.sortColumn.labelElement.innerHTML = this.getColumnHeader(this.sortColumn)
             }
+            
+            this.sortData()
+            
+            let newBody = this.renderBody()
+            this.table.replaceChild(newBody, this.tbody )
+            this.tbody = newBody    
+            document.body.style.cursor = ""  
+        } catch(e)       {
+            document.body.style.cursor = ""  
+            nort.alert(e.stack)
         }
-        let newBody = this.renderBody()
-        this.table.replaceChild(newBody, this.tbody )
-        this.tbody = newBody        
-    }       
+    }
+    
+    sortData() {
+        let sc = this.sortColumn.name
+        if (this.sortDescending) {
+            this.data = this.data.sort( function (a,b) { return a[sc] < b[sc] ? 1 : -1 })
+        } else {
+            this.data = this.data.sort( function (a,b) { return a[sc] > b[sc] ? 1 : -1 })
+        }
+    }
 
     onClickCell(r, c) {
         nort.alert(`Clicked row ${r}, column ${c}`)
     }
 
-    renderBody() {
-        let rows = []   
-        let displayedRows = 0
-        let me = this 
-        for (let r=0; r< this.data.rows.length && displayedRows< this.rowLimit; r++) {
-            let row=[]
-            if ( this.rowVisible[r]) {
-                for (let c in this.data.columns ) {
-                    let v = this.data.rows[r][c]
-                    let newTableRow = $td({}, this.transformFuncs[c](v))
-                    newTableRow.onclick = function() { me.onClickCell(r, c) }
-                    row.push(newTableRow)
-                }
-                displayedRows++
-                rows.push($tr({},row))
-            }
-        }     
-        return $tbody({}, rows)     
+    _onclickCell(r,c) {
+        if (this.columns[c].onclick) { this.columns[c].onclick(this.data[r])}
+        else this.onClickCell(r, c) 
     }
 
     getFilterOptions(values, transformFunc) {
@@ -168,30 +239,103 @@ nort.components.Grid =  class extends nort.Component{
         return options
     }
 
-    render() {
-        document.body.style.cursor = "progress"
+    getColumnHeader(c) {
+        let postfix = ""
+        if (c === this.sortColumn) postfix = this.sortDescending ? " \u25b4" : " \u25be"
+        if (c.headerTransformFunc) return nort.translate(c.headerTransformFunc(c.name)) + postfix
+        else return nort.translate( c.name )+ postfix
+    }
+
+    renderBody() {
+        let rows = []   
+        let displayedRows = 0
+        let me = this 
+        for (let r=0; r< this.data.length && displayedRows < this.conf.options.rowLimit; r++) {
+            let row=[]
+            if (this.data[r]._visible) {
+                if (this.conf.options.addSelectBox ) {
+                    let cb = nort.elements.checkbox ({}).setValue(this.data[r]._checked || false)
+                    cb.on("click", function(){
+                        me.topCheckbox.checked = 0 
+                        me.data[r]._checked = cb.getValue()
+                    }) 
+                    cb.setChecked = function(v) {
+                        cb.checked = v
+                        me.data[r]._checked = v
+                    }
+                    this.checkboxes.push(cb)
+                    row.push($td({}, cb))                    
+                }
+                for (let c in this.columns ) {
+                    let col = this.columns[c]
+                    if (col.visible) {
+                        let v = this.data[r][c]
+                        if ( v == null ) v=""
+                        //let cell = $td({ class: col.css || "", style: `width: ${col.maxColTextLength*.3}em` }, col.transformFunc(v))
+                        let cell = $td({ class: col.css || "" }, col.transformFunc(v))
+
+                        cell.onclick = function() { me._onclickCell(r, c) }
+                        row.push(cell)
+                    }
+                }
+                displayedRows++
+                rows.push($tr({},row))
+
+            }
+        }     
+        return $tbody({}, rows)     
+    }    
+
+    renderHeader() {
         let row=[]
-        let rows = []
+
         let me = this
         let css = (" " + this.properties.class ) || ""
-        for (let c in this.data.columns ) {
+
+        if (this.conf.options.addSelectBox ) {
+            this.checkboxes = []
+            let cb = nort.elements.checkbox ({})
+            this.topCheckbox = cb
+            cb.on("click", function() {
+                for (let rcb of me.checkboxes) {
+                    rcb.setChecked(cb.checked)
+                }
+            })
+            row.push($th({}, cb))                    
+        }             
+        for (let c in this.columns ) {
             let f
-            if (this.groupValues[c].length<20) {
-                f = nort.elements.select({style:"width: 100%"},this.getFilterOptions(this.groupValues[c], this.transformFuncs[c]))
-                f.onchange = function() { me.applyFilters(me) }
-                f.setValue("")
-            } else {
-                f = nort.elements.textbox({style:"width: 100%"} )
-                f.onchange = function() { me.applyFilters(me) }
-            }
-            this.filters.push(f)            
-            row.push($th({}, nort.translate(this.data.columns[c]), f))
+            let col = this.columns[c]
+       
+            if (col.visible) {
+                let enableDropdown = col.enableDropdown == undefined ? this.conf.options.defaultEnableDropdown : col.enableDropdown
+                if ( col.groupValues.length<20 && enableDropdown ) {
+                    f = nort.elements.select({style:`display: block; width: 100%`},this.getFilterOptions(col.groupValues, col.transformFunc))
+                    col.filterElement = f
+                    f.onchange = function() { me.applyFilters() }
+                    f.setValue("")
+                } else {
+                    f = nort.elements.textbox({style: `display: block; width: 100%`, autocomplete: "off" } )
+                    f.onchange = function() { me.applyFilters() }
+                    f.setValue("")
+                }
+                col.filter=f
+                col.labelElement = $label({},this.getColumnHeader(col) ).on("click", function(evt) { me.sort(col)} )
+                row.push($th({}, col.labelElement , f, $div({style: `display: block; min-width: ${col.maxColTextLength*.6}em`})))
+            } 
         }
-        let thead = $thead({}, $tr({},row))
+        return $thead({}, $tr({},row))
+    }
+
+    render() {
+        document.body.style.cursor = "progress"
+
+        let css = (" " + this.properties.class ) || ""
+
+        let thead = this.renderHeader()
 
         this.tbody = this.renderBody()
         this.table = $table({}, thead, this.tbody )
-
         document.body.style.cursor = "default"
 
         return $div({ class: "nort-grid" + css},this.table)
