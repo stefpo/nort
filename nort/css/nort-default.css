@@ -35,6 +35,7 @@ input, select {
 
 select {
     -webkit-appearance: none;    
+    -webkit-border-radius: 0px;
     background-image: url(combobtn.gif); 
     background-position: right; background-repeat: no-repeat; 
     padding-right: 20px;

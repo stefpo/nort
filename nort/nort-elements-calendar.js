@@ -143,8 +143,13 @@ nort.elements.datebox = function(attributes) {
     let inhibitFocusEvent = false
 
     e.setValue = function(v) {
+        try {
+            let x = new Date(Date.parse(v))
+            v = x
+        } catch(e) {}
         if (v.getDate ) e.value = nort.currentLocale.dateToString(v)
         else e.value = v
+        e.initialValue = e.value
         return e
     }
 
@@ -168,7 +173,9 @@ nort.elements.datebox = function(attributes) {
             if (e.isRequired()) {
                 e.addClass ("missing-field"); 
                 e.validationErrorMsg = "REQUIRED_VALUE"
-            } 
+            } else {
+                dateValue = null
+            }
         }       
         return false
     }        

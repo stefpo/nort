@@ -86,6 +86,7 @@ nort.elements.comboBox = function(attributes, optionList) {
 
     e.setValue = function(v) {
         e.value = v
+        e.initialValue = e.value
         return e
     }
 

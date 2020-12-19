@@ -90,6 +90,7 @@ nort.elements.textbox = function(attributes) {
 
     e.setValue = function(v) {
         e.value = v
+        e.initialValue = e.value
         return e
     }
 
@@ -106,6 +107,7 @@ nort.elements.passwordbox = function(attributes) {
 
     e.setValue = function(v) {
         e.value = v
+        e.initialValue = e.value
         return e
     }
 
@@ -119,8 +121,14 @@ nort.elements.passwordbox = function(attributes) {
 
 nort.elements.checkbox = function(attributes) {
     let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkbox", "nort-element":"checkbox"}, [attributes])) 
+
+    e.isValid = function() {
+        return true
+    }
+
     e.setValue = function(v) {
-        e.checked = v || false
+        v = v || false
+        e.checked = [true, 1, '1', 'Y','y'].includes(v)
         return e
     }
 
@@ -194,6 +202,7 @@ nort.elements.select = function(attributes, optionList) {
                 break
             }
         }
+        element.initialValue = element.value
         return element
     }    
 
@@ -275,6 +284,13 @@ nort.elements.popup = function (element) {
     document.body.appendChild(bg)
     document.body.appendChild(element)
     return element
+}
+
+nort.elements.yesNoSelect = function(attributes) {
+    let e = nort.elements.select(attributes, {'0': 'No', '1': 'Yes'})
+    if (attributes.checked ) e.setValue(1) 
+    else e.setValue(0)
+    return e
 }
 
 document.write (`<script src=\"${nort.baseURL}/nort-elements-tabber.js?version=${nort.version}\"></script>`)

@@ -65,8 +65,9 @@ button.dd-menu.right-align > div {
 	transform: translate(-100%, 4px)
 }	
 
-button.dd-menu > div a  {
-    display: block;
+button.dd-menu > div button  {
+	display: block;
+	white-space: nowrap;
 }
 
 button.dd-menu > div > div {
