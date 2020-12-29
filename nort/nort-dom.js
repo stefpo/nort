@@ -26,10 +26,26 @@ nort.createElement = function (tn, fixedAttr, rest) {
         nort.addElement(elt, e) 
     }
 
+    elt.listeners = {}
+
     elt.addClass = function(className) { return nort.addCssClass(elt, className) }
     elt.removeClass = function(className) { return nort.removeCssClass(elt, className)}        
     elt.hasClass = function(className) { return nort.hasCssClass(elt, className)}        
-    elt.on = function(a,b,c,d,e) { elt.addEventListener(a,b,c,d,e); return elt }
+
+    elt.off = function (evt) {
+        let h = elt.listeners[evt]
+        if ( h ) {
+            elt.removeEventListener(evt, h)
+            elt.listeners[evt] = undefined
+        }
+    }
+
+    elt.on = function(a,b,c,d,e) { 
+        elt.off(a)
+        elt.addEventListener(a,b,c,d,e)
+        elt.listeners[a] = b
+        return elt 
+    }    
     
     elt.nortProps = {}
 

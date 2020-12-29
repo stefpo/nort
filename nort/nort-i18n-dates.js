@@ -2807,16 +2807,21 @@ class Locale {
 
    dateToString(d) {
 		let fmt
-      let s
-      if (this.dateFormatFixed ) fmt="00"; else fmt=""
-      if (this.partOrder == 'YMD') 
-         s = d.getFullYear() + this.separator + this.fixedFormat((d.getMonth()+1 ),fmt) + this.separator + this.fixedFormat(d.getDate(),fmt)
-      else if (this.partOrder == 'DMY') 
-         s = this.fixedFormat(d.getDate(),fmt) + this.separator + this.fixedFormat((d.getMonth()+1 ),fmt)+ this.separator + d.getFullYear()
-      else if (this.partOrder == 'MDY') 
-         s = this.fixedFormat((d.getMonth()+1 ),fmt)+ this.separator + this.fixedFormat(d.getDate(),fmt) + this.separator + d.getFullYear()
-      else
-         s = d.getFullYear() + '-' + (d.getMonth()+1 )+ '-' + d.getDate()
+      let s = ""
+      let dn
+
+      if (typeof(d)=="string" && ! isNaN(dn = Date.parse(d)) ) { d = new Date(dn) }
+      if (d)  {
+         if (this.dateFormatFixed ) fmt="00"; else fmt=""
+         if (this.partOrder == 'YMD') 
+            s = d.getFullYear() + this.separator + this.fixedFormat((d.getMonth()+1 ),fmt) + this.separator + this.fixedFormat(d.getDate(),fmt)
+         else if (this.partOrder == 'DMY') 
+            s = this.fixedFormat(d.getDate(),fmt) + this.separator + this.fixedFormat((d.getMonth()+1 ),fmt)+ this.separator + d.getFullYear()
+         else if (this.partOrder == 'MDY') 
+            s = this.fixedFormat((d.getMonth()+1 ),fmt)+ this.separator + this.fixedFormat(d.getDate(),fmt) + this.separator + d.getFullYear()
+         else
+            s = d.getFullYear() + '-' + (d.getMonth()+1 )+ '-' + d.getDate()
+      } 
       return s
     }    
 
@@ -2859,7 +2864,15 @@ nort.setLocale = function(lang) {
    nort.currentLocale = new Locale(lang)
 }
 
-nort.setLocale(nort.language)
+nort.dateToString = function(d) {
+   return nort.currentLocale.dateToString(d)
+}
+
+nort.stringToDate = function(d) {
+   return nort.currentLocale.stringToDate(d)
+}
+
+nort.setLocale (nort.getBrowserLanguage())
 
 
 

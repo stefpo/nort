@@ -17,7 +17,7 @@ nort.makeTranslatable = function(s) {
 }
 
 nort.translate = function(s) {
-    let re = /\[([a-z]|[0-9]|[_ .])+\]/i
+    let re = /\[([a-z]|[0-9]|[_ .])*\]/i
     let match=re.exec(s)
     let istr = s
     let b = []

@@ -213,9 +213,11 @@ nort.elements.datebox = function(attributes) {
     }
 
     e.on("focus", function() { 
-        if (!inhibitFocusEvent) { justFocused=true; showPopup() }
-        inhibitFocusEvent = false
-        } 
+        if ( ! e.getAttribute("readonly") && ! e.getAttribute("locked")) {
+            if (!inhibitFocusEvent ) { justFocused=true; showPopup() }
+            inhibitFocusEvent = false
+            } 
+        }
     )
 
     e.on("blur", function() {
@@ -223,11 +225,13 @@ nort.elements.datebox = function(attributes) {
     })
 
     e.on("click", function() { 
-        if ( ! justFocused ) {
-            if (e.popupAnchorDiv) { e.hidePopup() }
-            else showPopup()
+        if ( ! e.getAttribute("readonly") && ! e.getAttribute("locked")) {
+            if ( ! justFocused ) {
+                if (e.popupAnchorDiv) { e.hidePopup() }
+                else showPopup()
+            }
+            justFocused = false
         }
-        justFocused = false
     } )
 
     return e
