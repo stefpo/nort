@@ -47,8 +47,9 @@ nort.components.Grid =  class extends nort.Component{
             this.loadGroupValues() 
             for ( let c in this.columns ) {
                 let e
-                if ( e = this.columns[c].filterElement) {
-                    e.setOptions(this.columns[c].groupValues)
+                let col = this.columns[c]
+                if ( e = col.filterElement) {
+                    e.setOptions(this.getFilterOptions(col.groupValues, col.transformFunc))
                 } 
             }
 

@@ -303,6 +303,8 @@ nort.WM.createWindow = function(options) {
         if (! this.maximized) {
             this.top = (this.parentNode.offsetHeight-nort.WM.minTop) /2 - this.height/2
             this.left = (this.parentNode.offsetWidth-nort.WM.minLeft) /2 - this.width/2
+            if ( this.top < 0 ) this.top = 0
+            if ( this.left < 0 ) this.left = 0
             this.style.top = this.top + "px"
             this.style.left = this.left + "px"
         }
@@ -410,7 +412,7 @@ nort.WM.createWindow = function(options) {
 
 nort.WM.windowTemplate = function (w){
     let maxBtn = ""
-    if (w.resizable ) maxBtn=`<div class="wm-window-button" onmousedown="nort.WM.onWindowButton(this,&#39;max&#39;)">&circledcirc;</div>`
+    if (w.resizable ) maxBtn=`<div class="wm-window-button" style="color: #00ff00;" onmousedown="nort.WM.onWindowButton(this,&#39;max&#39;)">&#x2B24;&nbsp;</div>`
 
     return `
     <table cellpadding=0 cellspacing=0 onmouseover="this.fi=nort.WM.delayedSetFocusTo(this);" onmouseout="window.clearTimeout(this.fi)" >
@@ -419,7 +421,7 @@ nort.WM.windowTemplate = function (w){
     <tr><td onmousedown="nort.WM.OnMouseDown(this,event,&#39;rw&#39;)"></td><td>
     <table>
     <tr><td class="wm-title-bar"  onmousedown="nort.WM.OnMouseDown(this,event,&#39;mv&#39;)"><div class="wm-title">Title bar</div>
-    <div class="wm-window-button" onmousedown="nort.WM.onWindowButton(this,&#39;close&#39;)">&CircleTimes;</div>
+    <div class="wm-window-button" style="color: #ff4040;" onmousedown="nort.WM.onWindowButton(this,&#39;close&#39;)">&#x2B24;</div>
     ${maxBtn}
     </td></tr>
     <tr><td class="content-pane" id="content"></td></tr>

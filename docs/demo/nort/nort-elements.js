@@ -90,6 +90,7 @@ nort.elements.textbox = function(attributes) {
 
     e.setValue = function(v) {
         e.value = v
+        e.initialValue = e.value
         return e
     }
 
@@ -106,6 +107,7 @@ nort.elements.passwordbox = function(attributes) {
 
     e.setValue = function(v) {
         e.value = v
+        e.initialValue = e.value
         return e
     }
 
@@ -119,8 +121,14 @@ nort.elements.passwordbox = function(attributes) {
 
 nort.elements.checkbox = function(attributes) {
     let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkbox", "nort-element":"checkbox"}, [attributes])) 
+
+    e.isValid = function() {
+        return true
+    }
+
     e.setValue = function(v) {
-        e.checked = v || false
+        v = v || false
+        e.checked = [true, 1, '1', 'Y','y'].includes(v)
         return e
     }
 
@@ -141,22 +149,7 @@ nort.elements.button = function(attributes) {
 
 
 nort.elements.select = function(attributes, optionList) {
-    let options = []
-    if (Array.isArray(optionList)) {
-        let p = optionList
-        for (let i=0; i< p.length; i++) {
-            options.push ($option({}, nort.translate(optionList[i])))
-        }
-    } else if (typeof(optionList) == "object") {
-        for (let k of Object.keys(optionList)) {
-            options.push ($option({value: k}, nort.translate(optionList[k])))
-        }
-    } else if (typeof (optionList) == "string") {
-        let p = optionList.split(';')
-        for (let i=0; i< p.length; i++) {
-            options.push ($option({}, nort.translate(p[i])))
-        }
-    } 
+ 
     let fieldValue = ""
 
     if (! attributes) attributes = {}
@@ -194,6 +187,7 @@ nort.elements.select = function(attributes, optionList) {
                 break
             }
         }
+        element.initialValue = element.value
         return element
     }    
 
@@ -219,15 +213,18 @@ nort.elements.select = function(attributes, optionList) {
                     if(typeof(p) == "object") {
                         let keys = Object.keys(p)
                         if (keys.length == 1 ) element.addOption(p[keys[0]] ) 
-                        else element.addOption(p[keys[0]],p[keys[1]]  ) 
+                        else element.addOption(p[keys[0]], nort.translate(p[keys[1]])  ) 
 
-                    } else { element.addOption(p ) }
+                    } else { element.addOption( nort.translate(p) ) }
                 }
             }
         } else  if (typeof(optionList) == "object") {
             for (let k of Object.keys(optionList)) {
-                element.addOption(k,optionList[k] )
+                if ( k == "") element.addOption(k, nort.translate(optionList[k]) )
             } 
+            for (let k of Object.keys(optionList)) {
+                if ( k != "") element.addOption(k, nort.translate(optionList[k]) )
+            }             
         } else if (typeof (optionList) == "string") {
             let p = optionList.split(';')
             for (let i=0; i< p.length; i++) {
@@ -235,12 +232,11 @@ nort.elements.select = function(attributes, optionList) {
             }
         }
         element.value = v
+
         return element 
     }
 
-    element.setOptions(optionList)
-
-
+    if (optionList) element.setOptions(optionList)
     element.setAttribute("nort-element","select")            
     return element
 }
@@ -248,19 +244,26 @@ nort.elements.select = function(attributes, optionList) {
 nort.elements.fieldbox = function (attributes, fieldElement) { 
     let css = attributes.class || ""
     let label
-    if ( fieldElement.attributes["n-label"] ) label =fieldElement.attributes["n-label"].value
+    if ( fieldElement.attributes["n-label"] ) label = fieldElement.attributes["n-label"].value
     else label = "[" + (fieldElement.name || "Label") + "]"
 
     if ( fieldElement.placeholder ) fieldElement.placeholder = nort.translate(fieldElement.placeholder )
 
     label = nort.translate(label)
+    let labelElt
 
     let element=$div( { class: css },
-                $label({}, label ), 
+                labelElt =$label({}, label ), 
                 $div({},  fieldElement ))
             .addClass("fieldbox")
 
-    element.setAttribute("nort-element","fieldbox")            
+    if (attributes.link != undefined) {
+        labelElt.addClass("link")
+        labelElt.onclick =  attributes.link
+    }
+
+    element.setAttribute("nort-element","fieldbox")     
+    
     return nort.elements.lib.bindFieldMethods(element)
 }
 
@@ -275,6 +278,13 @@ nort.elements.popup = function (element) {
     document.body.appendChild(bg)
     document.body.appendChild(element)
     return element
+}
+
+nort.elements.yesNoSelect = function(attributes) {
+    let e = nort.elements.select(attributes, {'0': 'No', '1': 'Yes'})
+    if (attributes.checked ) e.setValue(1) 
+    else e.setValue(0)
+    return e
 }
 
 document.write (`<script src=\"${nort.baseURL}/nort-elements-tabber.js?version=${nort.version}\"></script>`)

@@ -47,8 +47,9 @@ nort.components.Grid =  class extends nort.Component{
             this.loadGroupValues() 
             for ( let c in this.columns ) {
                 let e
-                if ( e = this.columns[c].filterElement) {
-                    e.setOptions(this.columns[c].groupValues)
+                let col = this.columns[c]
+                if ( e = col.filterElement) {
+                    e.setOptions(this.getFilterOptions(col.groupValues, col.transformFunc))
                 } 
             }
 
@@ -75,41 +76,43 @@ nort.components.Grid =  class extends nort.Component{
     }
 
     setData(o, tabledef) {
+        if (o.length > 0 ) {
 
-        if (tabledef) this.setTabledef(tabledef)
-        this.clear()
-        // Create columns
-        if (Array.isArray(o) && o.length>0) {
-            this.data = o
-            this.dataLoadedOnce = true
+            if (tabledef) this.setTabledef(tabledef)
+            this.clear()
+            // Create columns
+            if (Array.isArray(o) && o.length>0) {
+                this.data = o
+                this.dataLoadedOnce = true
 
-            for (let k in o[0]) {
-                
-                let col = {
-                    name: k,
-                    visible: true,
-                    groupValues: [],
-                    visible: true,
-                    transformFunc: this.conf.options.defaultTransform,
-                    headerTransformFunc: this.conf.options.defaultHeaderTransform
+                for (let k in o[0]) {
+                    
+                    let col = {
+                        name: k,
+                        visible: true,
+                        groupValues: [],
+                        visible: true,
+                        transformFunc: this.conf.options.defaultTransform,
+                        headerTransformFunc: this.conf.options.defaultHeaderTransform
+                    }
+                    
+                    nort.object.merge(col, this.conf.columns[k] || {}, true)
+                    if ( ! this.sortColumn && col.visible )  this.sortColumn = col
+                    this.columns[k] = col
                 }
-                
-                nort.object.merge(col, this.conf.columns[k] || {}, true)
-                if ( ! this.sortColumn && col.visible )  this.sortColumn = col
-                this.columns[k] = col
             }
-        }
 
 
-        /* Collect group values */
-        this.loadGroupValues()
+            /* Collect group values */
+            this.loadGroupValues()
 
-        for (let r of this.data) {
-            r._visible = true
-            r._checked = false
-        }
-         
-        this.sortData()        
+            for (let r of this.data) {
+                r._visible = true
+                r._checked = false
+            }
+            
+            this.sortData()   
+        }     
         this.refresh()
     }
 
@@ -236,6 +239,7 @@ nort.components.Grid =  class extends nort.Component{
         for (let i=0; i<values.length; i++) {
             options[values[i]] = transformFunc(values[i], true)
         }
+        console.log(JSON.stringify(options))
         return options
     }
 
@@ -328,16 +332,22 @@ nort.components.Grid =  class extends nort.Component{
     }
 
     render() {
-        document.body.style.cursor = "progress"
+        
 
         let css = (" " + this.properties.class ) || ""
 
-        let thead = this.renderHeader()
+        if ( this.data.length > 0 ) {
+            document.body.style.cursor = "progress"
 
-        this.tbody = this.renderBody()
-        this.table = $table({}, thead, this.tbody )
-        document.body.style.cursor = "default"
+            let thead = this.renderHeader()
 
-        return $div({ class: "nort-grid" + css},this.table)
+            this.tbody = this.renderBody()
+            this.table = $table({}, thead, this.tbody )
+            document.body.style.cursor = "default"
+
+            return $div({ class: "nort-grid" + css},this.table)
+        } else {
+            return $div({  style: "margin: 8px;" },nort.translate('[NO_DATA]'))
+        }
     }
 }

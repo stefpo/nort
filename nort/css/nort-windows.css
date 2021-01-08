@@ -11,7 +11,6 @@ body{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-family: sans-serif;
     font-size: 11pt;   
 }
 
@@ -22,7 +21,6 @@ div.wm-window {
     background-color: silver;
     padding: 0px;
     display: table;
-    font-family: sans-serif;
     font-size: 11pt;
     /* border: 1px solid grey; */
     /* box-sizing: border-box; */
@@ -53,7 +51,7 @@ div.wm-moving { opacity: 0.5 }
 
 
 div.wm-window table { height:100%; width: 100%; border-collapse: collapse; border: none;}
-div.wm-window td{ font-family: sans-serif; font-size: 11pt; overflow: hidden; border: none; margin:0px; padding:0px;}
+div.wm-window td{ font-size: 11pt; overflow: hidden; border: none; margin:0px; padding:0px;}
 
 /* borders */
 div.wm-window>table>tbody>tr:first-child { height: 4px; cursor: n-resize; color:red}

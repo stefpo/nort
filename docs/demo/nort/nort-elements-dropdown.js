@@ -86,6 +86,7 @@ nort.elements.comboBox = function(attributes, optionList) {
 
     e.setValue = function(v) {
         e.value = v
+        e.initialValue = e.value
         return e
     }
 
@@ -126,9 +127,11 @@ nort.elements.comboBox = function(attributes, optionList) {
     }
 
     e.on("focus", function() { 
-        if (!inhibitFocusEvent) { justFocused=true; showPopup() }
-        inhibitFocusEvent = false
-        } 
+        if ( ! e.getAttribute("readonly") && ! e.getAttribute("locked")) {
+            if (!inhibitFocusEvent) { justFocused=true; showPopup() }
+            inhibitFocusEvent = false
+            } 
+        }
     )
 
     e.on("blur", function() {
@@ -136,11 +139,13 @@ nort.elements.comboBox = function(attributes, optionList) {
     })
 
     e.on("click", function() { 
-        if ( ! justFocused ) {
-            if (e.popupAnchorDiv) { e.hidePopup() }
-            else showPopup()
+        if ( ! e.getAttribute("readonly") && ! e.getAttribute("locked")) {
+            if ( ! justFocused ) {
+                if (e.popupAnchorDiv) { e.hidePopup() }
+                else showPopup()
+            }
+            justFocused = false
         }
-        justFocused = false
     } )
 
     return e
