@@ -296,6 +296,7 @@ nort.WM.createWindow = function(options) {
             this.minWidth = this.width
             this.minHeight = this.height
         }
+        if ( this.width  > window.innerWidth || this.height > window.innerHeight ) this.setMaximized(true)
         return w
     }
 
@@ -322,14 +323,16 @@ nort.WM.createWindow = function(options) {
             w.setFrameSize(false)
             this.style.top = nort.WM.minTop + "px"
             this.style.left = nort.WM.minLeft + "px";   
-            this.style.width = (top.innerWidth-nort.WM.minLeft) +"px"
-            this.style.height = (this.parentNode.offsetHeight-nort.WM.minTop) +"px"
-            this.style.bottom = "100%";  
+            //this.style.width = (top.innerWidth-nort.WM.minLeft) +"px"
+            this.style.width = (this.parentNode.offsetWidth-nort.WM.minLeft) +"px"
+            this.style.height = (this.parentNode.offsetHeight-nort.WM.minTop) +"px" 
+            this.contentPane.style.overflow = "scroll"
             w.addClass('wm-maximized')
             w.setFrameSize(true)
         }
         else {
             w.removeClass('wm-maximized')
+            this.contentPane.style.overflow = "initial"
             w.place(undefined, undefined, undefined, undefined)
         }
         return w
