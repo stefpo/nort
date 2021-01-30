@@ -24,6 +24,8 @@ class AssetForm extends nort.components.containers.Form {
                    .add (nort.elements.button({name:"btn5", type: "button"},"[Show alert]"))
                    .add (nort.elements.button({name:"btn6", type: "button"},"[Choice box]"))
                    .add (nort.elements.button({name:"btn7", type: "button"},"[New window]"))
+                   .add (nort.elements.buttonMenu({name:"mnu1", type: "button"},"Menu", 
+                            [{text: "Entry1"},{text: "Entry2"},{text: "Entry3"}]))
                    .add (nort.elements.textbox({name:"browser"}))
                    .add (nort.elements.checkbox({name:"cb1" }))
 
@@ -72,7 +74,8 @@ class AssetForm extends nort.components.containers.Form {
                 nort.elements.fieldbox({class: "size-3"}, this.fields.browser),
                 $br(),
                 this.fields.btn," ",  this.fields.btn2," Visible ",  this.fields.cb1, " ",  
-                this.fields.btn3," ", this.fields.btn5,  " ", this.fields.btn6, " ", this.fields.btn7,
+                this.fields.btn3," ", this.fields.btn5,  " ", this.fields.btn6, " ", 
+                this.fields.btn7, " ", this.fields.mnu1,
                 $div({style: "height: 10px;"}),
                 $div({ style: "width: 720px; height: 200px; margin-bottom: 0.5em"},
                     this.tabber = nort.elements.tabber({ style: "height: 100%;"}, 

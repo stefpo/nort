@@ -25,7 +25,7 @@ nort.elements.tabber = function (attributes, tabPages) {
         let delButton
 
         let removable =  tab.removable || false
-        let he = $div({},nort.translate(tab.label), 
+        let he = $div({},tab.label, 
             ! removable ? undefined: delButton= $div({ class: "tabberbutton"},"x"))
         let pe
         let i = tabs.length
