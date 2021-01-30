@@ -179,7 +179,7 @@ nort.getDocumentScroll = function () {
 }
 
 nort.getParentPane = function(e) {
-    if ( ! e.parentNode ) return e
+    if ( ! e.parentNode ) return document.documentElement
     else if ( nort.hasCssClass (e, "content-pane") || nort.hasCssClass (e, "scroll-pane") ) return e
     else return nort.getParentPane(e.parentNode)
 }
@@ -188,7 +188,7 @@ nort.activePopup = undefined
 
 nort.showFieldPopup = function(e, popup, location) {
     let cp = nort.getParentPane(e)
-    let anchorDiv = $div({ style: "width:0px; height: 0px; position: relative; overflow: visible"},
+    let anchorDiv = $div({ style: `width: 0px; height: 0px; vertical-align: top; position: relative; overflow: visible; display: inline-block;`},
         popup
     )
     e.parentNode.insertBefore(anchorDiv, e); 
@@ -201,6 +201,8 @@ nort.showFieldPopup = function(e, popup, location) {
     eRect = e.getBoundingClientRect()
     cpRect = cp.getBoundingClientRect()
 
+    
+
     if (location == 'e') {
         if ( eRect.right + popup.offsetWidth > cpRect.width) anchorDiv.style.left = -popup.offsetWidth + "px"
         else anchorDiv.style.left = e.offsetWidth +"px"
@@ -210,7 +212,7 @@ nort.showFieldPopup = function(e, popup, location) {
             if ( eRect.top - popup.offsetHeight > cpRect.top )  anchorDiv.style.top = -popup.offsetHeight + "px"
             else anchorDiv.style.top = e.offsetHeight + "px"
         } else {
-            if ( eRect.bottom + popup.offsetHeight > cpRect.height) anchorDiv.style.top = e.offsetHeight + "px"
+            if ( cpRect.height - eRect.bottom - popup.offsetHeight > 0 ) { anchorDiv.style.top = e.offsetHeight + "px"; }
             else anchorDiv.style.top = -popup.offsetHeight + "px"
         }
 

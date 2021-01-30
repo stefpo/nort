@@ -249,7 +249,7 @@ nort.WM.createWindow = function(options) {
     }     
 
     w.moveTo=function (left,top) {
-        iw (w.moveable) .place(left,top,undefined,undefined)
+        if (w.moveable) w.place(left,top,undefined,undefined)
     }  
 
     w.focus=function() {
