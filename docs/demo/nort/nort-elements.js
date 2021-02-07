@@ -96,7 +96,11 @@ nort.elements.textbox = function(attributes) {
 
     e.getValue = function() {
         e.isValid()
-        return fieldValue
+        if (e.hasClass ("type-uint")) return parseInt(fieldValue)
+        else if (e.hasClass ("type-int")) return parseInt(fieldValue)
+        else if (e.hasClass ("type-decimal")) return parseFloat(fieldValue)
+        else if (e.hasClass ("type-float")) return parseFloat(fieldValue)
+        else return fieldValue
     }
     
     return e
@@ -182,7 +186,7 @@ nort.elements.select = function(attributes, optionList) {
 
     element.setValue = function(v) {
         for (let i=0; i< element.options.length; i++) {
-            if ( v==element.options[i].value ) {
+            if ( v == element.options[i].value ) {
                 element.selectedIndex = i
                 break
             }

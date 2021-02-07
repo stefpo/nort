@@ -12,8 +12,10 @@ nort.alert = function(s, timeout) {
 nort.choiceBox = function(title, msg, buttons, timeout) {
     let btns = []
     let w
+    let firstBtn = null
     for (let i in buttons) {
         let b = nort.elements.button({},buttons[i].text)
+        if ( ! firstBtn ) firstBtn = b 
         b.on("click", function () {
             w.close()
             if (buttons[i].callback) setTimeout(buttons[i].callback, 100)
@@ -37,6 +39,7 @@ nort.choiceBox = function(title, msg, buttons, timeout) {
     w.pack()
     w.center()
     w.focus()
+    if (firstBtn) firstBtn.focus()
 }
 
 

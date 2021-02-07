@@ -92,6 +92,7 @@ document.addEventListener("DOMContentLoaded",function() { nort.main() })
 
 
 loadJS("nort-object.js")
+loadJS("nort-datetime.js")
 loadJS("nort-dom.js")
 loadJS("nort-html-tags.js")
 loadJS("nort-elements.js")

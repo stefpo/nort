@@ -24,8 +24,11 @@ class AssetForm extends nort.components.containers.Form {
                    .add (nort.elements.button({name:"btn5", type: "button"},"[Show alert]"))
                    .add (nort.elements.button({name:"btn6", type: "button"},"[Choice box]"))
                    .add (nort.elements.button({name:"btn7", type: "button"},"[New window]"))
-                   .add (nort.elements.buttonMenu({name:"mnu1", type: "button"},"Menu", 
-                            [{text: "Entry1"},{text: "Entry2"},{text: "Entry3"}]))
+                   .add (nort.elements.buttonMenu({name:"mnu1" },"Menu", 
+                            [{text: "Entry1", callback: function() { nort.alert("Entry 1")}},
+                             {text: "Entry2", callback: function() { nort.alert("Entry 2")}},
+                             { menu: { text: "Submenu", items: [ { text: "Sub1", callback: function() { nort.alert("Sub1 2")} } ] } },
+                             {text: "Entry3", callback: function() { nort.alert("Entry 3")}}]))
                    .add (nort.elements.textbox({name:"browser"}))
                    .add (nort.elements.checkbox({name:"cb1" }))
 

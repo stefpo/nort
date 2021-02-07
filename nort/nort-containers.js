@@ -41,10 +41,6 @@ nort.components.containers.Form =  class extends nort.Component{
         return elements
     }
 
-    isValid() {
-        return this.isValid
-    }
-
     toObject() {
         let fo = new Object()
         let errors = []
@@ -65,6 +61,7 @@ nort.components.containers.Form =  class extends nort.Component{
                 }
             }
         }
+
         fo['$valid']=this.isValid
         fo['$errors'] = errors
         return (fo)
@@ -73,6 +70,7 @@ nort.components.containers.Form =  class extends nort.Component{
     fill( fo ) {
         for ( let i in this.fields) {
             let e = this.fields[i]
+            console.log(e.name)
             let id
             if ( (id = e.name) != undefined ) {
                 if (id !=null && id != "") {
@@ -80,27 +78,6 @@ nort.components.containers.Form =  class extends nort.Component{
                         if (e.setValue) {
                             e.setValue(fo[id])
                         }
-                        /*
-                        if (e.tagName == "INPUT" ) {
-                            
-                            if (e.type == "checkbox") {
-                                e.checked = fo[id] == 0 ? false : true
-                            }
-                            else if (e.type == "radio") {
-                                if (fo[id] == e.value) e.checked = true
-                            }
-                            
-                            else {
-                                if (fo[id].getTime) {
-                                    e.value = nort.currentLocale.dateToString(fo[id])
-                                } else {
-                                    e.value = fo[id]
-                                }
-                            }
-                        }
-                        else if (e.tagName == "SELECT" ) {
-                            e.value = fo[id]
-                        }*/
                     }
                 }
             }

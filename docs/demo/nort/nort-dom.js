@@ -188,7 +188,7 @@ nort.activePopup = undefined
 
 nort.showFieldPopup = function(e, popup, location) {
     let cp = nort.getParentPane(e)
-    let anchorDiv = $div({ style: `width: 0px; height: 0px; vertical-align: top; position: relative; overflow: visible; display: inline-block;`},
+    let anchorDiv = $div({ style: `width: 0px; height: 0px; vertical-align: top; position: relative; overflow: visible; display: inline-block; z-index: 10`},
         popup
     )
     e.parentNode.insertBefore(anchorDiv, e); 
@@ -201,7 +201,6 @@ nort.showFieldPopup = function(e, popup, location) {
     eRect = e.getBoundingClientRect()
     cpRect = cp.getBoundingClientRect()
 
-    
 
     if (location == 'e') {
         if ( eRect.right + popup.offsetWidth > cpRect.width) anchorDiv.style.left = -popup.offsetWidth + "px"
@@ -217,7 +216,7 @@ nort.showFieldPopup = function(e, popup, location) {
         }
 
         if (location.substr(1,1) == "e" ) {
-            anchorDiv.style.left = e.offsetWidth - popup.offsetWidth+"px"
+            anchorDiv.style.left = ( e.offsetWidth - popup.offsetWidth)  +"px"
         } else {
             anchorDiv.style.left = "0px"
         }
@@ -230,7 +229,7 @@ nort.showFieldPopup = function(e, popup, location) {
 
     nort.activePopup = anchorDiv
     popup.style.visibility = "visible"
-    //popup.style.position =  "fixed"
+
 }
 
 nort.hideFieldPopup = function(e) {
