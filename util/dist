@@ -1,4 +1,4 @@
-rsync -av --delete app nort docs/demo
+rsync -av --delete nort docs
 
 mkdir docs/dist
 tar -cvzf docs/dist/nort.tgz nort
