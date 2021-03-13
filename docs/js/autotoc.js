@@ -19,3 +19,6 @@ function generateToc(elt, headings) {
     return out.join("")
 }
 
+function insertToc(dest, source, tag) {
+    document.getElementById(dest).innerHTML = document.getElementById(dest).innerHTML + generateToc(document.getElementById(source),tag) 
+}

@@ -250,6 +250,15 @@ nort.components.Grid =  class extends nort.Component{
         else return nort.translate( c.name )+ postfix
     }
 
+    fireCheckboxEvent() {
+        let me = this
+        let selRows = []
+        for ( let i in me.data) {
+            if ( me.data[i]._checked) selRows.push(i)
+        }
+        me.fireEvent('checkbox', { selection: selRows})
+    }
+
     renderBody() {
         let rows = []   
         let displayedRows = 0
@@ -262,6 +271,7 @@ nort.components.Grid =  class extends nort.Component{
                     cb.on("click", function(){
                         me.topCheckbox.checked = 0 
                         me.data[r]._checked = cb.getValue()
+                        me.fireCheckboxEvent()
                     }) 
                     cb.setChecked = function(v) {
                         cb.checked = v
@@ -304,6 +314,7 @@ nort.components.Grid =  class extends nort.Component{
                 for (let rcb of me.checkboxes) {
                     rcb.setChecked(cb.checked)
                 }
+                me.fireCheckboxEvent()
             })
             row.push($th({}, cb))                    
         }             

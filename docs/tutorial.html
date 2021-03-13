@@ -11,17 +11,18 @@
     <section>
         <div class="container">
             <h1>NORT Tutorial</h1>
-            <div id="toc" style="width: 20%; float: left;"></div> 
+            <div id="toc" style="width: 20%; float: left;"><h2>Content</h2></div> 
             <div style="width: 75%; float: right;" id="contents">
                 <script>include("under-construction.html")</script>   
                 <h2>Prerequisites</h2>
                 <p>This tutorial assumes that you have some level of familiarity with Javascript, HTML and CSS.</p>
+                <p>You may want to take a look at <a href="getstarted.html"> Getting Started.</a></p>
                 <h2>Getting ready</h2>
                 <h2>Your first application</h2>
             </div>
         </div>
     </section>
     <script>include("footer.html")</script>  
-    <script>document.getElementById("toc").innerHTML = generateToc(document.getElementById("contents"),"h2") </script>      
+    <script>insertToc("toc", "contents", "h2")</script>
 </body>
 </html>

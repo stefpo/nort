@@ -57,7 +57,7 @@ input.type-float, input.type-int, input.type-uint,
 input.type-decimal,  input.type-decimal2,  input.type-decimal4 { text-align: right }
 
 button {
-    font-size: 100%;
+    font-size: 90%;
     border: 1px solid silver;
     /* border-radius: 3px; */
     color: #404040;
@@ -460,13 +460,14 @@ div.nort-grid>table th{
     padding: 4px;
     padding-top: 6px;
     padding-bottom: 6px;
-    font-size: 95%;
-    color: #404040;
+    font-size: 90%;
+    color: #606060;
 }
 
 div.nort-grid input, div.nort-grid select{
     background-color: white;
     border: none;
+    padding: 2px;
 }
 
 div.nort-grid>table tr:hover{ 
@@ -476,7 +477,7 @@ div.nort-grid>table tr:hover{
 div.nort-grid>table td{ 
     padding: 4px;
     margin: 0px;
-    font-size: 95%;;
+    font-size: 90%;;
     border-bottom: 1px solid silver;
     white-space: nowrap;
     overflow: hidden;

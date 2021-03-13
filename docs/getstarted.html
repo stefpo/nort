@@ -3,19 +3,120 @@
 <head>
 <title>Getting started with NORT</title>  
 <script src="js/csi.js"></script>  
+<script src="js/autotoc.js"></script> 
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
     <script>include("header.html")</script>  
     <section>
-        <div id="toc"></div>
-        <div id="maindoc" class="container">
-            <script>include("under-construction.html")</script> 
+        <div class="container">
             <h1>Getting started with NORT</h1>
-            <h2>Getting </h2>
-            <p>This page is under construction</p>
+            <div id="toc" style="width: 20%; float: left;"><h2>Content</h2></div> 
+            <div style="width: 75%; float: right;" id="contents">
+
+                <h2>About NORT</h2>
+                <p>NORT is a client-side Javascript library that makes the creaction of Single Page Application
+                    as easy as writing HTML code. </p>
+                <p>NORT design objectives are:</p>
+                <ul>
+                    <li>Modular, component-orientated</li>
+                    <li>Pure javavascript. You will write no HTML code.</li>
+                    <li>Imperative programming. What your application executes is exactly what you write.</li>
+                    <li>No transpiling. Your code executes in the browser as-is.</li>
+                    <li>Visual component programming uses HTML-like  structure.</li>
+                </ul>
+                <h2>Your first app</h2>
+                <p>A NORT application is always a HTML page. The HTML page generally contains the 
+                    Javascript loading code. The rest of your application is implemented in Javascript
+                </p>
+                <p>Your HTML page will look like the following: ( You can see the result <a href="demo/getstarted" target="demo">here</a>)</p>
+                index.html:
+                <pre><code class="html">
+    &lt;!DOCTYPE html&gt;
+    &lt;html style=&quot;height: 100%&quot;&gt;
+    
+    &lt;head&gt;
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+    &lt;meta name='viewport' content='target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' /&gt;
+    
+    &lt;title&gt;Your first application&lt;/title&gt;
+    
+    &lt;script src=&quot;../nort/nort.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;loadStyleSheet(&quot;./style.css&quot;)&lt;/script&gt;
+    &lt;script&gt;
+        loadJS(&quot;./appcode.js&quot;)
+    
+    &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;/html&gt;
+                </code></pre>
+                <p>You then need an application main code.</p>
+                appcode.js:
+                <pre><code class="javascript">
+    // This is the entry point of your application
+    nort.main = function() {                    
+        
+        // You need to render something.
+        nort.render(
+            $div({ style: "padding: 30px"},
+                [
+                $h1({ style: "color: red"}, "Your first NORT application" ),
+                $p({}, "Some text here" )
+                ])
+        )
+    }
+                    
+                </code></pre>
+                <h3>The code explained</h3>
+                <h4>In the HTML file</h4>
+                <p>To load a NORT application into your page, you need to:</p>
+                <ul>
+                    <li>Load the NORT library. It is best to do it in the HEAD section of your page.</li>
+                    <li>Load you application code. Note your pages does not even need a BODY section</li>                 </li>
+                </ul>
+                <h4>The Javascript code</h4>
+                <p>After loading the page, the browser will run the function <b>nort.main()</b>. 
+                    This function is your application entry point. You may perform any initialization here.
+                    After that, your are ready to render your first UI, by calling <b>nort.render()</b>.
+                </p>
+                <b>nort.render( element, target)</b> appends the <b>element</b> to the <b>target</b> element.
+                When no target is specified, the element is inserted at the root of the document.
+                <p>In this example we are rendering a div. The equivalent HTML code would be:</p>
+                <pre><code class="html">
+    &lt;div style=&quot;padding: 30px&quot; nort-element=&quot;div&quot;&gt;
+    &lt;h1 style=&quot;color: red&quot; nort-element=&quot;h1&quot;&gt;Your first NORT application &lt;/h1&gt;
+    &lt;p nort-element=&quot;p&quot;&gt;Some text here &lt;/p&gt;
+    &lt;/div&gt;
+                </code></pre>
+                <p>Let's compare with the Javascript. Pretty close ! </p>
+                <pre><code class="javascript">
+    $div({ style: "padding: 30px"},
+    [
+    $h1({ style: "color: red"}, "Your first NORT application" ),
+    $p({}, "Some text here" )
+    ])
+                </code></pre>
+                <p>All HTML5 tags are have there $tag equivalent in NORT. There are 
+                    2 ways of using a tag, depnding on the context:</p>
+                <ul>
+                    <li><b>Parameter notation</b> $tag( { attrib1: value, attrib2: value ....}, [ child1, child2, .... ] )</li>
+                    <li><b>Array notation</b> $tag( { attrib1: value, attrib2: value ....}, [ child1, child2, .... ] )</li>
+                </ul>
+                <p>Both notations are equivalent. The parameter notation is slighty simpler when 
+                    creating literals.<br>
+                    The Array notation allows the children to be the result of a function that generates the chunk.
+                </p>
+                <h2>Next steps</h2>
+                <p>We hope this introduction makes you feel like learning more about NORT...</p>
+                <p>You are now ready to <a href="tutorial.html">take the tutorial</a>.</p>
+            </div>
         </div>
     </section>
     <script>include("footer.html")</script>  
+    <script>insertToc("toc", "contents", "h2")</script>      
 </body>
 </html>

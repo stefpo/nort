@@ -9,6 +9,7 @@ class nortComponent {
         this.element = null
         this.properties = properties != undefined ? properties : {}
         this.display = ""
+        this.eventHandlers = {}
     }
 
     destroy(rootElt) {
@@ -25,6 +26,22 @@ class nortComponent {
             this[k] = undefined
         }
     }    
+
+    on(event, handler) {
+        if ( ! this.eventHandlers[event] ) this.eventHandlers[event] = []
+        this.eventHandlers[event].push(handler)
+    }
+
+    fireEvent(event, data) {
+        let handlers = this.eventHandlers[event]
+        if (Array.isArray(handlers)) {
+            for (let handler of handlers) {
+                try {
+                    handler(this, data)
+                } catch(e) { } // Ignore errors 
+            }
+        }
+    }
 
     refresh() {
         if (this.element) {
