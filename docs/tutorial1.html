@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NORT Tutorial</title>  
+<script src="js/csi.js"></script>  
+<script src="js/autotoc.js"></script>  
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <script>include("header.html")</script>  
+    <section>
+        <div class="container">
+            <h1>Setting up your environment</h1>
+            <div id="toc" style="width: 20%; float: left;"><h2>Content</h2></div> 
+            <div style="width: 75%; float: right;" id="contents">
+                <h2>What you need</h2>
+                <p>In order to develop with NORT, you will need:</p>
+                <ul>
+                    <li>A text editor. (Personally I like VSCode)</li>
+                    <li>A web server. There are multiple options.<br>
+                        <p>If you are building a complete system that includes an application server,  just place your NORT files in the static files
+                        folder of your application server.</p>
+                        <p>To service only you UI files, a simple static files server will do. Multiple options exist; here are two easy ones:</p>
+                        <ul>
+                            <li>Python3. Install python3. From the root folder where you placed you NORT files, run <code>python -m http.server 8000</code></li>
+                            <li>PHP-CLI. Install PHP. From the root folder where you placed you NORT files, run <code>php -S 0.0.0.0:8000</code></li>
+                        </ul>
+                         <p>Your application is accessible at http://localhost:8000.</p>
+                    </li>
+                    <li>The NORT library. See below options for obtaining the library</li>
+                        For development, you may simply include the NORT system by 
+                        including the github version in your HEAD section, like in this example.
+
+                    
+                </ul>
+                <h2>Options for getting NORT library</h2>
+                <p>If you are doing development and do not want to worry about installing NORT, 
+                    you may just include the scripts from github. Simply add the following to 
+                    your main page HEAD section:
+                </p>
+                <pre><code class="html">
+    &lt;script src=&quot;https://stefpo.github.io/nort/nort/nort.js&quot;&gt;&lt;/script&gt;
+                </code></pre>
+                <p>For production, it is better to get a static version of NORT, and add it to
+                    your application assets. You can download it from <a href="https://stefpo.github.io/nort/dist/nort.tgz">
+                    https://stefpo.github.io/nort/dist/nort.tgz</a> or <a href="https://stefpo.github.io/nort/dist/nort.zip">
+                        https://stefpo.github.io/nort/dist/nort.zip</a><br>
+                    You can then include it in your app.
+                </p>
+                <pre><code class="html">
+    &lt;script src=&quot;./nort/nort.js&quot;&gt;&lt;/script&gt;
+                </code></pre>
+                <div class="docnav-panel">
+                    <a class="green-button" href="tutorial.html">Back to "NORT tutorial"</a>
+                    <div style="flex-grow: 1;"></div>
+                    <a class="green-button" href="tutorial2.html">Next to "Your first application"</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>include("footer.html")</script>  
+    <script>insertToc("toc", "contents", "h2")</script>
+</body>
+</html>

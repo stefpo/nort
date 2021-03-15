@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Getting started with NORT</title>  
+<title>NORT Tutorial</title>  
 <script src="js/csi.js"></script>  
 <script src="js/autotoc.js"></script> 
 <link rel="stylesheet" href="css/style.css">
@@ -14,24 +14,13 @@
     <script>include("header.html")</script>  
     <section>
         <div class="container">
-            <h1>Getting started with NORT</h1>
+            <h1>Your first application</h1>
             <div id="toc" style="width: 20%; float: left;"><h2>Content</h2></div> 
             <div style="width: 75%; float: right;" id="contents">
 
-                <h2>About NORT</h2>
-                <p>NORT is a client-side Javascript library that makes the creaction of Single Page Application
-                    as easy as writing HTML code. </p>
-                <p>NORT design objectives are:</p>
-                <ul>
-                    <li>Modular, component-orientated</li>
-                    <li>Pure javavascript. No need to mix HTML and Javascript code.</li>
-                    <li>Imperative programming style. What your application executes is exactly what you write.</li>
-                    <li>No transpiling. Your code executes in the browser as-is.</li>
-                    <li>Visual component programming uses HTML-like structure.</li>
-                </ul>
-                <h2>Your first app</h2>
-                <p>A NORT application is always a HTML page. The HTML page generally contains the 
-                    Javascript loading code. The rest of your application is implemented in Javascript
+                <h2>The components of an application</h2>
+                <p>A NORT application is always a HTML page. The only purpose if the HTML is to load NORT and your javascript code.
+                    The rest of your application is implemented  exclusively in Javascript.
                 </p>
                 <p>Your HTML page will look like the following: ( You can see the result <a href="demo/getstarted" target="demo">here</a>)</p>
                 index.html:
@@ -57,9 +46,15 @@
                 <p>You then need an application main code.</p>
                 appcode.js:
                 <pre><code class="javascript">
+    // You can write your application initialization code.
+    function initializeMyApplication() {
+        // Do something
+    }
+
     // This is the entry point of your application
     nort.main = function() {                    
-        
+        initializeMyApplication()
+
         // You need to render something.
         nort.render(
             $div({ style: "padding: 30px"},
@@ -83,8 +78,12 @@
                     This function is your application entry point. You may perform any initialization here.
                     After that, your are ready to render your first UI, by calling <b>nort.render()</b>.
                 </p>
-                <b>nort.render( element, target)</b> appends the <b>element</b> to the <b>target</b> element.
-                When no target is specified, the element is inserted at the root of the document.
+                <p><b>nort.render( element, target)</b> appends the <b>element</b> to the <b>target</b> element.
+                    When no target is specified, the element is inserted at the root of the document.</p>
+                <p>This means that you can embed your NORT application anywhere on a HTML page. All you need 
+                    is a DIV with a ID, so that <b>nort.render()</b> can place your application there. In other 
+                   words, although NORT was designed primarily for Single Page Applications, you can mix NORT components with 
+                   classic HTML pages.</p>
                 <p>In this example we are rendering a div. The equivalent HTML code would be:</p>
                 <pre><code class="html">
     &lt;div style=&quot;padding: 30px&quot; nort-element=&quot;div&quot;&gt;
@@ -110,9 +109,11 @@
                     creating literals.<br>
                     The Array notation allows the children to be the result of a function that generates the chunk.
                 </p>
-                <h2>Next steps</h2>
-                <p>We hope this introduction makes you feel like learning more about NORT...</p>
-                <p>You are now ready to <a href="tutorial.html">take the tutorial</a>.</p>
+                <div class="docnav-panel">
+                    <a class="green-button" href="tutorial1.html">Back</a>
+                    <div style="flex-grow: 1;"></div>
+                    <a class="green-button" href="tutorial3.html">Next</a>
+                </div>
             </div>
         </div>
     </section>

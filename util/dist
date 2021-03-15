@@ -2,3 +2,5 @@ rsync -av --delete nort docs
 
 mkdir docs/dist
 tar -cvzf docs/dist/nort.tgz nort
+zip docs/dist/nort.zip nort/*
+

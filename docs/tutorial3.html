@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NORT Tutorial</title>  
+<script src="js/csi.js"></script>  
+<script src="js/autotoc.js"></script> 
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <script>include("header.html")</script>  
+    <section>
+        <div class="container">
+            <h1>Understanding elements and components</h1>
+            <div id="toc" style="width: 20%; float: left;"><h2>Content</h2></div> 
+            <div style="width: 75%; float: right;" id="contents">
+
+                <h2>NORT Elements</h2>
+                <p>The core of NORT is a unique way of generating DOM trees using Javascript functions. Each function returns a HTML element, and accepts
+                    a list if children as parameters. Let's look at the code below:  </p>
+
+                    <pre><code class="javascript">
+    $div({ style: "padding: 30px"},
+        $h1({ style: "color: red"}, "Your first NORT application" ),
+        $p({}, "Some text here" )
+    )
+                </code></pre>
+
+                <p>The $div() function returns a DOM DIV element. Its first parameter is an object whose properties are the element attributes. 
+                   All HTML attributes are supported. The rest of the parameters are the child elements that our DIV will contain.
+                   Each element contain child elements, and so on... creating a complete documents.
+                </p>
+                <p>The child elements may be</p>
+                <ul>
+                    <li>A string, to specify a DOM text node.</li>
+                    <li>A DOM element, usually created using its NORT $tag function.</li>
+                    <li>A NORT component. Components are covered in the next section.</li>
+                    <li>An array of the 3 above types</li>
+                </ul>
+                <p>Using arrays is very useful when we want children to be generated programatically. Let's look at en example: </p>
+                <pre><code class="javascript">
+    function myGeneratedList( attributes, items ) {
+        let list=[]
+        // Generate and array of LI elements.
+        for ( let item of items ) {
+            list.push( $li({attributes}, item))
+        }
+        // Return a UL element containing the collection of LI element.
+        return $ul({}, list) 
+    }
+                </code></pre>           
+                <p>We just created a custom element, that generates a DOM unordered list from a list of strings. Note that it is a good 
+                    practice to always make <b>attributes</b> the first parameter. This will keep your code consistent and will allow 
+                    you to easily specify CSS class or style attributes.</p>      
+                <p>Note our new component can not contain children, because its parameter list doesn not comply with NORT elements format.
+                    This is not a problem, the element we created is not meant to be a container for other elements. </p>
+
+                <h2>NORT components</h2>
+                <p>In the previous section we saw how to create custom elements by creating a function. Although this is very poweful already,
+                   this may not be sufficient to build components with rich behaviour and persistent state. Doing so would require that our element 
+                   function modifies the underlying HTML element to extend its functionality. This is possible, but the it is generally not  
+                   a best practice. NORT components make it possible to create complex reuseable components.</p>
+                <p>Let's convert our list to a component:</p>
+                <pre><code class="javascript">
+    class myGeneratedList extends nort.Component {
+        constructor( attributes, items ) {
+            super(attributes)
+            this.items = items
+        }
+
+        render() {
+            let list=[]
+            // Generate and array of LI elements.
+            for ( let item of this.items ) {
+                // Note our first parameter "Attributes" in constructor becomes "properties" property of our component.
+                list.push( $li(this.properties, item )) 
+            }
+            // Return a UL element containing the collection of LI element.
+            return $ul({}, list)                             
+        }
+    }
+                    
+                    </code></pre>   
+                <p>Note the <b>render()</b> method where the actual presentation of the component is defined. The <b>render()</b> method simply returns a DOM element.
+                    The component can be inserted into your DOM by combining it with other elements/components. Let's include our custom list into our 
+                    initial page:
+                </p>
+                <pre><code class="javascript">
+    // declare our component
+    class myGeneratedList extends nort.Component {
+        constructor( attributes, items ) {
+            super(attributes)
+            this.items = items
+        }
+
+        render() {
+            let list=[]
+            // Generate and array of LI elements.
+            for ( let item of this.items ) {
+                list.push( $li(this.properties, item ))
+            }
+            // Return a UL element containing the collection of LI element.
+            return $ul({}, list)                             
+        }
+    }
+
+    var aListOnthePage
+
+    // This is the entry point of your application
+    nort.main = function() {          
+        aListOnthePage = new myGeneratedList({}, [ 'First item', 'Second item', 'Third item'] )
+        
+        // You need to render something.
+        nort.render(
+            $div({ style: "padding: 30px"},
+                [
+                $h1({ style: "color: red"}, "Your first NORT application" ),
+                $p({}, "The next item is component" ),
+                aListOnthePage
+                ])
+        )
+    }
+                    
+                </code></pre>
+
+                <p></p>You can see the application working <a href="demo/tutorial3" target="demo">here</a>.</p>
+
+                <div class="docnav-panel">
+                    <a class="green-button" href="tutorial2.html">Back</a>
+                    <div style="flex-grow: 1;"></div>
+                    <a class="green-button" href="tutorial4.html">Next</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>include("footer.html")</script>  
+    <script>insertToc("toc", "contents", "h2")</script>      
+</body>
+</html>
