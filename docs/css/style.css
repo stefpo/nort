@@ -153,6 +153,7 @@ code {
 div.docnav-panel {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     margin-top: 4em;
     margin-bottom: 4em;
     margin-right: 15%;
