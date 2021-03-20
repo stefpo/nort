@@ -1,4 +1,4 @@
-class AssetForm extends nort.components.containers.Form {
+class AssetForm extends nort.components.Form {
     constructor (properties) {
         super(properties)
         let me = this

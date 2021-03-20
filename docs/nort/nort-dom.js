@@ -7,6 +7,7 @@
 
 nort.createElement = function (tn, fixedAttr, rest) {
     let oArgs = Object.values(rest)
+    //let oArgs = rest
     let attributes = oArgs[0] || {}
     let elements = oArgs.slice(1) || []
 
@@ -40,10 +41,10 @@ nort.createElement = function (tn, fixedAttr, rest) {
         }
     }
 
-    elt.on = function(a,b,c,d,e) { 
-        elt.off(a)
-        elt.addEventListener(a,b,c,d,e)
-        elt.listeners[a] = b
+    elt.on = function(evt,handler,c,d,e) { 
+        elt.off(evt)
+        elt.addEventListener(evt,handler,c,d,e)
+        elt.listeners[evt] = handler
         return elt 
     }    
     

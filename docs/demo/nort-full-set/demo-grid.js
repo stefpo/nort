@@ -1,4 +1,4 @@
-class GridDemo extends nort.components.containers.Form {
+class GridDemo extends nort.components.Form {
     constructor(properties) {
         super(properties)
         let me = this

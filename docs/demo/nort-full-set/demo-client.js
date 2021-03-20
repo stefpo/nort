@@ -1,4 +1,4 @@
-class ClientDemo extends nort.components.containers.Form {
+class ClientDemo extends nort.components.Form {
     constructor(properties) {
         super(properties)
         let me = this

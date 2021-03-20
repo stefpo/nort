@@ -19,16 +19,10 @@ Date.prototype.addWeeks = function(n) {
 
 Date.prototype.addMonths = function(n) {
     let d = new Date(this)
-    let m = d.getUTCMonth() + n
-    let y = d.getUTCFullYear() + Math.trunc(m/12)
-    m = m %12 
-    if (m < 0 ) {
-        m = m + 12
-        y--
-    }
-
-    d.setMonth( m )
-    d.setUTCFullYear( y )
+    let m = d.getUTCMonth() + d.getUTCFullYear() *12 + n
+    let y = Math.trunc(m/12)
+    d.setMonth( m % 12 )
+    d.setUTCFullYear( Math.trunc(m/12) )
     return d
 }
 

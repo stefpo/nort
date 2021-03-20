@@ -1,4 +1,4 @@
-class GraphDemo extends nort.components.containers.Form {
+class GraphDemo extends nort.components.Form {
     constructor(properties) {
         super(properties)
     }

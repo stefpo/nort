@@ -19,8 +19,11 @@ tags = [
     "tbody", "td", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", 
     "tt", "u", "ul", "var", "video", "wbr", ]
 
-    for ( v of tags ) {
-        eval ("function $" + v + "() {return nort.createElement(\""+ v + "\", { \"nort-element\" : \"" + v + "\"}, arguments) }\n")
+    for ( let v of tags ) {
+        //let s = "window['$" + v + "'] = function() {return nort.createElement(\""+ v + "\", { \"nort-element\" : \"" + v + "\"}, arguments) }\n"
+        //eval (s)
+        let tn = v
+        window["$" + tn ] = function(...args) { return nort.createElement(tn, { "nort-element" : tn }, args) }
     }
 
     function $htmldiv(attributes, html) {

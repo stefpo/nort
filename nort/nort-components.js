@@ -4,6 +4,8 @@
  * MIT Licensed
 */
 
+nort.components = {}
+
 class nortComponent {
     constructor(properties) {
         this.element = null
@@ -37,7 +39,7 @@ class nortComponent {
         if (Array.isArray(handlers)) {
             for (let handler of handlers) {
                 try {
-                    handler(this, data)
+                    setTimeout( function(){handler(this, data)}, 0)
                 } catch(e) { } // Ignore errors 
             }
         }
@@ -70,59 +72,3 @@ class nortComponent {
 }
 
 nort.Component = nortComponent
-
-nort.render = function(component, target ) {
-    var e
-    if (target) e = document.getElementById(target)
-    else e = document.body
-    if (Array.isArray(component)) {
-        for (let c of component) {
-            if ( typeof(c.render) == "function") { 
-                let he = c.render()
-                c.element = he
-                e.appendChild(he)
-            }
-            else e.appendChild(c)            
-        }
-
-    } else {
-        if (typeof(component.render) == "function") { 
-            let he = component.render()
-            component.element = he
-            e.appendChild(he)
-        }
-        else e.appendChild(component)
-    }
-}
-
-
-
-nort.components = {}
-nort.elements = {}
-nort.components.containers = {}
-
-nort.main = function() {
-    alert("NORT main function not defined")
-}
-
-document.addEventListener("DOMContentLoaded",function() { nort.main() })
-
-
-loadJS("nort-object.js")
-loadJS("nort-datetime.js")
-loadJS("nort-dom.js")
-loadJS("nort-html-tags.js")
-loadJS("nort-elements.js")
-loadJS("nort-elements-windows.js")
-loadJS("nort-elements-menu.js")
-loadJS("nort-components-grid.js")
-loadJS("nort-containers.js")
-loadJS("nort-i18n.js")
-loadJS("nort-i18n-dates.js")
-loadJS("nort-http.js")
-loadJS("nort-data.js")
-
-loadStyleSheet("nort-default.css") 
-loadStyleSheet("nort-windows.css") 
-loadStyleSheet("nort-menu.css") 
-

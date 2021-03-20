@@ -3,6 +3,8 @@
  * Copyright(c) 2019-2020 Stephane Potelle 
  * MIT Licensed
 */
+
+nort.elements = {}
 nort.elements.lib = {}
 
 nort.elements.lib.bindFieldMethods = function(e) {

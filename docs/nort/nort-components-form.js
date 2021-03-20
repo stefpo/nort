@@ -4,7 +4,7 @@
  * MIT Licensed
 */
 
-nort.components.containers.Form =  class extends nort.Component{
+nort.components.Form =  class Form extends nort.Component{
     constructor(properties) {
         super(properties)
         this.cssRequiredField = "required-field"

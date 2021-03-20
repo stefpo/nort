@@ -28,7 +28,13 @@
                 <p>To get a div element, simply write:</p>
                 <pre><code class="javascript">
     var myDiv=$div({class: "your-css"}, "Place the div content here.")
-                </code></pre>                
+                </code></pre>          
+                <p>All NORT HTML elements include 3 additional methods:</p>      
+                <ul>
+                    <li><b>e.addClass(className)</b>: Adds className to the "class" attribute of the element.</li>
+                    <li><b>e.removeClass(className)</b>: Removes className to the "class" attribute of the element.</li>
+                    <li><b>e.hasClass(className)</b>: Return true if the element "class" attribute includes className.</li>
+                </ul>
                 <h2>Form fields elements</h2>
                 <p>Although HTML5 include a full set or form fields, there interface is not 100% consistent. For example, 
                     the property "value" does not mean the same for a <b>input</b> element, depending in its type. NORT 

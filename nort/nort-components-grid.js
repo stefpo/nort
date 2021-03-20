@@ -67,7 +67,7 @@ nort.components.Grid =  class extends nort.Component{
                 col.groupValues.push("")
                 col.maxColTextLength = 4
                 for (let r of this.data) {
-                    v = r[c] != null ? r[c] : ""
+                    let v = r[c] != null ? r[c] : ""
                     if ( col.enableDropdown && ! col.groupValues.includes(v)) col.groupValues.push(v)
                     if ( v.length > col.maxColTextLength ) col.maxColTextLength = v.length
                 }
