@@ -7,6 +7,7 @@
 
 nort.createElement = function (tn, fixedAttr, rest) {
     let oArgs = Object.values(rest)
+
     //let oArgs = rest
     let attributes = oArgs[0] || {}
     let elements = oArgs.slice(1) || []
@@ -61,7 +62,7 @@ nort.createElement = function (tn, fixedAttr, rest) {
 
 nort.addElement = function (elt, e) {
     let t = typeof(e)
-    if (e == null ) console.log(elt.tagName)
+    if (e == null ) return
     if (t == "object" && typeof(e.render) == "function") {
         let he = e.render()
         elt.appendChild(e.element = he)

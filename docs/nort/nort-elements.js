@@ -53,7 +53,8 @@ nort.elements.lib.bindFieldMethods = function(e) {
 }
 
 nort.elements.textbox = function(attributes) {
-    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "text", "nort-element":"textbox"}, [attributes])) 
+    let e= nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "text", "nort-element":"textbox"}, [attributes])) 
+    
 
     if (e.hasClass ("type-uint")) e.validRegexp = /^[0-9]+$/
     else if (e.hasClass ("type-int")) e.validRegexp = /^[+-]{0,1}[0-9]+$/
@@ -103,6 +104,43 @@ nort.elements.textbox = function(attributes) {
         else if (e.hasClass ("type-decimal")) return parseFloat(fieldValue)
         else if (e.hasClass ("type-float")) return parseFloat(fieldValue)
         else return fieldValue
+    }
+    
+    return e
+}
+
+nort.elements.multilineBox = function(attributes) {
+    let e= nort.elements.lib.bindFieldMethods(nort.createElement("textarea", {type: "text", "nort-element":"textbox"}, [attributes])) 
+
+    let fieldValue = ""
+
+    e.validate = function(value) {
+        return ""
+    }
+
+    e.isValid = function() {
+        e.value = e.value.trim()
+        fieldValue = e.value
+        if (e.isRequired() && e.value =="") {
+            e.addClass ("missing-field")
+            e.validationErrorMsg = "REQUIRED"
+        } else if ( e.validRegexp && ! e.validRegexp.test(fieldValue)) {
+            e.addClass ("missing-field")
+            e.validationErrorMsg = "INCORRECT_FORMAT"            
+        }   
+        e.title =  nort.translate(`[${e.validationErrorMsg}]`)
+        return false
+    }        
+
+    e.setValue = function(v) {
+        e.value = v
+        e.initialValue = e.value
+        return e
+    }
+
+    e.getValue = function() {
+        e.isValid()
+        return fieldValue
     }
     
     return e
@@ -250,7 +288,8 @@ nort.elements.select = function(attributes, optionList) {
 nort.elements.fieldbox = function (attributes, fieldElement) { 
     let css = attributes.class || ""
     let label
-    if ( fieldElement.attributes["n-label"] ) label = fieldElement.attributes["n-label"].value
+    if ( attributes["n-label"] ) label = attributes["n-label"]    
+    else if ( fieldElement.attributes["n-label"] ) label = fieldElement.attributes["n-label"].value
     else label = "[" + (fieldElement.name || "Label") + "]"
 
     if ( fieldElement.placeholder ) fieldElement.placeholder = nort.translate(fieldElement.placeholder )

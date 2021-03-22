@@ -125,11 +125,11 @@ nort.WM.OnMouseDown = function(elt, evt, mt) {
 nort.WM.onMouseUp = function(event) { 
     //console.log("mouse up")
     if (document.body && nort.WM.currentWindow) {
-        console.log("Got current window")
+        //console.log("Got current window")
         nort.WM.removeClass(document.body,'wm-'+nort.WM.currentWindow.mode)
         nort.WM.removeClass(nort.WM.currentWindow,'wm-moving')
         if (nort.WM.veilDiv ) { //&& nort.WM.veilDiv.isConnected) { 
-            console.log("remove veil")
+            //console.log("remove veil")
                 nort.destroyElement(nort.WM.veilDiv) 
         } //document.body.removeChild(nort.WM.veilDiv)
         if (nort.WM.button =='close') nort.WM.currentWindow.close()
