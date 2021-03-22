@@ -239,7 +239,7 @@ nort.components.Grid =  class extends nort.Component{
         for (let i=0; i<values.length; i++) {
             options[values[i]] = transformFunc(values[i], true)
         }
-        console.log(JSON.stringify(options))
+        //console.log(JSON.stringify(options))
         return options
     }
 

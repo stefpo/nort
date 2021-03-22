@@ -70,7 +70,7 @@ nort.components.Form =  class Form extends nort.Component{
     fill( fo ) {
         for ( let i in this.fields) {
             let e = this.fields[i]
-            console.log(e.name)
+            //console.log(e.name)
             let id
             if ( (id = e.name) != undefined ) {
                 if (id !=null && id != "") {

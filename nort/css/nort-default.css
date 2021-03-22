@@ -22,7 +22,7 @@ div {
     box-sizing: border-box;
 }
 
-input, select {
+input, select, textarea {
     box-sizing: border-box; 
     font-family: Arial, sans-serif;
     font-size: 100%;
@@ -31,6 +31,12 @@ input, select {
     background-color: #fafafa;
     border: 1px solid #d0d0d0;  
     border-bottom: 1px solid #c0c0c0;
+}
+
+textarea {
+    height: 4.5em;
+    width: 100%;
+    resize: none;
 }
 
 select {
@@ -410,6 +416,10 @@ div.calendar>div:first-child>div:nth-child(2){
 
 div.calendar>div:first-child>div{
 }  
+
+div.hidden {
+    display: none;
+}
             
     
 div.calendar table { background-color: white; font-size: 95%; width: 100%; border-spacing: 0px; border-collapse: separate; font-weight: normal; border: none; }

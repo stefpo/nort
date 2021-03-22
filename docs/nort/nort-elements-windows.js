@@ -123,7 +123,7 @@ nort.WM.OnMouseDown = function(elt, evt, mt) {
 }
 
 nort.WM.onMouseUp = function(event) { 
-    console.log("mouse up")
+    //console.log("mouse up")
     if (document.body && nort.WM.currentWindow) {
         console.log("Got current window")
         nort.WM.removeClass(document.body,'wm-'+nort.WM.currentWindow.mode)
