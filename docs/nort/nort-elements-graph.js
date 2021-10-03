@@ -6,9 +6,9 @@
 
 if ( typeof(atb) === 'undefined' ) atb = {}
 
-nort.elements.graph = new Object()
+nort.chart = new Object()
 
-nort.elements.graph.autoScale = function(minValue, maxValue) {
+nort.chart.autoScale = function(minValue, maxValue) {
 
 	var mag1=Math.floor(Math.log( Math.min(Math.abs(maxValue),Math.abs(minValue)))/Math.log(10)) |0
 	var mag2=Math.floor(Math.log( Math.max(Math.abs(maxValue),Math.abs(minValue))/1.51 )/Math.log(10)) |0
@@ -50,7 +50,7 @@ nort.elements.graph.autoScale = function(minValue, maxValue) {
 
 
 
-nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
+nort.chart.cumulatedBarGraph = function ( options, pData ) {
 	var cv=$canvas()
 	var div=$div({}, cv)
 	var sensitiveArea=[]
@@ -95,7 +95,7 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 	var barWidth=hScale*.8
 	var barOffset=hScale*.1
 	
-	var asdata = nort.elements.graph.autoScale(minValue, maxValue)
+	var asdata = nort.chart.autoScale(minValue, maxValue)
 	var maxScale = asdata.maxScale
 	var minScale = asdata.minScale
 	var vStepCount = asdata.vStepCount
@@ -255,7 +255,7 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 }
 
 
-nort.elements.graph.barGraph = function( options, pData ) {
+nort.chart.barGraph = function( options, pData ) {
 	var cv=$canvas()
 	var div=$div({}, cv)
 
@@ -301,7 +301,7 @@ nort.elements.graph.barGraph = function( options, pData ) {
 	var barWidth=hScale*.8
 	var barOffset=hScale*.1
 	
-	var asdata = nort.elements.graph.autoScale(minValue, maxValue)
+	var asdata = nort.chart.autoScale(minValue, maxValue)
 	var maxScale = asdata.maxScale
 	var minScale = asdata.minScale
 	var vStepCount = asdata.vStepCount
@@ -446,7 +446,7 @@ nort.elements.graph.barGraph = function( options, pData ) {
 	return div
 }
 		
-nort.elements.graph.pieChart = function( options, pData ) {
+nort.chart.pieChart = function( options, pData ) {
 	var sorterFunc = function(v2,v1) {
 		if (v1[1] == v2[1]) return 0
 		else if (v1[1] >= v2[1]) return 1

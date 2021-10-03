@@ -333,7 +333,7 @@ nort.elements.yesNoSelect = function(attributes) {
 }
 
 document.write (`<script src=\"${nort.baseURL}/nort-elements-tabber.js?version=${nort.version}\"></script>`)
-document.write (`<script src=\"${nort.baseURL}/nort-elements-graph.js?version=${nort.version}\"></script>`)
+document.write (`<script src=\"${nort.baseURL}/nort-elements-chart.js?version=${nort.version}\"></script>`)
 document.write (`<script src=\"${nort.baseURL}/nort-elements-dropdown.js?version=${nort.version}\"></script>`)
 document.write (`<script src=\"${nort.baseURL}/nort-elements-calendar.js?version=${nort.version}\"></script>`)
 document.write (`<script src=\"${nort.baseURL}/nort-elements-modal.js?version=${nort.version}\"></script>`)

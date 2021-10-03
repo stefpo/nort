@@ -29,7 +29,7 @@ nort.main = function() {
             nort.elements.tabber({ style: "flex-grow:1"}, [
                     { label: "A form",  page: f1 },
                     { label: "Another form",  page: f2 },
-                    { label: "The graphing set",  page: f3 },
+                    { label: "The charting set",  page: f3 },
                     { label: "HTTP Client",  page: new ClientDemo() },
                     { label: "Grid",  page: new GridDemo() }
                 ])

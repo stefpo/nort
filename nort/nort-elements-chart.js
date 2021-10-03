@@ -6,67 +6,125 @@
 
 if ( typeof(atb) === 'undefined' ) atb = {}
 
-nort.elements.graph = new Object()
+nort.chart = new Object()
 
-nort.elements.graph.autoScale = function(minValue, maxValue) {
 
-	var mag1=Math.floor(Math.log( Math.min(Math.abs(maxValue),Math.abs(minValue)))/Math.log(10)) |0
-	var mag2=Math.floor(Math.log( Math.max(Math.abs(maxValue),Math.abs(minValue))/1.51 )/Math.log(10)) |0
-	var magLin
-	var vStepCount=0
-	var maxScale
-	var minScale
-	
-	var mag
-	if (mag1 == mag2 ) {
-		mag=Math.log(Math.abs(maxValue-minValue))/Math.log(10) |0
-		magLin=Math.pow(10, mag)*5
-		maxScale=Math.ceil(maxValue / magLin ) * magLin
-		minScale=Math.floor(minValue / magLin ) * magLin
-		vStepCount = ( maxScale - minScale ) / magLin | 0
-		vStepSize = magLin/5 
-	} else {
-		mag = mag2
-		magLin=Math.pow(10, mag)/2
-		maxScale=Math.ceil(maxValue / magLin ) * magLin
-		minScale=Math.floor(minValue / magLin ) * magLin
-		vStepCount = ( maxScale - minScale ) / magLin /2 | 0
-		vStepSize = magLin *2
+nort.chart.Scaler = class{
+	constructor( data, viewPort ) {
+		if ( data.lX == undefined || data.lY == undefined || data.uX == undefined || data.uY == undefined ) 
+				 throw("data requires lX, lY, uX, uX properties")
+	 if ( viewPort.left == undefined ||viewPort.right == undefined || viewPort.top == undefined || viewPort.bottom == undefined ) 
+				 throw("viewPort requires top, left, right, bottom properties")
+
+	 this.scaleY = ( viewPort.top - viewPort.bottom ) / (data.uY - data.lY)
+	 this.offsetY = ( viewPort.bottom - (data.lY * this.scaleY))
+	 this.scaleX = ( viewPort.right - viewPort.left ) / (data.uX - data.lX)
+	 this.offsetX = ( viewPort.left - (data.lX * this.scaleX))    
+ }
+
+ pixelY (v) { return v* this.scaleY + this.offsetY }
+ pixelX (v) { return v* this.scaleX + this.offsetX }   
+ pixelXY( vX, vY) { return { vX, vY, pixelX: this.pixelX(vX), pixelY: this.pixelY(vY) } }
+
+ static autoScale( min, max ) {
+	 function mag(v) {
+		 let lgt = Math.log(v)
+		 if ( lgt < -9 ) lgt = -9
+		 
+		 return lgt / Math.log(10)
+	 }
+
+	 let ret = { min, max }
+
+	 if ( min * max > 0 ) {
+		 ret.magDiff = mag(max-min)
+	 } else {
+		 let m1 = mag(Math.abs(min))
+		 ret.magDiff = mag(Math.abs(max))
+		 ret.magDiff = m1 > ret.magDiff ? m1 : ret.magDiff
+	 }
+
+
+	 ret.magDiff = Math.round(ret.magDiff) 
+	 ret.magLin = Math.pow(10, ret.magDiff)
+	 ret.magLin=Math.round( ret.magLin * 1E9 ) / 1E9
+
+	 let unit = ret.magLin / 10
+
+	 while ( (max - min) / unit >= 10 ) unit = unit * 5
+	 if ( (max - min) / unit < 4 ) unit = unit / 2
+
+	 unit = Math.round(unit * 1E9 ) / 1E9
+
+	 ret.lb = Math.floor(min / unit) * unit
+	 ret.ub = Math.ceil(max / unit) * unit
+
+	 if ( ret.lb == ret.ub ) {
+		 ret.lb = ret.lb - unit
+		 ret.ub = ret.ub + unit
+	 }
+
+	 ret.unit = unit
+	 ret.steps = Math.round((ret.ub - ret.lb) / unit)
+
+	 return ret
+ }    
+}
+
+nort.chart.autoScale = function(minValue, maxValue) {
+	let scl = nort.chart.Scaler.autoScale(minValue, maxValue) 
+
+	let ret= {
+		maxScale: scl.ub,
+		minScale: scl.lb,
+		vStepCount: scl.steps,
+		magLin: scl.unit/10,
+		vStepSize: scl.unit 
 	}
-
-	while (vStepCount > 10 ) {
-		vStepCount = vStepCount / 2 
-		vStepSize = vStepSize * 2 
-	}
-	
-	var ret={}
-	ret.maxScale=maxScale
-	ret.minScale=minScale
-	ret.vStepCount=vStepCount
-	ret.magLin=magLin
-	ret.vStepSize = vStepSize 
+	console.log(JSON.stringify(ret))
 	return ret
 }
 
 
-
-nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
-	var cv=$canvas()
-	var div=$div({}, cv)
-	var sensitiveArea=[]
-	var i,j
-	var title=""
-	var negativeValue = false
-	
-	var colors=['blue','orange','green','yellow']
-	var data=pData.data
-	var onclick
-	
-	div.style.border="none"
+//TODO: Complete line Graph
+nort.chart.lineGraph = function( options, pData)  {
+	let cv=$canvas()
+	let div=$div({}, cv)
 	
 	cv.width=options.width ? options.width : 130
 	cv.height=options.height ? options.height : 100
-	var withLinks=options.withLinks ? true: false
+	let withLinks=options.withLinks ? true: false
+
+	let xMin = 1E99
+	let yMin = 1E99
+	let xMax = -1E99
+	let yMax = -1E99
+
+	for (p of pData) {
+		if (p[0] < xMin) xMin = p[0]
+		if (p[0] > xMax) xMax = p[0]
+	}
+	
+
+	return cv
+}
+
+
+nort.chart.cumulatedBarGraph = function ( options, pData ) {
+	let cv=$canvas()
+	let div=$div({}, cv)
+	let sensitiveArea=[]
+	let i,j
+	let title=""
+	let negativeValue = false
+	
+	let colors=['blue','orange','green','yellow']
+	let data=pData.data
+	let onclick
+	
+	cv.width=options.width ? options.width : 130
+	cv.height=options.height ? options.height : 100
+	let withLinks=options.withLinks ? true: false
 	
 	
 
@@ -77,37 +135,37 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 	
 	cv.style.display="inline-block"
 	
-	var ctx = cv.getContext("2d")
+	let ctx = cv.getContext("2d")
 	
-	var minValue=0
-	var maxValue=0
-	var barSum = 0
+	let minValue=0
+	let maxValue=0
+	let barSum = 0
 	
 	for ( i in data ) {
-		var barSum = 0
+		let barSum = 0
 		for ( j = 1; j < data[i].length; j++ ) {
 			barSum += data[i][j]
 			if ( data[i][j]<0 ) negativeValue = true
 		}
 		if (barSum > maxValue ) maxValue = barSum
 	}
-	var hScale = cv.width*.8/data.length
-	var barWidth=hScale*.8
-	var barOffset=hScale*.1
+	let hScale = cv.width*.8/data.length
+	let barWidth=hScale*.8
+	let barOffset=hScale*.1
 	
-	var asdata = nort.elements.graph.autoScale(minValue, maxValue)
-	var maxScale = asdata.maxScale
-	var minScale = asdata.minScale
-	var vStepCount = asdata.vStepCount
-	var magLin=asdata.magLin
+	let asdata = nort.chart.autoScale(minValue, maxValue)
+	let maxScale = asdata.maxScale
+	let minScale = asdata.minScale
+	let vStepCount = asdata.vStepCount
+	let magLin=asdata.magLin
 	
-	var vScale=-cv.height*.7/(maxScale-minScale)
+	let vScale=-cv.height*.7/(maxScale-minScale)
 	
-	var ox=(cv.width/10) |0
-	var oy=(cv.height*.85-minScale*vScale) |0
+	let ox=(cv.width/10) |0
+	let oy=(cv.height*.85-minScale*vScale) |0
 	
 	
-	var txtSize = cv.height/20
+	let txtSize = cv.height/20
 	if (txtSize> 15) txtSize=15
 	ctx.textAlign="center"
 	ctx.textBaseline="middle";		
@@ -122,7 +180,7 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 	//ctx.fillText(maxScale, -txtSize, maxScale*vScale)
 	ctx.fillText(minScale, -txtSize, minScale*vScale);		
 	
-	for ( var i=0; i<=vStepCount; i++) {
+	for ( let i=0; i<=vStepCount; i++) {
 		if ( i==0 ) { ctx.strokeStyle='black'; }
 		else { ctx.strokeStyle='#D0D0D0'; }
 		ctx.beginPath()
@@ -144,7 +202,7 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 	ctx.font=txtSize*.7+'px arial'
 				
 	for (i in data) {
-		var barSum = 0
+		let barSum = 0
 		for (j=1; j<data[i].length && j<= pData.bars.length; j++) {
 			ctx.fillStyle=colors[j-1]
 			x1= (i*hScale+barOffset ) 
@@ -174,8 +232,8 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 		divlinks.style.paddingTop=cv.height/10+'px'
 		divlinks.style.display="inline-block"
 		div.appendChild(divlinks)
-		var out=""
-		var fontSize = txtSize
+		let out=""
+		let fontSize = txtSize
 		if (fontSize > 12 ) fontSize=12
 		for ( i in pData.bars ) {
 			l="<div style=\"display: inline-block;height:"+ txtSize +"px; width: "+txtSize*2 + "px; background-color: "+ colors[i] +"\"></div> "
@@ -188,8 +246,8 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 		divlinks.innerHTML=out
 	}
 	
-	var cumulativeOffset = function(element) {
-		var top = 0, left = 0
+	let cumulativeOffset = function(element) {
+		let top = 0, left = 0
 		do {
 			top += element.offsetTop  || 0
 			left += element.offsetLeft || 0
@@ -202,11 +260,11 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 		}
 	}
 	
-	var getAreaId = function(ev) {
+	let getAreaId = function(ev) {
 		
-		var x=ev.pageX
-		var y=ev.pageY
-		var o=cumulativeOffset(ev.target); 
+		let x=ev.pageX
+		let y=ev.pageY
+		let o=cumulativeOffset(ev.target); 
 		x-= o.left; 
 		y-= o.top; 				
 		for(i in sensitiveArea){
@@ -221,17 +279,17 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 	}
 	
 	if (onclick) {
-		var xclick = function(ev) {
-			var a
+		let xclick = function(ev) {
+			let a
 			if(onclick) {
 				if (( a=getAreaId(ev)) >=0)  {
-					var area=sensitiveArea[a]
+					let area=sensitiveArea[a]
 					onclick(area[4],area[5])
 				}
 			}
 		}
 		
-		var xmousemove = function(ev) {
+		let xmousemove = function(ev) {
 			if (getAreaId(ev) >=0) cv.style.cursor="pointer"
 			else cv.style.cursor="auto"
 		};			
@@ -255,25 +313,21 @@ nort.elements.graph.cumulatedBarGraph = function ( options, pData ) {
 }
 
 
-nort.elements.graph.barGraph = function( options, pData ) {
-	var cv=$canvas()
-	var div=$div({}, cv)
+nort.chart.barGraph = function( options, pData ) {
+	let cv=$canvas()
+	let div=$div({}, cv)
 
-	var sensitiveArea=[]
-	var i,j
-	var title=""
+	let sensitiveArea=[]
+	let i,j
+	let title=""
 	
-	var colors=['blue','orange','green','yellow']
-	var data=pData.data
-	var onclick
-	
-	div.style.border="none"
-	
-	
+	let colors=['blue','orange','green','yellow']
+	let data=pData.data
+	let onclick
 	
 	cv.width=options.width ? options.width : 130
 	cv.height=options.height ? options.height : 100
-	var withLinks=options.withLinks ? true: false
+	let withLinks=options.withLinks ? true: false
 	
 	
 	if (options.divStyle) div.setAttribute('style',options.divStyle)
@@ -286,10 +340,10 @@ nort.elements.graph.barGraph = function( options, pData ) {
 	
 	cv.style.display="inline-block"
 	
-	var ctx = cv.getContext("2d")
+	let ctx = cv.getContext("2d")
 	
-	var minValue=0
-	var maxValue=0
+	let minValue=0
+	let maxValue=0
 	
 	for ( i in data ) {
 		for ( j = 1; j < data[i].length; j++ ) {
@@ -297,23 +351,23 @@ nort.elements.graph.barGraph = function( options, pData ) {
 			if (data[i][j]<minValue) minValue=data[i][j]
 		}
 	}
-	var hScale = cv.width*.8/data.length
-	var barWidth=hScale*.8
-	var barOffset=hScale*.1
+	let hScale = cv.width*.8/data.length
+	let barWidth=hScale*.8
+	let barOffset=hScale*.1
 	
-	var asdata = nort.elements.graph.autoScale(minValue, maxValue)
-	var maxScale = asdata.maxScale
-	var minScale = asdata.minScale
-	var vStepCount = asdata.vStepCount
-	var magLin=asdata.magLin
+	let asdata = nort.chart.autoScale(minValue, maxValue)
+	let maxScale = asdata.maxScale
+	let minScale = asdata.minScale
+	let vStepCount = asdata.vStepCount
+	let magLin=asdata.magLin
 	
-	var vScale=-cv.height*.7/(maxScale-minScale)
+	let vScale=-cv.height*.7/(maxScale-minScale)
 	
-	var ox=(cv.width/10) |0
-	var oy=(cv.height*.85-minScale*vScale) |0
+	let ox=(cv.width/10) |0
+	let oy=(cv.height*.85-minScale*vScale) |0
 	
 	
-	var txtSize = cv.height/20
+	let txtSize = cv.height/20
 	if (txtSize> 15) txtSize=15
 	ctx.textAlign="center"
 	ctx.textBaseline="middle";		
@@ -321,24 +375,29 @@ nort.elements.graph.barGraph = function( options, pData ) {
 	ctx.fillText(title,cv.width/2,cv.height*0.05)
 		
 	
-	ctx.translate(ox,oy)
+	ctx.translate(ox+.5,oy+.5)
 	ctx.textAlign="right"
 	ctx.font=txtSize*.7+'px arial';			
 	
 	ctx.fillText(maxScale, -txtSize, maxScale*vScale)
 	ctx.fillText(minScale, -txtSize, minScale*vScale);			
 				
-	for ( var i=0; i<=vStepCount; i++) {
+	for ( let i=0; i<=vStepCount; i++) {
 		if ( i==0 ) { ctx.strokeStyle='black'; }
 		else { ctx.strokeStyle='#D0D0D0'; }
 		ctx.beginPath()
-		ctx.moveTo(0,asdata.vStepSize * i*vScale)
-		ctx.lineTo(cv.width*.8,asdata.vStepSize * i*vScale)
+		ctx.moveTo(0,asdata.vStepSize * i*vScale + minScale*vScale)
+		ctx.lineTo(cv.width*.8,asdata.vStepSize * i*vScale + minScale*vScale )
 		ctx.stroke()
 		ctx.fillText( Math.round((minScale + asdata.vStepSize * i) / magLin) * magLin , -txtSize, 
 			(minScale + asdata.vStepSize * i)*vScale);	
-		
 	}
+
+	ctx.strokeStyle='#808080'
+	ctx.beginPath()
+	ctx.moveTo(0,0)
+	ctx.lineTo(cv.width*.8,0 )
+	ctx.stroke()
 
 	ctx.strokeStyle='black'
 	ctx.beginPath()
@@ -377,8 +436,8 @@ nort.elements.graph.barGraph = function( options, pData ) {
 		divlinks.style.paddingTop=cv.height/10+'px'
 		divlinks.style.display="inline-block"
 		div.appendChild(divlinks)
-		var out=""
-		var fontSize = txtSize
+		let out=""
+		let fontSize = txtSize
 		if (fontSize > 12 ) fontSize=12
 		for ( i in pData.bars ) {
 			l="<div style=\"display: inline-block;height:"+ txtSize +"px; width: "+txtSize*2 + "px; background-color: "+ colors[i] +"\"></div> "
@@ -391,8 +450,8 @@ nort.elements.graph.barGraph = function( options, pData ) {
 		divlinks.innerHTML=out
 	}
 	
-	var cumulativeOffset = function(element) {
-		var top = 0, left = 0
+	let cumulativeOffset = function(element) {
+		let top = 0, left = 0
 		do {
 			top += element.offsetTop  || 0
 			left += element.offsetLeft || 0
@@ -405,11 +464,11 @@ nort.elements.graph.barGraph = function( options, pData ) {
 		}
 	}
 	
-	var getAreaId = function(ev) {
+	let getAreaId = function(ev) {
 		
-		var x=ev.pageX
-		var y=ev.pageY
-		var o=cumulativeOffset(ev.target); 
+		let x=ev.pageX
+		let y=ev.pageY
+		let o=cumulativeOffset(ev.target); 
 		x-= o.left; 
 		y-= o.top; 				
 		for(i in sensitiveArea){
@@ -424,17 +483,17 @@ nort.elements.graph.barGraph = function( options, pData ) {
 	}
 	
 	if (onclick) {
-		var xclick = function(ev) {
-			var a
+		let xclick = function(ev) {
+			let a
 			if(onclick) {
 				if (( a=getAreaId(ev)) >=0)  {
-					var area=sensitiveArea[a]
+					let area=sensitiveArea[a]
 					onclick(area[4],area[5])
 				}
 			}
 		}
 		
-		var xmousemove = function(ev) {
+		let xmousemove = function(ev) {
 			if (getAreaId(ev) >=0) cv.style.cursor="pointer"
 			else cv.style.cursor="auto"
 		};			
@@ -446,26 +505,24 @@ nort.elements.graph.barGraph = function( options, pData ) {
 	return div
 }
 		
-nort.elements.graph.pieChart = function( options, pData ) {
-	var sorterFunc = function(v2,v1) {
+nort.chart.pieChart = function( options, pData ) {
+	let sorterFunc = function(v2,v1) {
 		if (v1[1] == v2[1]) return 0
 		else if (v1[1] >= v2[1]) return 1
 		else return -1
 	}
 	
-	var cv=$canvas()
-	var div=$div({}, cv)
+	let cv=$canvas()
+	let div=$div({}, cv)
 	
-	var sensitiveArea=[]
-	var onclick
-	var title=""
-	
-	div.style.border="none"
+	let sensitiveArea=[]
+	let onclick
+	let title=""
 	
 	cv.width=options.size ? options.size : 100
 	cv.height=options.size ? options.size : 100
-	var withLinks=options.withLinks ? true: false
-	var maxSlices=options.maxSlices ? options.maxSlices : 12
+	let withLinks=options.withLinks ? true: false
+	let maxSlices=options.maxSlices ? options.maxSlices : 12
 	
 	if (options.divStyle) div.setAttribute('style',options.divStyle)
 	if (options.id) div.setAttribute('style',options.id)
@@ -475,11 +532,11 @@ nort.elements.graph.pieChart = function( options, pData ) {
 	div.style.whiteSpace='nowrap'
 	
 	cv.style.display="inline-block"
-	var ox=cv.width*0.5
-	var oy=cv.height*0.55
+	let ox=cv.width*0.5
+	let oy=cv.height*0.55
 	
 	ctx = cv.getContext("2d")
-	var txtSize = cv.height/20
+	let txtSize = cv.height/20
 	if (txtSize> 15) txtSize=15
 	ctx.textAlign="center"
 	ctx.textBaseline="middle";		
@@ -491,11 +548,11 @@ nort.elements.graph.pieChart = function( options, pData ) {
 	ctx.font=txtSize*.7+'px arial';				
 	ctx.translate (ox, oy)
 				
-	var denom = 0
-	var begin = 0
-	var other = 0
+	let denom = 0
+	let begin = 0
+	let other = 0
 	pData=pData.sort(sorterFunc)
-	var data=Array()
+	let data=Array()
 	for ( i in pData ) {
 		denom += pData[i][1]
 		if (i >=maxSlices || pData[i][1]/denom < 0.02) { other+=pData[i][1]; }
@@ -505,7 +562,7 @@ nort.elements.graph.pieChart = function( options, pData ) {
 	
 	//data=pData
 	
-	var begin=denom/2
+	begin=denom/2
 	
 	for ( i in data ) {
 		ctx.beginPath()
@@ -521,8 +578,8 @@ nort.elements.graph.pieChart = function( options, pData ) {
 		if (txtSize>7) {
 			ctx.font=txtSize+"px arial"
 			ctx.fillStyle="black"
-			var tx=cv.height*.4*Math.cos((begin+data[i][1]/2)*2*Math.PI/denom)
-			var ty=cv.height*.4*Math.sin((begin+data[i][1]/2)*2*Math.PI/denom)
+			let tx=cv.height*.4*Math.cos((begin+data[i][1]/2)*2*Math.PI/denom)
+			let ty=cv.height*.4*Math.sin((begin+data[i][1]/2)*2*Math.PI/denom)
 			ctx.fillText(Math.floor(data[i][1]/denom*100) +"%", tx, ty )
 			if (onclick) {
 				sensitiveArea.push([ox+tx-txtSize,oy+ty-txtSize/2,ox+tx+txtSize,oy+ty+txtSize/2,data[i][0]]) 
@@ -530,6 +587,13 @@ nort.elements.graph.pieChart = function( options, pData ) {
 		}
 		begin = begin + data[i][1]
 	}
+
+	ctx.moveTo(0,0)
+	ctx.fillStyle='white'
+	ctx.arc(0,0,cv.height/2*.3,0,2*Math.PI )
+	ctx.fill()
+
+
 	
 	if (withLinks) {
 		divlinks=$div()
@@ -538,8 +602,8 @@ nort.elements.graph.pieChart = function( options, pData ) {
 		divlinks.style.paddingTop=cv.height/10+'px'
 		divlinks.style.display="inline-block"
 		div.appendChild(divlinks)
-		var out=""
-		var l
+		let out=""
+		let l
 		fontSize = txtSize
 		if (fontSize > 12 ) fontSize=12
 		for ( i in data ) {
@@ -559,8 +623,8 @@ nort.elements.graph.pieChart = function( options, pData ) {
 		divlinks.innerHTML=out
 	}
 	
-	var cumulativeOffset = function(element) {
-		var top = 0, left = 0
+	let cumulativeOffset = function(element) {
+		let top = 0, left = 0
 		do {
 			top += element.offsetTop  || 0
 			left += element.offsetLeft || 0
@@ -573,11 +637,11 @@ nort.elements.graph.pieChart = function( options, pData ) {
 		}
 	}
 	
-	var getAreaId = function(ev) {
+	let getAreaId = function(ev) {
 		
-		var x=ev.pageX
-		var y=ev.pageY
-		var o=cumulativeOffset(ev.target); 
+		let x=ev.pageX
+		let y=ev.pageY
+		let o=cumulativeOffset(ev.target); 
 		x-= o.left; 
 		y-= o.top; 				
 		for(i in sensitiveArea){
@@ -592,17 +656,17 @@ nort.elements.graph.pieChart = function( options, pData ) {
 	}
 	
 	if (onclick) {
-		var xclick = function(ev) {
-			var a
+		let xclick = function(ev) {
+			let a
 			if(onclick) {
 				if (( a=getAreaId(ev)) >=0)  {
-					var area=sensitiveArea[a]
+					let area=sensitiveArea[a]
 					onclick(area[4])
 				}
 			}
 		}
 		
-		var xmousemove = function(ev) {
+		let xmousemove = function(ev) {
 			if (getAreaId(ev) >=0) cv.style.cursor="pointer"
 			else cv.style.cursor="auto"
 		};			
