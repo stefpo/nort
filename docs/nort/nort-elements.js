@@ -52,8 +52,8 @@ nort.elements.lib.bindFieldMethods = function(e) {
     return e
 }
 
-nort.elements.textbox = function(attributes) {
-    let e= nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "text", "nort-element":"textbox"}, [attributes])) 
+nort.elements.textBox = function(attributes) {
+    let e= nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "text", "nort-element":"textBox"}, [attributes])) 
     
 
     if (e.hasClass ("type-uint")) e.validRegexp = /^[0-9]+$/
@@ -110,7 +110,7 @@ nort.elements.textbox = function(attributes) {
 }
 
 nort.elements.multilineBox = function(attributes) {
-    let e= nort.elements.lib.bindFieldMethods(nort.createElement("textarea", {type: "text", "nort-element":"textbox"}, [attributes])) 
+    let e= nort.elements.lib.bindFieldMethods(nort.createElement("textarea", {type: "text", "nort-element":"textBox"}, [attributes])) 
 
     let fieldValue = ""
 
@@ -146,8 +146,8 @@ nort.elements.multilineBox = function(attributes) {
     return e
 }
 
-nort.elements.passwordbox = function(attributes) {
-    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "password", "nort-element":"textbox"}, [attributes])) 
+nort.elements.passwordBox = function(attributes) {
+    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "password", "nort-element":"textBox"}, [attributes])) 
 
     e.setValue = function(v) {
         e.value = v
@@ -163,8 +163,8 @@ nort.elements.passwordbox = function(attributes) {
 }
 
 
-nort.elements.checkbox = function(attributes) {
-    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkbox", "nort-element":"checkbox"}, [attributes])) 
+nort.elements.checkBox = function(attributes) {
+    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkBox", "nort-element":"checkBox"}, [attributes])) 
 
     e.isValid = function() {
         return true
@@ -285,7 +285,7 @@ nort.elements.select = function(attributes, optionList) {
     return element
 }
 
-nort.elements.fieldbox = function (attributes, fieldElement) { 
+nort.elements.fieldBox = function (attributes, fieldElement) { 
     let css = attributes.class || ""
     let label
     if ( attributes["n-label"] ) label = attributes["n-label"]    
@@ -300,14 +300,14 @@ nort.elements.fieldbox = function (attributes, fieldElement) {
     let element=$div( { class: css },
                 labelElt =$label({}, label ), 
                 $div({},  fieldElement ))
-            .addClass("fieldbox")
+            .addClass("fieldBox")
 
     if (attributes.link != undefined) {
         labelElt.addClass("link")
         labelElt.onclick =  attributes.link
     }
 
-    element.setAttribute("nort-element","fieldbox")     
+    element.setAttribute("nort-element","fieldBox")     
     
     return nort.elements.lib.bindFieldMethods(element)
 }
@@ -316,13 +316,13 @@ nort.elements.scrollPane = function() {
         return nort.createElement("div", { class: "scroll-pane", "nort-element":"scrollPane"}, arguments )
 }
 
-nort.elements.popup = function (element) {
+nort.elements.popup = function (contentElement) {
     let source = document.activeElement
     let bg = $div({ style: "position: fixed; top: 0px; left: 0px;  height: 100%; width:100%; opacity: 0.1; background-color: silver"} )
-    bg.on ("click", function() { nort.destroyElement(element); nort.destroyElement(bg);/* source.focus() */})
+    bg.on ("click", function() { nort.destroyElement(contentElement); nort.destroyElement(bg);/* source.focus() */})
     document.body.appendChild(bg)
-    document.body.appendChild(element)
-    return element
+    document.body.appendChild(contentElement)
+    return contentElement
 }
 
 nort.elements.yesNoSelect = function(attributes) {
@@ -331,10 +331,4 @@ nort.elements.yesNoSelect = function(attributes) {
     else e.setValue(0)
     return e
 }
-
-document.write (`<script src=\"${nort.baseURL}/nort-elements-tabber.js?version=${nort.version}\"></script>`)
-document.write (`<script src=\"${nort.baseURL}/nort-elements-chart.js?version=${nort.version}\"></script>`)
-document.write (`<script src=\"${nort.baseURL}/nort-elements-dropdown.js?version=${nort.version}\"></script>`)
-document.write (`<script src=\"${nort.baseURL}/nort-elements-calendar.js?version=${nort.version}\"></script>`)
-document.write (`<script src=\"${nort.baseURL}/nort-elements-modal.js?version=${nort.version}\"></script>`)
 

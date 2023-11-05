@@ -3,28 +3,29 @@ nort.elements.buttonMenu = function(attributes, label, menuItems) {
     attributes = attributes || {}
     attributes.type = "button"
 
-    let e = $button( attributes, label )
+    let mainButton = $button( attributes, label )
     let cal
-    let popupIsActive = false
     let anchoring = attributes.anchoring || "sw"
+    mainButton.ignoreBlurEvent = false
 
 
     function popupDiv() {
         let popupItems = []
-        let e
+        let popupButton
         for (let mi of menuItems) {
             if ( mi.menu ) {
                 let mnuAttr = mi.menu.attributes || {}
                 let mnuText = mi.menu.text || "Submenu (undef)"
                 let mnuItems = mi.menu.items || []
-                e = nort.elements.buttonMenu( mnuAttr, mnuText, mnuItems )
+                popupButton = nort.elements.buttonMenu( mnuAttr, mnuText, mnuItems )
             } else {
-                e = $button({ type: "button", style:"white-space: nowrap; text-align: left;"}, mi.text)
-                e.on("mousedown",  mi.callback)
+                popupButton = $button({ type: "button", style:"white-space: nowrap; text-align: left;"}, mi.text)
+                popupButton.on("mousedown",  function(evt) { mainButton.ignoreBlurEvent = true })
+                popupButton.on("click",  function(evt) { mainButton.ignoreBlurEvent = false ; mi.callback() ; mainButton.hidePopup()})
             }
 
-            if (e) {
-                popupItems.push(e)
+            if (popupButton) {
+                popupItems.push(popupButton)
             }
 
         }
@@ -35,24 +36,24 @@ nort.elements.buttonMenu = function(attributes, label, menuItems) {
     
     function showPopup () { 
         cal = popupDiv()
-        popupIsActive = true
 
-        nort.showFieldPopup(e, cal, anchoring)
+        nort.showFieldPopup(mainButton, cal, anchoring)
     }
 
-    e.on("click", function() { 
-        if ( ! popupIsActive ) showPopup() 
-        else { e.hidePopup() ; popupIsActive = false }
+    mainButton.on("click", function() { 
+        if ( ! mainButton.hasActivePopup ) showPopup() 
+        else { mainButton.hidePopup() }
     }   
     )
 
-    e.on("blur", function() {
-        e.hidePopup()
-        popupIsActive = false
+    mainButton.on("blur", function() {
+        if (! mainButton.ignoreBlurEvent) {
+            mainButton.hidePopup()
+        }
     })
 
 
-    return e.addClass("dd-menu")
+    return mainButton.addClass("dd-menu")
 }
 
 

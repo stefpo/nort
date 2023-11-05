@@ -2,17 +2,17 @@ class AssetForm extends nort.components.Form {
     constructor (properties) {
         super(properties)
         let me = this
-        this.fields.add (nort.elements.textbox({name: "manuf", placeholder: "manufacturer", value: "" }))
-                   .add (nort.elements.textbox({class: "required-field", style: "background-image: none", name: "model", value: "" }))
-                   .add (nort.elements.textbox({style: "background-image: none", name: "serial", value: "" }))
+        this.fields.add (nort.elements.textBox({name: "manuf", placeholder: "manufacturer", value: "" }))
+                   .add (nort.elements.textBox({class: "required-field", style: "background-image: none", name: "model", value: "" }))
+                   .add (nort.elements.textBox({style: "background-image: none", name: "serial", value: "" }))
                    .add (nort.elements.datebox({name: "srvdate", class:"required-field", value: "" }))                       
                    .add (nort.elements.datebox({name: "bottom_date", value: "" }))                       
 
-                   .add (nort.elements.textbox({name: "integer", class:"required-field type-int", value: "" }))                       
-                   .add (nort.elements.textbox({name: "decimal", class:"required-field type-decimal2", value: "" }))                       
-                   .add (nort.elements.textbox({name: "float", class:"required-field type-float", value: "" }))                       
-                   .add (nort.elements.textbox({name: "domain", class:"required-field type-domain", value: "" }))                       
-                   .add (nort.elements.textbox({name: "email", class:"required-field type-email", value: "" }))                       
+                   .add (nort.elements.textBox({name: "integer", class:"required-field type-int", value: "" }))                       
+                   .add (nort.elements.textBox({name: "decimal", class:"required-field type-decimal2", value: "" }))                       
+                   .add (nort.elements.textBox({name: "float", class:"required-field type-float", value: "" }))                       
+                   .add (nort.elements.textBox({name: "domain", class:"required-field type-domain", value: "" }))                       
+                   .add (nort.elements.textBox({name: "email", class:"required-field type-email", value: "" }))                       
 
                    .add (nort.elements.select({name: "location", value:"L1"},{ null:"Undefined", L1:"Location 1", L2:"Location 2", L3: "Location3"} ))
                    .add (nort.elements.select({name: "status"},{NEW:"New",ACTIVE:"Active",DISPOSED:"Disposed"}))
@@ -29,8 +29,8 @@ class AssetForm extends nort.components.Form {
                              {text: "Entry2", callback: function() { nort.alert("Entry 2")}},
                              { menu: { text: "Submenu", items: [ { text: "Sub1", callback: function() { nort.alert("Sub1 2")} } ] } },
                              {text: "Entry3", callback: function() { nort.alert("Entry 3")}}]))
-                   .add (nort.elements.textbox({name:"browser"}))
-                   .add (nort.elements.checkbox({name:"cb1" }))
+                   .add (nort.elements.textBox({name:"browser"}))
+                   .add (nort.elements.checkBox({name:"cb1" }))
 
 
         //this.fields.location.setValue("L2")
@@ -62,19 +62,19 @@ class AssetForm extends nort.components.Form {
     render() {
 
         return $div({style: "padding: 1em;"},
-                nort.elements.fieldbox({class: "horizontal"}, this.fields.manuf),
-                nort.elements.fieldbox({class: "horizontal"}, this.fields.model),
-                nort.elements.fieldbox({class: "horizontal"}, this.fields.serial),
+                nort.elements.fieldBox({class: "horizontal"}, this.fields.manuf),
+                nort.elements.fieldBox({class: "horizontal"}, this.fields.model),
+                nort.elements.fieldBox({class: "horizontal"}, this.fields.serial),
                 $br(),
-                nort.elements.fieldbox({class: "horizontal"}, this.fields.srvdate),
-                nort.elements.fieldbox({class: "horizontal"}, this.fields.integer),
-                nort.elements.fieldbox({class: "horizontal"}, this.fields.decimal),
-                nort.elements.fieldbox({class: "horizontal"}, this.fields.float),
-                nort.elements.fieldbox({class: "horizontal size-2"}, this.fields.domain),
-                nort.elements.fieldbox({class: "horizontal size-2"}, this.fields.email),
-                nort.elements.fieldbox({class: "horizontal size-2"}, this.fields.location),
+                nort.elements.fieldBox({class: "horizontal"}, this.fields.srvdate),
+                nort.elements.fieldBox({class: "horizontal"}, this.fields.integer),
+                nort.elements.fieldBox({class: "horizontal"}, this.fields.decimal),
+                nort.elements.fieldBox({class: "horizontal"}, this.fields.float),
+                nort.elements.fieldBox({class: "horizontal size-2"}, this.fields.domain),
+                nort.elements.fieldBox({class: "horizontal size-2"}, this.fields.email),
+                nort.elements.fieldBox({class: "horizontal size-2"}, this.fields.location),
                 $br(),  
-                nort.elements.fieldbox({class: "size-3"}, this.fields.browser),
+                nort.elements.fieldBox({class: "size-3"}, this.fields.browser),
                 $br(),
                 this.fields.btn," ",  this.fields.btn2," Visible ",  this.fields.cb1, " ",  
                 this.fields.btn3," ", this.fields.btn5,  " ", this.fields.btn6, " ", 
@@ -84,10 +84,10 @@ class AssetForm extends nort.components.Form {
                     this.tabber = nort.elements.tabber({ style: "height: 100%;"}, 
                         [{ label:"[STATUS]", 
                             page: $div({style: "padding: 4px;"}, 
-                                nort.elements.fieldbox({}, this.fields.status),
-                                nort.elements.fieldbox({}, this.fields.type),
+                                nort.elements.fieldBox({}, this.fields.status),
+                                nort.elements.fieldBox({}, this.fields.type),
                                 $br(),
-                                nort.elements.fieldbox({}, nort.elements.comboBox({},"Option 1;Option 2;Option 3; Option 4")),
+                                nort.elements.fieldBox({}, nort.elements.comboBox({},"Option 1;Option 2;Option 3; Option 4")),
                                  ),
                             },
                          { label:"[CONDITION]", page:   
@@ -98,7 +98,7 @@ class AssetForm extends nort.components.Form {
                         ])
                     ),
                 this.fields.btn4,
-                nort.elements.fieldbox({}, this.fields.bottom_date)
+                nort.elements.fieldBox({}, this.fields.bottom_date)
         )
     }
 

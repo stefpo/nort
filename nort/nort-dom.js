@@ -56,6 +56,8 @@ nort.createElement = function (tn, fixedAttr, rest) {
         else return elt.nortProps[k]
     }
 
+    elt.setInnerContent = function(c) { nort.setInnerContent(elt,c)}
+
     return elt
 }
 
@@ -227,11 +229,12 @@ nort.showFieldPopup = function(e, popup, location) {
     e.hidePopup = function () {
         nort.hideFieldPopup(e)
         e.anchorDiv = undefined
+        e.hasActivePopup = false
     }
 
     nort.activePopup = anchorDiv
     popup.style.visibility = "visible"
-
+    e.hasActivePopup = true
 }
 
 nort.hideFieldPopup = function(e) {

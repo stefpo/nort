@@ -12,7 +12,23 @@ body {
     font-family: "Microsoft Sans Serif Regular", Calibri, Arial, sans-serif;
     font-size: 11pt;
     color: black;
+    /* Disable text selection in the top window */ 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
+
+div.allow-selection{
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+} 
 
 h1, h2, h3, h4 {
     color: #376680;
@@ -40,6 +56,8 @@ textarea {
 }
 
 select {
+    appearance: none;  
+    border-radius: 0px;
     -webkit-appearance: none;    
     -webkit-border-radius: 0px;
     background-image: url(combobtn.gif); 
@@ -116,13 +134,13 @@ a:hover, .link:hover { text-decoration: underline; cursor: pointer; }
 
 
 
-div.fieldbox { display: inline-block; 
+div.fieldBox { display: inline-block; 
     width: 180px;
     margin: 0px;
     margin-bottom: 0.9em;
 }    
 
-div.fieldbox>label { 
+div.fieldBox>label { 
     display: block; 
     width: 100%;
     font-size: 85%;
@@ -130,43 +148,43 @@ div.fieldbox>label {
     color: #606060;
 }   
 
-div.fieldbox>label.link { color : #165d79; }
+div.fieldBox>label.link { color : #165d79; }
 
 
-div.fieldbox>div {
+div.fieldBox>div {
     width: 100%;
 }
 
-div.fieldbox>div>input, .fieldbox>div>select{
+div.fieldBox>div>input, .fieldBox>div>select{
     width: 100%;
 }
 
-div.fieldbox.size-1 { width: calc(180px *1 ) ; margin-right: 1em;}                  
-div.fieldbox.size-2 { width: calc(180px *2 + 1em) ; margin-right: 1em;}                  
-div.fieldbox.size-3 { width: calc(180px *3 + 2 * 1em) ; margin-right: 1em;}                  
-div.fieldbox.size-4 { width: calc(180px *4 + 3 * 1em) ; margin-right: 1em;}   
+div.fieldBox.size-1 { width: calc(180px *1 ) ; margin-right: 1em;}                  
+div.fieldBox.size-2 { width: calc(180px *2 + 1em) ; margin-right: 1em;}                  
+div.fieldBox.size-3 { width: calc(180px *3 + 2 * 1em) ; margin-right: 1em;}                  
+div.fieldBox.size-4 { width: calc(180px *4 + 3 * 1em) ; margin-right: 1em;}   
 
-div.fieldbox.size-1p4 { width: calc(25% ) ; padding-right: 1em; }                  
-div.fieldbox.size-2p4 { width: calc(50% ) ; padding-right: 1em; }                  
-div.fieldbox.size-3p4 { width: calc(75% ) ; padding-right: 1em; }                  
-div.fieldbox.size-4p4 { width: calc(100% ) ; padding-right: 1em; } 
+div.fieldBox.size-1p4 { width: calc(25% ) ; padding-right: 1em; }                  
+div.fieldBox.size-2p4 { width: calc(50% ) ; padding-right: 1em; }                  
+div.fieldBox.size-3p4 { width: calc(75% ) ; padding-right: 1em; }                  
+div.fieldBox.size-4p4 { width: calc(100% ) ; padding-right: 1em; } 
 
-div.fieldbox.size-1p5 { width: calc(20% ) ; padding-right: 1em; }                  
-div.fieldbox.size-2p5 { width: calc(40% ) ; padding-right: 1em; }                  
-div.fieldbox.size-3p5 { width: calc(60% ) ; padding-right: 1em; }                  
-div.fieldbox.size-4p5 { width: calc(80% ) ; padding-right: 1em; } 
-div.fieldbox.size-5p5 { width: calc(100% ) ; padding-right: 1em; } 
+div.fieldBox.size-1p5 { width: calc(20% ) ; padding-right: 1em; }                  
+div.fieldBox.size-2p5 { width: calc(40% ) ; padding-right: 1em; }                  
+div.fieldBox.size-3p5 { width: calc(60% ) ; padding-right: 1em; }                  
+div.fieldBox.size-4p5 { width: calc(80% ) ; padding-right: 1em; } 
+div.fieldBox.size-5p5 { width: calc(100% ) ; padding-right: 1em; } 
 
 
 
-div.fieldbox.horizontal { 
+div.fieldBox.horizontal { 
     display: inline-block; 
     width: 360px;
     margin-right: 1em;
     margin-bottom: 0.9em;
 }    
 
-div.fieldbox.horizontal>label { 
+div.fieldBox.horizontal>label { 
     display: inline-block; 
     /* box-sizing: border-box; */
     width: 150px;
@@ -177,19 +195,19 @@ div.fieldbox.horizontal>label {
     padding-right: 8px;
 }    
 
-div.fieldbox.horizontal>div {
+div.fieldBox.horizontal>div {
     display: inline-block; 
     width: calc(100% - 150px - 1em);
 }
 
-div.fieldbox.horizontal>div>input, .fieldbox>div>select{
+div.fieldBox.horizontal>div>input, .fieldBox>div>select{
     width: 100%;
 }
 
-div.fieldbox.horizontal.size-1 { width: calc(360px *1 ) ; }                  
-div.fieldbox.horizontal.size-2 { width: calc(360px *2 + 1em) ; }                  
-div.fieldbox.horizontal.size-3 { width: calc(360px *3 + 2 * 1em) ; }                  
-div.fieldbox.horizontal.size-4 { width: calc(360px *4 + 3 * 1em) ; }                  
+div.fieldBox.horizontal.size-1 { width: calc(360px *1 ) ; }                  
+div.fieldBox.horizontal.size-2 { width: calc(360px *2 + 1em) ; }                  
+div.fieldBox.horizontal.size-3 { width: calc(360px *3 + 2 * 1em) ; }                  
+div.fieldBox.horizontal.size-4 { width: calc(360px *4 + 3 * 1em) ; }                  
 
 
 
@@ -242,7 +260,6 @@ div.form>form {
 div.tabber {
     display: flex;
     width: 100%;
-    xheight: 100%;
     padding: 0px;
     flex-flow: column; 
     flex-grow: 1;

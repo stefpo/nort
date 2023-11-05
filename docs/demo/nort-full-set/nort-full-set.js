@@ -16,7 +16,7 @@ nort.translations.fr = {
     }
 }    
 
-tb = nort.elements.textbox
+tb = nort.elements.textBox
 
 var f1 = new AssetForm()
 var f2 = new AssetForm()

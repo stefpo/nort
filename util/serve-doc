@@ -1,0 +1,6 @@
+script=`realpath $0` 
+nortroot=`dirname $script`
+nortroot=`dirname $nortroot`  
+
+echo "Serving from $nortroot/docs"
+php -S 0.0.0.0:8000 -t $nortroot/docs

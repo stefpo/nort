@@ -224,16 +224,9 @@ nort.WM.createWindow = function(options) {
 
     w.setTitle=function(title) { this.getElementsByClassName("wm-title")[0].innerHTML=title; }
 
-    w.setContent=function(content) { 
-        if (typeof(content) == "string" ) w.contentPane.innerHTML=content; 
-        else if (content instanceof HTMLElement) {
-            w.contentPane.contentText = ""
-            w.contentPane.appendChild(content)
-        } else if  (typeof(content.render) == "function") { 
-            w.contentPane.contentText = ""
-            w.contentPane.appendChild(content.render())
-        }
-    }
+    w.setInnerContent = function(content) { nort.setInnerContent(w.contentPane, content) }
+    w.setContent = w.setInnerContent
+    
 
     w.addClass=function(className) { nort.WM.addClass(this, className); }
     w.removeClass=function(className) { nort.WM.removeClass(this, className); }
@@ -354,7 +347,7 @@ nort.WM.createWindow = function(options) {
     }
 
     w.close = function() {
-        if (this.locker != null ) this.parentNode.removeChild(this.locker)
+        if (this.locker && this.parentNode) this.parentNode.removeChild(this.locker)
         this.parentNode.removeChild(this)
         nort.WM.activeWindow = 0
         if (typeof(w.onCloseHandler) == "function") {
@@ -405,9 +398,9 @@ nort.WM.createWindow = function(options) {
     nort.WM.currentWindow = w
     if (0 || options.maximized) w.setMaximized(true)
     if (options.src ) {
-        w.setContent('<iframe class="wm-iframe" style="border: none; overflow: auto;" src="'+ options.src +'">')
+        w.setInnerContent('<iframe class="wm-iframe" style="border: none; overflow: auto;" src="'+ options.src +'">')
     } else if (options.content) {
-        w.setContent(options.content)
+        w.setInnerContent(options.content)
     }
     nort.WM.setFocusTo(w)
     return w

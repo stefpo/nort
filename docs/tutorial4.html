@@ -48,7 +48,7 @@
                 </p>
                 <p>We would need to add tou our component:</p>
                 <ul>
-                    <li>A textbox</li>
+                    <li>A textBox</li>
                     <li>A button</li>
                     <li>The code to add the new item list</li>
                 </ul>
@@ -61,16 +61,16 @@
     }                    
                 </code></pre>
                 <p>Note the builtin method <b>refresh</b> we use to refresh the DOM after changing the component state.</p>
-                <p>We will then need to add the textbox and the button to the component. We do it in its constructor:</p>                                
+                <p>We will then need to add the textBox and the button to the component. We do it in its constructor:</p>                                
                 <pre><code class="javascript">
-    // Add a textbox and a button
-    this.textbox = $input({ type: "text" })
+    // Add a textBox and a button
+    this.textBox = $input({ type: "text" })
     this.button  = $input({ type: "button", value:"Add to list"  })
     
     // Add a callback to the button
     this.button.onclick = function() {
         // Note we use "me" and not "this"
-        me.addItem( me.textbox.value)
+        me.addItem( me.textBox.value)
     }
                 </code></pre>
                 <p>You will also tell your component how to display the new fields by changing its <b>render()</b> method</p>
@@ -78,7 +78,7 @@
     // Return a DIV element 
     return $div({}, 
         $ul({}, list),
-        this.textbox, this.button )   // We add the fields at the bottom, after the list                 
+        this.textBox, this.button )   // We add the fields at the bottom, after the list                 
                 </code></pre>
                 <p>You're done. Now the component can accept new data and refresh itsef in the page.
                     The complete code of our new component looks like this:
@@ -90,14 +90,14 @@
             super(attributes)
             let me = this   // We make a copy of "this" to make sure we can us it in callbacks
             this.items = items
-            // Add a textbox and a button
-            this.textbox = $input({ type: "text" })
+            // Add a textBox and a button
+            this.textBox = $input({ type: "text" })
             this.button  = $input({ type: "button", value:"Add to list"  })
             
             // Add a callback to the button
             this.button.onclick = function() {
                 // Note we use "me" and not "this"
-                me.addItem( me.textbox.value)
+                me.addItem( me.textBox.value)
             }
         }
         
@@ -118,7 +118,7 @@
             // Return a UL element containing the collection of LI element.
             return $div({}, 
                 $ul({}, list),
-                this.textbox, this.button )
+                this.textBox, this.button )
         }
     }
                 

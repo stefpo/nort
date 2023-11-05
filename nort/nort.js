@@ -31,6 +31,35 @@ function loadJS(scriptName) {
     }
 }
 
+function loadJSx(scriptName) {
+    let src
+    if (scriptName.startsWith("./") || /http[s]{0,1}\:\/\//.test() ) {
+        loadJSReal(`${scriptName}?version=${nort.version}`)
+    } else {
+        loadJSReal (`${nort.baseURL}/${scriptName}?version=${nort.version}`)
+    }
+}
+
+function loadJSReal(FILE_URL) {
+    let scriptEle = document.createElement("script");
+  
+    scriptEle.setAttribute("src", FILE_URL);
+    scriptEle.setAttribute("type", "text/javascript");
+    scriptEle.setAttribute("async", "false");
+  
+    document.body.appendChild(scriptEle);
+  
+    // success event 
+    scriptEle.addEventListener("load", () => {
+      console.log("File loaded: " + FILE_URL)
+    });
+     // error event
+    scriptEle.addEventListener("error", (ev) => {
+      console.log("Error on loading file", ev);
+    });
+  }
+
+
 function loadStyleSheet(scriptName) {
     let src
     if (scriptName.startsWith("./") || /http[s]{0,1}\:\/\//.test() ) {
@@ -84,6 +113,13 @@ loadJS("nort-components-form.js")
 loadJS("nort-i18n.js")
 loadJS("nort-i18n-dates.js")
 loadJS("nort-http-client.js")
+
+loadJS("nort-elements-tabber.js")
+loadJS("nort-elements-chart.js")
+loadJS("nort-elements-dropdown.js")
+loadJS("nort-elements-calendar.js")
+loadJS("nort-elements-modal.js")
+
 
 loadStyleSheet("nort-default.css") 
 loadStyleSheet("nort-windows.css") 

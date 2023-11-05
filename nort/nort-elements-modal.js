@@ -31,7 +31,7 @@ nort.choiceBox = function(title, msg, buttons, timeout) {
     }
 
     w = nort.WM.createWindow( { title: title , resizable: false, maximizable: false, modal: true } )
-    w.setContent (
+    w.setInnerContent (
             $div({class: "inform"},
             $div({}, $div({},msg)),
             $div({}, btns))

@@ -23,7 +23,10 @@ tags = [
         //let s = "window['$" + v + "'] = function() {return nort.createElement(\""+ v + "\", { \"nort-element\" : \"" + v + "\"}, arguments) }\n"
         //eval (s)
         let tn = v
-        window["$" + tn ] = function(...args) { return nort.createElement(tn, { "nort-element" : tn }, args) }
+        window["$" + tn ] = function(...args) { 
+            let elt = nort.createElement(tn, { "nort-element" : tn }, args) 
+            return elt
+        }
     }
 
     function $htmldiv(attributes, html) {

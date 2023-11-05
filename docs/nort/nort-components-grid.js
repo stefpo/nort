@@ -76,10 +76,10 @@ nort.components.Grid =  class extends nort.Component{
     }
 
     setData(o, tabledef) {
-        if (o.length > 0 ) {
+        this.clear()
+        if (o && o.length > 0 ) {
 
             if (tabledef) this.setTabledef(tabledef)
-            this.clear()
             // Create columns
             if (Array.isArray(o) && o.length>0) {
                 this.data = o
@@ -250,13 +250,13 @@ nort.components.Grid =  class extends nort.Component{
         else return nort.translate( c.name )+ postfix
     }
 
-    fireCheckboxEvent() {
+    firecheckBoxEvent() {
         let me = this
         let selRows = []
         for ( let i in me.data) {
             if ( me.data[i]._checked) selRows.push(i)
         }
-        me.fireEvent('checkbox', { selection: selRows})
+        me.fireEvent('checkBox', { selection: selRows})
     }
 
     renderBody() {
@@ -267,17 +267,17 @@ nort.components.Grid =  class extends nort.Component{
             let row=[]
             if (this.data[r]._visible) {
                 if (this.conf.options.addSelectBox ) {
-                    let cb = nort.elements.checkbox ({}).setValue(this.data[r]._checked || false)
+                    let cb = nort.elements.checkBox ({}).setValue(this.data[r]._checked || false)
                     cb.on("click", function(){
-                        me.topCheckbox.checked = 0 
+                        me.topcheckBox.checked = 0 
                         me.data[r]._checked = cb.getValue()
-                        me.fireCheckboxEvent()
+                        me.firecheckBoxEvent()
                     }) 
                     cb.setChecked = function(v) {
                         cb.checked = v
                         me.data[r]._checked = v
                     }
-                    this.checkboxes.push(cb)
+                    this.checkBoxes.push(cb)
                     row.push($td({}, cb))                    
                 }
                 for (let c in this.columns ) {
@@ -307,14 +307,14 @@ nort.components.Grid =  class extends nort.Component{
         let css = (" " + this.properties.class ) || ""
 
         if (this.conf.options.addSelectBox ) {
-            this.checkboxes = []
-            let cb = nort.elements.checkbox ({})
-            this.topCheckbox = cb
+            this.checkBoxes = []
+            let cb = nort.elements.checkBox ({})
+            this.topcheckBox = cb
             cb.on("click", function() {
-                for (let rcb of me.checkboxes) {
+                for (let rcb of me.checkBoxes) {
                     rcb.setChecked(cb.checked)
                 }
-                me.fireCheckboxEvent()
+                me.firecheckBoxEvent()
             })
             row.push($th({}, cb))                    
         }             
@@ -330,7 +330,7 @@ nort.components.Grid =  class extends nort.Component{
                     f.onchange = function() { me.applyFilters() }
                     f.setValue("")
                 } else {
-                    f = nort.elements.textbox({style: `display: block; width: 100%`, autocomplete: "off" } )
+                    f = nort.elements.textBox({style: `display: block; width: 100%`, autocomplete: "off" } )
                     f.onchange = function() { me.applyFilters() }
                     f.setValue("")
                 }

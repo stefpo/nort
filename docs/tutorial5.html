@@ -52,10 +52,10 @@
                     <li><b>e.validate()</b> an overridable method in which you can add field validation logic</li>
                 </ul>
                 
-                <h3>Textbox</h3>
-                <p>A textbox is an improved version of HTML &lt;input type="text"&gt; or NORT $input({type: "text"})</p>
+                <h3>textBox</h3>
+                <p>A textBox is an improved version of HTML &lt;input type="text"&gt; or NORT $input({type: "text"})</p>
                 <pre><code class="javascript">
-    var myfield=nort.elements.textbox({ name: "Field label", 
+    var myfield=nort.elements.textBox({ name: "Field label", 
                                         class: "required-field" 
                                         placeholder: "type here", 
                                         value: "" })
@@ -63,9 +63,9 @@
                 <p>Note that you do not need to specify an ID for your field. The variable "myfield" is where
                     you can keep a reference to the element, and always have direct programatic access to it.
                 </p>
-                <p>The "name" attribute is optional, but it is useful if you insert your field into a fieldbox (See below)</p>
+                <p>The "name" attribute is optional, but it is useful if you insert your field into a fieldBox (See below)</p>
                 <p>In the example, the class "required-field" is specified. This means that the field is mandatory. there
-                    are a few classes that change the behaviour of the textbox:
+                    are a few classes that change the behaviour of the textBox:
                 </p>
                 <ul>
                     <li><b>required-field</b> indicates the fiels is mandatory</li>
@@ -75,15 +75,15 @@
                     <li><b>type-int</b> to only accept floating point numbers. Exponent notation can be used.</li>
                     <li><b>type-email</b> to only accept valid email addresses</li>
                 </ul>
-                <h3>PasswordBox</h3>
+                <h3>passwordBox</h3>
                 <p>This is the NORT-improved version of a password field. The behaviour is the same a HTML 
                     password fields, plus NORT field methods.
                 </p>
-                <h3>Checkbox</h3>
-                <p>A NORT-improved version of a HTML checkbox. The key difference is that the <b>getValue()</b> and <b>setValue()</b>
-                set the checkbox "checked" state, thus allowing consistent interface with other fields.</p>
+                <h3>checkBox</h3>
+                <p>A NORT-improved version of a HTML checkBox. The key difference is that the <b>getValue()</b> and <b>setValue()</b>
+                set the checkBox "checked" state, thus allowing consistent interface with other fields.</p>
                 <pre><code class="javascript">
-    var mycb=nort.elements.checkbox({ name: "Field label", checked: 1 })
+    var mycb=nort.elements.checkBox({ name: "Field label", checked: 1 })
     mycb.setValue (false) // Unchecks the box
                 </code></pre>   
                 <h3>Datebox</h3>
@@ -115,7 +115,7 @@
     mySelList.addOption('L4','Garden')
                 </code></pre>                      
 
-                <h3>Fieldbox</h3>
+                <h3>fieldBox</h3>
 
                 <h2>Buttons</h2>
                 <h3>Button</h3>

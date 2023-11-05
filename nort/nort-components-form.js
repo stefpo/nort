@@ -34,7 +34,7 @@ nort.components.Form =  class Form extends nort.Component{
         let elements=[]
         for ( let k of Object.keys(this.fields )) {
             if ( ["INPUT","SELECT"].includes( this.fields[k].tagName) )    
-                elements.push( $fieldbox({},this.fields[k]) )
+                elements.push( $fieldBox({},this.fields[k]) )
             else 
                 elements.push( this.fields[k]) 
         }

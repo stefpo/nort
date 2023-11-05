@@ -1,0 +1,8 @@
+script=`realpath $0` 
+nortroot=`dirname $script`
+nortroot=`dirname $nortroot`  
+
+cd $nortroot/test
+
+ 
+ php -S 0.0.0.0:8000
