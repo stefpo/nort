@@ -57,6 +57,27 @@
                 <p>You then need an application main code.</p>
                 appcode.js:
                 <pre><code class="javascript">
+    class Application {
+        init() {
+            // Place here your pre-rendering initialization code
+        }
+
+        render() {
+            return $div({ style: "padding: 30px"},
+                [
+                $h1({ style: "color: red"}, "Your first NORT application" ),
+                $p({}, "Some text here" )
+                ]) 
+        }
+
+        activate() {
+            // Place here your post-rendering initialization code
+        }                        
+    }
+                </code></pre>
+                <p>Alternatively you may want to override the default Nort startup sequence. (Note this method was used in first versions of Nort and is NOT the preferred way)</p>
+
+                <pre><code class="javascript">
     // This is the entry point of your application
     nort.main = function() {                    
         
@@ -76,15 +97,22 @@
                 <p>To load a NORT application into your page, you need to:</p>
                 <ul>
                     <li>Load the NORT library. It is best to do it in the HEAD section of your page.</li>
-                    <li>Load you application code. Note your pages does not even need a BODY section</li>                 </li>
+                    <li>Load you application code. Note your pages does not even need a BODY section</li> 
                 </ul>
-                <h4>The Javascript code</h4>
+                <h4>The Javascript code (Using Application class)</h4>
+                <p>After loading the page, Nort will create an instance of the Application class, then call its <b>init()</b> method. 
+                    After that, it will render the HTML element returned by the <b>render()</b> method into document.body.
+                    Finally it will call the <b>activate()</b> method, which is where you can place any additional initialization depends on initial rendering.
+                </p>
+
+                <h4>The Javascript code (old method)</h4>
                 <p>After loading the page, the browser will run the function <b>nort.main()</b>. 
                     This function is your application entry point. You may perform any initialization here.
                     After that, your are ready to render your first UI, by calling <b>nort.render()</b>.
                 </p>
                 <b>nort.render( element, target)</b> appends the <b>element</b> to the <b>target</b> element.
                 When no target is specified, the element is inserted at the root of the document.
+                <h3>Nort is HTML as Javascript</h3>
                 <p>In this example we are rendering a div. The equivalent HTML code would be:</p>
                 <pre><code class="html">
     &lt;div style=&quot;padding: 30px&quot; nort-element=&quot;div&quot;&gt;
