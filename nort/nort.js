@@ -7,8 +7,8 @@
 const nort = {}
 
 nort.info= {
-    version: "0.6",
-    date: new Date( 2023, 11, 5 )
+    version: "00",
+    date: new Date( Date.now() )
 }
 
 window.nort=nort
@@ -136,6 +136,7 @@ nort.applicationClass = function(cls) {
 
 document.addEventListener("DOMContentLoaded",initializeNort)
 
+loadJS("version.js")
 loadJS("nort-object.js")
 loadJS("nort-datetime.js")
 loadJS("nort-html-tags.js")

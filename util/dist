@@ -5,7 +5,8 @@ cd nortroot
 
 echo ROOT $nortroot
 
-rsync -av --delete nort docs
+rm -rf docs/nort
+cp -r nort docs
 
 rm -r docs/demo
 mkdir docs/demo
