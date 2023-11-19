@@ -84,8 +84,15 @@ nort.addElement = function (elt, e) {
 
 nort.replaceElement = function(elt, newElt) {
     if (elt) {
-        parent = elt.parentNode
-        if (parent ) parent.replaceChild(newElt, elt) 
+        if (elt.parentNode ) { 
+            elt.parentNode.replaceChild(newElt, elt) 
+            return newElt
+        } else {
+            return elt
+        }
+        
+    } else {    
+        return null
     }
 }
 
