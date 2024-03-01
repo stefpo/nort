@@ -52,8 +52,8 @@ nort.elements.lib.bindFieldMethods = function(e) {
     return e
 }
 
-nort.elements.textBox = function(attributes) {
-    let e= nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "text", "nort-element":"textBox"}, [attributes])) 
+nort.elements.textbox = function(attributes) {
+    let e= nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "text", "nort-element":"textbox"}, [attributes])) 
     
 
     if (e.hasClass ("type-uint")) e.validRegexp = /^[0-9]+$/
@@ -109,8 +109,8 @@ nort.elements.textBox = function(attributes) {
     return e
 }
 
-nort.elements.multilineBox = function(attributes) {
-    let e= nort.elements.lib.bindFieldMethods(nort.createElement("textarea", {type: "text", "nort-element":"textBox"}, [attributes])) 
+nort.elements.textarea = function(attributes) {
+    let e= nort.elements.lib.bindFieldMethods(nort.createElement("textarea", {type: "text", "nort-element":"textbox"}, [attributes])) 
 
     let fieldValue = ""
 
@@ -147,7 +147,7 @@ nort.elements.multilineBox = function(attributes) {
 }
 
 nort.elements.passwordBox = function(attributes) {
-    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "password", "nort-element":"textBox"}, [attributes])) 
+    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "password", "nort-element":"textbox"}, [attributes])) 
 
     e.setValue = function(v) {
         e.value = v
@@ -163,8 +163,8 @@ nort.elements.passwordBox = function(attributes) {
 }
 
 
-nort.elements.checkBox = function(attributes) {
-    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkBox", "nort-element":"checkBox"}, [attributes])) 
+nort.elements.checkbox = function(attributes) {
+    let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkbox", "nort-element":"checkbox"}, [attributes])) 
 
     e.isValid = function() {
         return true
