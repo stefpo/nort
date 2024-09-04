@@ -13,8 +13,8 @@ mkdir docs/demo
 cp -Lr test docs/demo/nort-full-set
 
 
-
+rm -rf docs/dist
 mkdir docs/dist
 tar -cvzf docs/dist/nort.tgz nort
-zip docs/dist/nort.zip nort/*
+zip -r docs/dist/nort.zip nort/*
 
