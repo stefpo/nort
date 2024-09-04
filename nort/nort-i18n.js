@@ -9,6 +9,7 @@ nort.translations = []
 nort.getBrowserLanguage = function() {
     let lang = window.navigator.languages ? window.navigator.languages[0] : null;
     lang = lang || window.navigator.language || window.navigator.browserLanguage || window.navigator.userLanguage;
+    lang = lang.substring(0,5)
     return lang
 }
 

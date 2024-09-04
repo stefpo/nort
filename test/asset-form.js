@@ -2,17 +2,17 @@ class AssetForm extends nort.components.Form {
     constructor (properties) {
         super(properties)
         let me = this
-        this.fields.add (nort.elements.textbox({name: "manuf", placeholder: "manufacturer", value: "" }))
-                   .add (nort.elements.textbox({class: "required-field", style: "background-image: none", name: "model", value: "" }))
-                   .add (nort.elements.textbox({style: "background-image: none", name: "serial", value: "" }))
-                   .add (nort.elements.datebox({name: "srvdate", class:"required-field", value: "" }))                       
-                   .add (nort.elements.datebox({name: "bottom_date", value: "" }))                       
+        this.fields.add (nort.elements.textBox({name: "manuf", placeholder: "manufacturer", value: "" }))
+                   .add (nort.elements.textBox({class: "required-field", style: "background-image: none", name: "model", value: "" }))
+                   .add (nort.elements.textBox({style: "background-image: none", name: "serial", value: "" }))
+                   .add (nort.elements.checkBox({name: "srvdate", class:"required-field", value: "" }))                       
+                   .add (nort.elements.checkBox({name: "bottom_date", value: "" }))                       
 
-                   .add (nort.elements.textbox({name: "integer", class:"required-field type-int", value: "" }))                       
-                   .add (nort.elements.textbox({name: "decimal", class:"required-field type-decimal2", value: "" }))                       
-                   .add (nort.elements.textbox({name: "float", class:"required-field type-float", value: "" }))                       
-                   .add (nort.elements.textbox({name: "domain", class:"required-field type-domain", value: "" }))                       
-                   .add (nort.elements.textbox({name: "email", class:"required-field type-email", value: "" }))                       
+                   .add (nort.elements.textBox({name: "integer", class:"required-field type-int", value: "" }))                       
+                   .add (nort.elements.textBox({name: "decimal", class:"required-field type-decimal2", value: "" }))                       
+                   .add (nort.elements.textBox({name: "float", class:"required-field type-float", value: "" }))                       
+                   .add (nort.elements.textBox({name: "domain", class:"required-field type-domain", value: "" }))                       
+                   .add (nort.elements.textBox({name: "email", class:"required-field type-email", value: "" }))                       
 
                    .add (nort.elements.select({name: "location", value:"L1"},{ null:"Undefined", L1:"Location 1", L2:"Location 2", L3: "Location3"} ))
                    .add (nort.elements.select({name: "status"},{NEW:"New",ACTIVE:"Active",DISPOSED:"Disposed"}))
@@ -29,8 +29,8 @@ class AssetForm extends nort.components.Form {
                              {text: "Entry2", callback: function() { nort.alert("Entry 2")}},
                              { menu: { text: "Submenu", items: [ { text: "Sub1", callback: function() { nort.alert("Sub1 2")} } ] } },
                              {text: "Entry3", callback: function() { nort.alert("Entry 3")}}]))
-                   .add (nort.elements.textbox({name:"browser"}))
-                   .add (nort.elements.checkbox({name:"cb1" }))
+                   .add (nort.elements.textBox({name:"browser"}))
+                   .add (nort.elements.checkBox({name:"cb1" }))
 
 
         //this.fields.location.setValue("L2")

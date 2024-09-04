@@ -267,7 +267,7 @@ nort.components.Grid =  class extends nort.Component{
             let row=[]
             if (this.data[r]._visible) {
                 if (this.conf.options.addSelectBox ) {
-                    let cb = nort.elements.checkbox ({}).setValue(this.data[r]._checked || false)
+                    let cb = nort.elements.checkBox ({}).setValue(this.data[r]._checked || false)
                     cb.on("click", function(){
                         me.topcheckbox.checked = 0 
                         me.data[r]._checked = cb.getValue()
@@ -308,7 +308,7 @@ nort.components.Grid =  class extends nort.Component{
 
         if (this.conf.options.addSelectBox ) {
             this.checkboxes = []
-            let cb = nort.elements.checkbox ({})
+            let cb = nort.elements.checkBox ({})
             this.topcheckbox = cb
             cb.on("click", function() {
                 for (let rcb of me.checkboxes) {
@@ -330,7 +330,7 @@ nort.components.Grid =  class extends nort.Component{
                     f.onchange = function() { me.applyFilters() }
                     f.setValue("")
                 } else {
-                    f = nort.elements.textbox({style: `display: block; width: 100%`, autocomplete: "off" } )
+                    f = nort.elements.textBox({style: `display: block; width: 100%`, autocomplete: "off" } )
                     f.onchange = function() { me.applyFilters() }
                     f.setValue("")
                 }

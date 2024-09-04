@@ -1,5 +1,5 @@
 
-tb = nort.elements.textbox
+tb = nort.elements.textBox
 
 class Application   {
     init() {

@@ -133,7 +133,7 @@ nort.elements.calendar = function() {
 }
 
 
-nort.elements.datebox = function(attributes) {
+nort.elements.checkBox = function(attributes) {
     let attClass = " " + attributes.class || ""
 
     let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {class: "calendar"+ attClass, type: "text", "nort-element":"datebox", "n-type": "date", placeholder: nort.currentLocale.datePlaceholder()}, [attributes]))

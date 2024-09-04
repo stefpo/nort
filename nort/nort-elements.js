@@ -52,7 +52,7 @@ nort.elements.lib.bindFieldMethods = function(e) {
     return e
 }
 
-nort.elements.textbox = function(attributes) {
+nort.elements.textBox = function(attributes) {
     let e= nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "text", "nort-element":"textbox"}, [attributes])) 
     
 
@@ -163,7 +163,7 @@ nort.elements.passwordBox = function(attributes) {
 }
 
 
-nort.elements.checkbox = function(attributes) {
+nort.elements.checkBox = function(attributes) {
     let e = nort.elements.lib.bindFieldMethods(nort.createElement("input", {type: "checkbox", "nort-element":"checkbox"}, [attributes])) 
 
     e.isValid = function() {
