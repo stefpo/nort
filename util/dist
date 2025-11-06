@@ -10,7 +10,7 @@ cp -r nort docs
 
 rm -r docs/demo
 mkdir docs/demo
-cp -Lr test docs/demo/nort-full-set
+cp -Lr test-app docs/demo/nort-full-set
 
 
 rm -rf docs/dist

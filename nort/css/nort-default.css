@@ -59,10 +59,10 @@ select {
     appearance: none;  
     border-radius: 0px;
     -webkit-appearance: none;    
-    -webkit-border-radius: 0px;
-    background-image: url(combobtn.gif); 
+    -webkit-border-radius: 0px; 
+    background-image: url(combobtn.gif);
     background-position: right; background-repeat: no-repeat; 
-    padding-right: 20px;
+    padding-right: 20px; 
 }
 
 input:focus, select:focus {
@@ -480,21 +480,17 @@ div.nort-grid>table th{
     position: sticky;
     top: 0;
     z-index: 2;
+    font-size: 90%;
+    color: #606060;
     white-space: nowrap;
 }
 
-div.nort-grid>table th{ 
-    padding: 4px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    font-size: 90%;
-    color: #606060;
-}
 
 div.nort-grid input, div.nort-grid select{
     background-color: white;
     border: none;
     padding: 2px;
+    white-space: nowrap;
 }
 
 div.nort-grid>table tr:hover{ 
@@ -502,12 +498,10 @@ div.nort-grid>table tr:hover{
 }
 
 div.nort-grid>table td{ 
-    padding: 4px;
     margin: 0px;
     font-size: 90%;;
-    border-bottom: 1px solid silver;
-    white-space: nowrap;
-    overflow: hidden;
+    border-bottom: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
 }
 
 div.nort-grid>table td:hover{ 
@@ -519,7 +513,7 @@ div.nort-grid.fix-first-col>table th:first-child{
     position: sticky;
     top: 0;
     left: 0;
-    background-color: #f0f0f0ed;
+    background-color: #f0f0f0;
     z-index:3;
 }
 
@@ -529,6 +523,42 @@ div.nort-grid.fix-first-col>table td:first-child{
     background-color: #f0f0f0;
 }
 
+div.nort-grid>table td>div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;    
+    display: inline-block;
+    padding: 4px;
+}
+
+div.nort-grid>table th>div {
+    width: 100%;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;       
+}
+
+div.nort-grid>table th>div>div:first-child {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding:4px;
+    flex-grow: 1;
+}
+
+div.nort-grid>table th>div>div.colsep {
+    width: 2px !important;
+    min-width: 2px;
+    background-color: white;
+    align-self: stretch;
+}
+
+div.nort-grid div.colsep:hover {
+    cursor:col-resize;
+}
+
 .valign-top { vertical-align: top;}
 .valign-middle { vertical-align:middle;}
 .valign-bottom { vertical-align:bottom;}
+

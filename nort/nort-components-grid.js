@@ -17,7 +17,9 @@ nort.components.Grid =  class extends nort.Component{
         this.fullTextSearch = ""
         this.sortColumn = undefined
         this.sortDescending = false
-        this.initialWidthSaved = false
+        this.columnWidths = undefined
+        this.dataCellDivs=[]
+        this.headerCellDivs=[]
     }
 
     setTabledef(tabledef) {
@@ -29,6 +31,7 @@ nort.components.Grid =  class extends nort.Component{
                 defaultTransform : identity,
                 defaultHeaderTransform : identity,
                 defaultEnableDropdown : false,
+                showFilters: true,
                 rowLimit : 1000,
                 addSelectBox : false
             }
@@ -40,6 +43,7 @@ nort.components.Grid =  class extends nort.Component{
         }
     }
 
+    /*
     refreshData(o, tabledef) {
         if (this.dataLoadedOnce ) {
             this.data = o
@@ -55,9 +59,9 @@ nort.components.Grid =  class extends nort.Component{
 
             this.applyFilters()
         } else {
-            this.setData(o, tabledef)
+            this.setData(o, tabledef)           
         }
-    }
+    }*/
 
     loadGroupValues() {
         for ( let c in this.columns ) {
@@ -78,7 +82,7 @@ nort.components.Grid =  class extends nort.Component{
     setData(o, tabledef) {
         this.clear()
         if (o && o.length > 0 ) {
-
+            this.columnWidths = undefined
             if (tabledef) this.setTabledef(tabledef)
             // Create columns
             if (Array.isArray(o) && o.length>0) {
@@ -178,6 +182,7 @@ nort.components.Grid =  class extends nort.Component{
         
         let newBody = this.renderBody()
         this.table.replaceChild(newBody, this.tbody )
+        this.setDOMColumnWidths()
         this.tbody = newBody      
         document.body.style.cursor = ""  
     }    
@@ -209,6 +214,7 @@ nort.components.Grid =  class extends nort.Component{
             let newBody = this.renderBody()
             this.table.replaceChild(newBody, this.tbody )
             this.tbody = newBody    
+            this.setDOMColumnWidths()
             document.body.style.cursor = ""  
         } catch(e)       {
             document.body.style.cursor = ""  
@@ -259,10 +265,45 @@ nort.components.Grid =  class extends nort.Component{
         me.fireEvent('checkbox', { selection: selRows})
     }
 
+    setDOMColumnWidths() {
+        if ( this.columnWidths ) {
+            for (let c in this.headerCellDivs ) {
+                this.setSingleDOMColumnWidth(c, this.columnWidths[c] )
+            }
+        }
+    }
+
+    setSingleDOMColumnWidth(c,w) {
+        let me = this
+        this.columnWidths[c] = w
+
+        // Synchronous version
+        this.headerCellDivs[c].style.width = `${w}px`
+        for (let r in this.dataCellDivs ) {
+          this.dataCellDivs[r][c].style.width = `${w}px`
+        }
+        
+        /*
+        let r = 0
+        me.headerCellDivs[c].style.width = `${w}px`
+          
+        function loop() {
+            if (r < me.headerCellDivs.length) {
+                me.dataCellDivs[r][c].style.width = `${w}px`
+                r++
+                setTimeout(loop,0)
+            }
+        }
+        setTimeout(loop,0)
+        */
+    }    
+
     renderBody() {
         let rows = []   
         let displayedRows = 0
+        this.dataCellDivs=[]
         let me = this 
+
         for (let r=0; r< this.data.length && displayedRows < this.conf.options.rowLimit; r++) {
             let row=[]
             if (this.data[r]._visible) {
@@ -280,21 +321,25 @@ nort.components.Grid =  class extends nort.Component{
                     this.checkboxes.push(cb)
                     row.push($td({}, cb))                    
                 }
+                let rowCellDivs = []
                 for (let c in this.columns ) {
                     let col = this.columns[c]
                     if (col.visible) {
                         let v = this.data[r][c]
                         if ( v == null ) v=""
+                        let dc
                         //let cell = $td({ class: col.css || "", style: `width: ${col.maxColTextLength*.3}em` }, col.transformFunc(v))
-                        let cell = $td({ class: col.css || "" }, col.transformFunc(v))
+                        let cell = $td({ class: col.css || "" }, 
+                                dc = $div({},col.transformFunc(v)))
 
                         cell.onclick = function() { me._onclickCell(r, c) }
                         row.push(cell)
+                        rowCellDivs.push(dc)
                     }
                 }
                 displayedRows++
                 rows.push($tr({},row))
-
+                this.dataCellDivs.push(rowCellDivs)
             }
         }     
         return $tbody({}, rows)     
@@ -302,6 +347,7 @@ nort.components.Grid =  class extends nort.Component{
 
     renderHeader() {
         let row=[]
+        this.headerCellDivs = []
 
         let me = this
         let css = (" " + this.properties.class ) || ""
@@ -317,35 +363,82 @@ nort.components.Grid =  class extends nort.Component{
                 me.firecheckboxEvent()
             })
             row.push($th({}, cb))                    
-        }             
+        }
+        
         for (let c in this.columns ) {
             let f
             let col = this.columns[c]
        
             if (col.visible) {
-                let enableDropdown = col.enableDropdown == undefined ? this.conf.options.defaultEnableDropdown : col.enableDropdown
-                if ( col.groupValues.length<20 && enableDropdown ) {
-                    f = nort.elements.select({style:`display: block; width: 100%`},this.getFilterOptions(col.groupValues, col.transformFunc))
-                    col.filterElement = f
-                    f.onchange = function() { me.applyFilters() }
-                    f.setValue("")
+                if (this.conf.options.showFilters) {
+                    let enableDropdown = col.enableDropdown == undefined ? this.conf.options.defaultEnableDropdown : col.enableDropdown
+                    if ( col.groupValues.length<20 && enableDropdown ) {
+                        f = nort.elements.select({style:`display: block; width: 100%; text-overflow: ellipsis;`},this.getFilterOptions(col.groupValues, col.transformFunc))
+                        col.filterElement = f
+                        f.onchange = function() { me.applyFilters() }
+                        f.setValue("")
+                    } else {
+                        f = nort.elements.textBox({style: `display: block; width: 100%`, autocomplete: "off" } )
+                        f.onchange = function() { me.applyFilters() }
+                        f.setValue("")
+                    }
+                    col.filter=f
                 } else {
-                    f = nort.elements.textBox({style: `display: block; width: 100%`, autocomplete: "off" } )
-                    f.onchange = function() { me.applyFilters() }
-                    f.setValue("")
+                    col.filters = ''
                 }
-                col.filter=f
+                let hc 
+                let colsep
                 col.labelElement = $label({},this.getColumnHeader(col) ).on("click", function(evt) { me.sort(col)} )
-                row.push($th({}, col.labelElement , f, $div({style: `display: block; min-width: ${col.maxColTextLength*.6}em`})))
+                // row.push($th({}, col.labelElement , f, $div({style: `display: block; min-width: ${col.maxColTextLength*.6}em`})))
+                row.push( $th({}, $div({}, hc = $div({},col.labelElement,f), colsep=$div({class: "colsep"}))))
+
+                let ix = this.headerCellDivs.length
+
+                colsep.on("mousedown", function (evt) {
+                    me.enterColumnWidthAdjust(evt, ix)
+                })
+
+                this.headerCellDivs.push(hc)
             } 
         }
-        return $thead({}, $tr({},row))
+        return  $thead({}, $tr({},row))
     }
 
-    render() {
-        
+    enterColumnWidthAdjust(evt, c) {
+        let me=this
 
+        let initialColumnWidth = this.headerCellDivs[c].offsetWidth //this.columnWidths[c]
+        let initialPos=evt.clientX
+
+        function muListener(muEvt) {
+            document.removeEventListener("mouseup", muListener)
+            document.removeEventListener("mousemove", mvListener)
+            let newWidth = muEvt.clientX - initialPos + initialColumnWidth
+            me.setSingleDOMColumnWidth(c, newWidth)            
+        }
+
+        function mvListener(mvEvt) {
+            let newWidth = mvEvt.clientX - initialPos + initialColumnWidth
+            me.setSingleDOMColumnWidth(c, newWidth)
+        }
+
+        document.addEventListener("mouseup", muListener)
+        document.addEventListener("mousemove", mvListener)
+    }
+
+
+
+
+    render() {
         let css = (" " + this.properties.class ) || ""
+        let me = this
+
+        function captureInitialColumnWidths(){
+            if (! me.columnWidths ) me.columnWidths = []
+            for (let h in me.headerCellDivs ) {
+                me.columnWidths.push(me.headerCellDivs[h].offsetWidth)
+            }
+        }        
 
         if ( this.data.length > 0 ) {
             document.body.style.cursor = "progress"
@@ -353,8 +446,11 @@ nort.components.Grid =  class extends nort.Component{
             let thead = this.renderHeader()
 
             this.tbody = this.renderBody()
-            this.table = $table({}, thead, this.tbody )
+            this.table = $table({style: "table-layout: fixed"}, thead, this.tbody )
             document.body.style.cursor = "default"
+
+            // This must be call once synchronous rendering is complete
+            setTimeout( captureInitialColumnWidths , 0 ) 
 
             return $div({ class: "nort-grid" + css},this.table)
         } else {
