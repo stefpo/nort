@@ -1,4 +1,7 @@
-class GraphDemo extends nort.components.Form {
+import * as components from "../nort/nort-components-form.js" 
+import * as charts from "../nort/nort-elements-chart.js" 
+
+export class GraphDemo extends components.Form {
     constructor(properties) {
         super(properties)
     }
@@ -47,10 +50,10 @@ class GraphDemo extends nort.components.Form {
                 ['Dec', 48]]
         }        
     return [
-        nort.chart.pieChart({ 'title':'A pie chart','size': 210   ,'withLinks': true, 'onclick': function(a){ alert(a); } }, pieData ),
-        nort.chart.barGraph({ 'title':'A bar chart','height': 200, 'width': 350 ,'withLinks': true, colors: ['blue','orange','#00ff00'], 'onclick': function(b,r){ alert(b+' '+r) } }, barData ),
-        nort.chart.cumulatedBarGraph({ 'title':'A stack chart','height': 200, 'width': 350 ,'withLinks': true, colors: ['blue','orange','#00ff00'] , 'onclick': function(b,r){ alert(b+' '+r) } },cumBarData ),
-        nort.chart.pieChart({ 'title':'A pie chart','size': 210,'withLinks': true, 'onclick': function(a){ alert(a); } }, pieData )
+        charts.pieChart({ 'title':'A pie chart','size': 210   ,'withLinks': true, 'onclick': function(a){ alert(a); } }, pieData ),
+        charts.barGraph({ 'title':'A bar chart','height': 200, 'width': 350 ,'withLinks': true, colors: ['blue','orange','#00ff00'], 'onclick': function(b,r){ alert(b+' '+r) } }, barData ),
+        charts.cumulatedBarGraph({ 'title':'A stack chart','height': 200, 'width': 350 ,'withLinks': true, colors: ['blue','orange','#00ff00'] , 'onclick': function(b,r){ alert(b+' '+r) } },cumBarData ),
+        charts.pieChart({ 'title':'A pie chart','size': 210,'withLinks': true, 'onclick': function(a){ alert(a); } }, pieData )
     ]
     }
 }

@@ -1,5 +1,5 @@
 <script>const nort={}</script>
-<script src="nort/version.js"></script> 
+<script type="module" src="demo/nort/version.js"></script> 
 <script src="js/autotoc.js"></script>  
 <header>
     <div class="container hflex-centered">
@@ -9,8 +9,13 @@
     <div style="margin-left: 25px;"><a href="tutorial.html">Tutorial</a></div>
     <div style="margin-left: 25px;"><a href="api.html">API</a></div>
     <div style="flex-grow: 1"></div>
-    <div style="margin-right: 20px;">v <script>document.write(nort.info.version)</script></div>
+    <div style="margin-right: 20px;">v <span id="version"></span></div>
     <div><a href="https://github.com/stefpo/nort" target="github">Github</a></div>
     </div>
     </div>
 </header>
+<script>
+    window.onload = () => {
+        document.getElementById("version").innerText=window.nortVersionInfo.version
+    }
+</script>

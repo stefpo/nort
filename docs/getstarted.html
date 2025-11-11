@@ -33,36 +33,39 @@
                 <p>A NORT application is always a HTML page. The HTML page generally contains the 
                     Javascript loading code. The rest of your application is implemented in Javascript
                 </p>
-                <p>Your HTML page will look like the following: ( You can see the result <a href="demo/getstarted" target="demo">here</a>)</p>
+                <p>Your HTML page will look like the following: ( You can see the result <a href="./demo/getstarted" target="demo">here</a>)</p>
                 index.html:
                 <pre><code class="html">
-    &lt;!DOCTYPE html&gt;
-    &lt;html style=&quot;height: 100%&quot;&gt;
-    
-    &lt;head&gt;
-    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-    &lt;meta name='viewport' content='target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' /&gt;
-    
-    &lt;title&gt;Your first application&lt;/title&gt;
-    
-    &lt;script src=&quot;https://stefpo.github.io/nort/nort/nort.js&quot;&gt;&lt;/script&gt;
-    &lt;script&gt;loadStyleSheet(&quot;./style.css&quot;)&lt;/script&gt;
-    &lt;script&gt;
-        loadJS(&quot;./appcode.js&quot;)
-    
-    &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;/html&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+&lt;meta http-equiv="content-type" content="text/html; charset=UTF-8"&gt;
+&lt;meta name='viewport' content='target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' /&gt;
+
+&lt;title&gt;NORT full component set demo&lt;/title&gt;
+
+&lt;!-- Simply import your application main module --&gt;
+&lt;script type="module" src="./appcode.js"&gt;&lt;/script&gt;
+
+&lt;/head&gt;
+&lt;/html&gt;
                 </code></pre>
                 <p>You then need an application main code.</p>
                 appcode.js:
                 <pre><code class="javascript">
-    class Application {
+
+    // First you need to import the Nort library. 
+    // This will also initialize the framework.
+    import * as nort from "../nort/nort.js"
+
+    export class Application {
         init() {
             // Place here your pre-rendering initialization code
         }
 
         render() {
+            // This is your page layout.
             return $div({ style: "padding: 30px"},
                 [
                 $h1({ style: "color: red"}, "Your first NORT application" ),
@@ -74,24 +77,13 @@
             // Place here your post-rendering initialization code
         }                        
     }
-                </code></pre>
-                <p>Alternatively you may want to override the default Nort startup sequence. (Note this method was used in first versions of Nort and is NOT the preferred way)</p>
 
-                <pre><code class="javascript">
-    // This is the entry point of your application
-    nort.main = function() {                    
-        
-        // You need to render something.
-        nort.render(
-            $div({ style: "padding: 30px"},
-                [
-                $h1({ style: "color: red"}, "Your first NORT application" ),
-                $p({}, "Some text here" )
-                ])
-        )
-    }
-                    
+    // This will add Nort default look and feel to your page
+    nort.useDefaultStyleSheets() 
+    // Don't forget to render your application
+    nort.render( new Application() ) 
                 </code></pre>
+ 
                 <h3>The code explained</h3>
                 <h4>In the HTML file</h4>
                 <p>To load a NORT application into your page, you need to:</p>
@@ -144,8 +136,8 @@
                 <h2>Downloading NORT runtime</h2>
                 <p>You can download a copy of NORT runtime for local hosting</p>
                 <ul>
-                    <li><a href="https://stefpo.github.io/nort/dist/nort.tgz">Tar version</a></li>
-                    <li><a href="https://stefpo.github.io/nort/dist/nort.zip">Zip version</a></li>
+                    <li><a href="dist/nort.tgz">Tar version</a></li>
+                    <li><a href="dist/nort.zip">Zip version</a></li>
                 </ul>
             </div>
         </div>

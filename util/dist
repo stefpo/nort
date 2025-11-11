@@ -1,15 +1,14 @@
 script=`realpath $0` 
 nortroot=`dirname $script`
 nortroot=`dirname $nortroot`  
-cd nortroot
+cd $nortroot
 
 echo ROOT $nortroot
 
-rm -rf docs/nort
-cp -r nort docs
+rm -rf docs/demo/nort
+cp -r nort docs/demo
 
-rm -r docs/demo
-mkdir docs/demo
+rm -r docs/demo/nort-full-set
 cp -Lr test-app docs/demo/nort-full-set
 
 

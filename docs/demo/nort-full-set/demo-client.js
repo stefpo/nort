@@ -1,4 +1,8 @@
-class ClientDemo extends nort.components.Form {
+
+import * as components from "../nort/nort-components-form.js" 
+import * as http from "../nort/nort-http-client.js" 
+
+export class ClientDemo extends components.Form {
     constructor(properties) {
         super(properties)
         let me = this
@@ -7,8 +11,8 @@ class ClientDemo extends nort.components.Form {
                     .add ($textarea({name: "data", style: "width: 100%; height: 350px;"}))
 
         this.fields.btn1.on("click", function() {
-            nort.http.debug=true
-            nort.http.jsonRequest("GET","wsdata.json",{},function(err, result){
+            http.setDebugMode(true)
+            http.jsonRequest("GET","wsdata.json",{},function(err, result){
                 me.fields.data.value = JSON.stringify(result.data,undefined,4)
             })
             me.fields.data.value ="In progress"

@@ -1,14 +1,22 @@
-class GridDemo extends nort.components.Form {
+
+import * as elements from "../nort/nort-elements.js" 
+import * as components from "../nort/nort-components-form.js" 
+import * as grid from "../nort/nort-components-grid.js" 
+import * as http from "../nort/nort-http-client.js" 
+import * as i18n from "../nort/nort-i18n.js" 
+import * as modal from "../nort/nort-elements-modal.js" 
+
+export class GridDemo extends components.Form {
     constructor(properties) {
         super(properties)
         let me = this
         
-        this.grid = new nort.components.Grid({class: "fix-first-col"},
+        this.grid = new grid.Grid({class: "fix-first-col"},
             {   columns: {  
                     status: { visible: true, enableDropdown: true, transformFunc: statusTransform },
                     LocShortName: { visible: false },
                 }, 
-                options: { defaultHeaderTransform: nort.makeTranslatable , rowLimit: 500 }
+                options: { defaultHeaderTransform: i18n.makeTranslatable , rowLimit: 500 }
             })
 
         this.fields.add ($button({name:"btn1", type: "button"},"Get data"))
@@ -21,8 +29,8 @@ class GridDemo extends nort.components.Form {
         }
 
         this.fields.btn1.on("click", function() {
-            nort.http.jsonRequest("GET","wsdata.json",{},function(err, result){
-                if (err) { nort.alert("Error "+ err) }
+            http.jsonRequest("GET","wsdata.json",{},function(err, result){
+                if (err) { modal.alert("Error "+ err) }
                 else {
                     me.grid.setData(result.data )
                 }
@@ -30,8 +38,8 @@ class GridDemo extends nort.components.Form {
         })
 
         this.fields.btn2.on("click", function() {
-            nort.http.jsonRequest("GET","wsdatalong.json",{},function(err, result){
-                if (err) { nort.alert("Error "+ err) }
+            http.jsonRequest("GET","wsdatalong.json",{},function(err, result){
+                if (err) { modal.alert("Error "+ err) }
                 else {
                     me.grid.setData(result.data )
                     }
@@ -48,7 +56,7 @@ class GridDemo extends nort.components.Form {
             $div({style: "display: flex; flex-direction: column; height: 100%; width: 100%;"},
             [
             $div({},this.fields.btn1, " ", this.fields.btn2, " ", this.fields.btn3), 
-                nort.elements.scrollPane({style: "flex-grow: 1"}, this.grid )
+                elements.scrollPane({style: "flex-grow: 1"}, this.grid )
             ])
         )
     }
