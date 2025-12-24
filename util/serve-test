@@ -2,6 +2,8 @@ script=`realpath $0`
 nortroot=`dirname $script`
 nortroot=`dirname $nortroot`  
 
+
 cd $nortroot/test-app
+pwd
  
 python3 -m http.server 8000

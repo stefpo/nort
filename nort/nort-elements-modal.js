@@ -5,7 +5,6 @@
 */
 
 import * as elements from "./nort-elements.js"
-//import { WM } from "./nort-elements-windows.js"
 
 export function alert(s, timeout) {
     choiceBox("", s, [ {text: "OK"}], timeout)
