@@ -2,8 +2,9 @@
 This file generate nort module documentation
 */
 
-import * as nort from './nort.js'
-import * as packageInfo from './package-info.js'
+import * as nort from '../nort.js'
+import * as version from '../version.js'
+import * as packageInfo from '../package-info.js'
 
 let contentHTML=[]
 
@@ -34,6 +35,7 @@ async function documentAll() {
     //const moduleList=["test-class"]
     let modInfo = await packageInfo.getInfo(moduleList)
     contentHTML.push("<h1>Nort package reference</h1>")
+    contentHTML.push(`Version ${version.info.version} released ${JSON.stringify(version.info.date).substring(1,11)}`)
     for (let mod of modInfo) {
         contentHTML.push(`<h2>Module ${mod.name}</h2>`)
         contentHTML.push("<blockquote>")
@@ -68,9 +70,19 @@ async function documentAll() {
     }
 //    contentHTML.push(`<pre>${JSON.stringify(modInfo, undefined,"  ")}</pre>`)
 
-    let tartgetDiv
-    nort.render(tartgetDiv=$div({},"Test"))
+    let tartgetDiv = $div({ id: "contents"},"Test")
+    nort.render($section({}, 
+        $div({class: "container"},
+            $h1({}, "Nort API reference"),
+            $div({id:"toc"}, $h2({},"Content")), 
+            tartgetDiv))
+        )
     tartgetDiv.innerHTML =contentHTML.join("\n")
 }
 
-documentAll()
+async function main() {
+    await documentAll()
+    insertToc("toc", "contents", "h2")
+}
+
+main()

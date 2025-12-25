@@ -113,7 +113,8 @@ function getClassMethods(cls){
 
 async function getModuleInfo(modName, rootDir) {
     let ret = { name: modName, classes: [], functions: [] } 
-    let mod = await import(`${rootDir}/${modName}.js`)
+    let modFile = `${rootDir}/${modName}.js`
+    let mod = await import(modFile)
     let moduleObjects=getModuleObjects(mod)
 
     ret.functions = moduleObjects.filter(x => x.type== 'function' )
