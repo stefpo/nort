@@ -6,7 +6,7 @@
 
 import * as dom from "./nort-dom.js"
 
-var windowManager = {
+window.WM = {
     mouseX : 0,
     mouseY : 0,
     currentWindow :  null,
@@ -20,19 +20,19 @@ var windowManager = {
     started: false
 }
 
-windowManager.getWindowElement = function(elt) {
+WM.getWindowElement = function(elt) {
     if ( dom.getClasses(elt).includes('wm-window') ) return elt
     else if ( elt===document.body) return null
-    else return windowManager.getWindowElement (elt.parentElement)
+    else return WM.getWindowElement (elt.parentElement)
 }
 
-windowManager.getTabberElement = function(elt) {
+WM.getTabberElement = function(elt) {
     if ( dom.getClasses(elt).includes('tabber') ) return elt
     else if ( elt===document.body) return null
-    else return windowManager.getTabberElement (elt.parentElement)
+    else return WM.getTabberElement (elt.parentElement)
 }
 
-windowManager.reduceZindex = function() {
+WM.reduceZindex = function() {
     var wl=document.getElementsByClassName("wm-window")
     var minZindex=9999
     var reduceBy=0
@@ -45,35 +45,35 @@ windowManager.reduceZindex = function() {
         for (var i=0; i<wl.length; i++) {
             wl[i].style.zIndex = wl[i].style.zIndex - reduceBy
         }        
-        windowManager.zIndex = windowManager.zIndex - reduceBy
+        WM.zIndex = WM.zIndex - reduceBy
     }
 }
 
-windowManager.setFocusTo = function (elt) {
-    let w = windowManager.getWindowElement(elt)
+WM.setFocusTo = function (elt) {
+    let w = WM.getWindowElement(elt)
     
-    if (w != windowManager.activeWindow && windowManager.activeWindow )  { 
-        windowManager.activeWindow.removeClass('wm-focus')
+    if (w != WM.activeWindow && WM.activeWindow )  { 
+        WM.activeWindow.removeClass('wm-focus')
     } 
 
-    if (w != windowManager.activeWindow) {
+    if (w != WM.activeWindow) {
         w.addClass('wm-focus')
 
-        if (! w.modal)  windowManager.reduceZindex(); // Do not let zIndex increase indefinitely
+        if (! w.modal)  WM.reduceZindex(); // Do not let zIndex increase indefinitely
         
-        w.style.zIndex = ++windowManager.zIndex
-        windowManager.activeWindow = w
+        w.style.zIndex = ++WM.zIndex
+        WM.activeWindow = w
     }    
     w.setTitle(w.windowTitle )
 }
 
-windowManager.delayedSetFocusTo = function (elt) {
+WM.delayedSetFocusTo = function (elt) {
     let x = elt
-    let t = window.setTimeout( function() {windowManager.setFocusTo(x)}, 1000)
+    let t = window.setTimeout( function() {WM.setFocusTo(x)}, 1000)
     return t
 }
 
-windowManager.stopContextMenu = function(event) {
+WM.stopContextMenu = function(event) {
     event = event || window.event
 
     if (event.stopPropagation) event.stopPropagation()
@@ -82,109 +82,108 @@ windowManager.stopContextMenu = function(event) {
     return false;        
 }
 
-windowManager.onWindowButton = function (elt,cmd) {
-    windowManager.button = cmd
-    windowManager.currentWindow = windowManager.getWindowElement(elt)
-    windowManager.currentWindow.mode=''
+WM.onWindowButton = function (elt,cmd) {
+    WM.button = cmd
+    WM.currentWindow = WM.getWindowElement(elt)
+    WM.currentWindow.mode=''
 }
 
-windowManager.OnMouseDown = function(elt, evt, mt) {
+WM.OnMouseDown = function(elt, evt, mt) {
     if (evt.buttons==1) {
-        windowManager.currentWindow = windowManager.getWindowElement(elt)
-        if ( windowManager.currentWindow != null &&  windowManager.currentWindow !== undefined  ) {
-            windowManager.currentWindow.Y = windowManager.currentWindow.offsetTop
-            windowManager.currentWindow.X = windowManager.currentWindow.offsetLeft
-            windowManager.currentWindow.W = windowManager.currentWindow.offsetWidth
-            windowManager.currentWindow.H = windowManager.currentWindow.offsetHeight
+        WM.currentWindow = WM.getWindowElement(elt)
+        if ( WM.currentWindow != null &&  WM.currentWindow !== undefined  ) {
+            WM.currentWindow.Y = WM.currentWindow.offsetTop
+            WM.currentWindow.X = WM.currentWindow.offsetLeft
+            WM.currentWindow.W = WM.currentWindow.offsetWidth
+            WM.currentWindow.H = WM.currentWindow.offsetHeight
             
-            windowManager.currentWindow.mouseX = windowManager.mouseX
-            windowManager.currentWindow.mouseY = windowManager.mouseY
-            windowManager.currentWindow.mode=mt
+            WM.currentWindow.mouseX = WM.mouseX
+            WM.currentWindow.mouseY = WM.mouseY
+            WM.currentWindow.mode=mt
 
-            if (! windowManager.veilDiv) {
-                windowManager.veilDiv = $div()
-                dom.addCssClass(document.body,'wm-'+windowManager.currentWindow.mode)
-                windowManager.veilDiv.id = 'wm-veil'
-                windowManager.veilDiv.style.zIndex = '9999'
-                document.body.appendChild(windowManager.veilDiv)
+            if (! WM.veilDiv) {
+                WM.veilDiv = $div()
+                dom.addCssClass(document.body,'wm-'+WM.currentWindow.mode)
+                WM.veilDiv.id = 'wm-veil'
+                WM.veilDiv.style.zIndex = '9999'
+                document.body.appendChild(WM.veilDiv)
             }
 
-            if (windowManager.currentWindow.clicked && windowManager.currentWindow.resizable) { windowManager.currentWindow.setMaximized(! windowManager.currentWindow.maximized );}
+            if (WM.currentWindow.clicked && WM.currentWindow.resizable) { WM.currentWindow.setMaximized(! WM.currentWindow.maximized );}
             else {
-                windowManager.currentWindow.clicked = true
-                var xw = windowManager.currentWindow
+                WM.currentWindow.clicked = true
+                var xw = WM.currentWindow
                 setTimeout(function() { xw.clicked = false }, 300 )
             }
 
-            if ( windowManager.activeWindow !== windowManager.currentWindow ) { 
-                windowManager.setFocusTo(windowManager.currentWindow)
+            if ( WM.activeWindow !== WM.currentWindow ) { 
+                WM.setFocusTo(WM.currentWindow)
             }
 
         }
     }
 }
 
-windowManager.onMouseUp = function(event) { 
+WM.onMouseUp = function(event) { 
     //console.log("mouse up")
-    if (document.body && windowManager.currentWindow) {
+    if (document.body && WM.currentWindow) {
         //console.log("Got current window")
-        dom.removeCssClass(document.body,'wm-'+windowManager.currentWindow.mode)
-        dom.removeCssClass(windowManager.currentWindow,'wm-moving')
-        if (windowManager.veilDiv ) { //&& WM.veilDiv.isConnected) { 
+        dom.removeCssClass(document.body,'wm-'+WM.currentWindow.mode)
+        dom.removeCssClass(WM.currentWindow,'wm-moving')
+        if (WM.veilDiv ) { //&& WM.veilDiv.isConnected) { 
             //console.log("remove veil")
-                dom.destroyElement(windowManager.veilDiv) 
+                dom.destroyElement(WM.veilDiv) 
         } //document.body.removeChild(WM.veilDiv)
-        if (windowManager.button =='close') windowManager.currentWindow.close()
-        if (windowManager.button =='max' ) windowManager.currentWindow.setMaximized( ! windowManager.currentWindow.maximized)
-        windowManager.button=''
-        windowManager.currentWindow = null; 
+        if (WM.button =='close') WM.currentWindow.close()
+        if (WM.button =='max' ) WM.currentWindow.setMaximized( ! WM.currentWindow.maximized)
+        WM.button=''
+        WM.currentWindow = null; 
     }
 }
 
-windowManager.start = function() {
-    if (! windowManager.started) {
-        window._nort_WM=windowManager        
+WM.start = function() {
+    if (! WM.started) {
         document.addEventListener("mousemove",function(event) {
             var evt = event || window.event
             var cw
-            windowManager.mouseX = evt.clientX
-            windowManager.mouseY = evt.clientY
+            WM.mouseX = evt.clientX
+            WM.mouseY = evt.clientY
 
-            if ( (cw=windowManager.currentWindow) !=null ) {
+            if ( (cw=WM.currentWindow) !=null ) {
 
                 if (cw.mode == 'mv' && cw.moveable) {
-                    cw.place(cw.X + windowManager.mouseX- cw.mouseX,cw.Y + windowManager.mouseY - cw.mouseY)
-                    dom.addCssClass( windowManager.currentWindow,'wm-moving')
+                    cw.place(cw.X + WM.mouseX- cw.mouseX,cw.Y + WM.mouseY - cw.mouseY)
+                    dom.addCssClass( WM.currentWindow,'wm-moving')
                 }	
                 else if (cw.mode == 'rn' && cw.resizable  && cw.moveable) {
-                    cw.place(undefined,cw.Y + windowManager.mouseY - cw.mouseY,undefined,cw.H - windowManager.mouseY + cw.mouseY)
+                    cw.place(undefined,cw.Y + WM.mouseY - cw.mouseY,undefined,cw.H - WM.mouseY + cw.mouseY)
                 }	
                 else if (cw.mode == 'rs' && cw.resizable) {
-                    cw.place(undefined,undefined,undefined, cw.H + windowManager.mouseY - cw.mouseY)
+                    cw.place(undefined,undefined,undefined, cw.H + WM.mouseY - cw.mouseY)
                 }	
                 else if (cw.mode == 'rw' && cw.resizable && cw.moveable) {
-                    cw.place(cw.X + windowManager.mouseX- cw.mouseX,undefined, cw.W - windowManager.mouseX + cw.mouseX,undefined)
+                    cw.place(cw.X + WM.mouseX- cw.mouseX,undefined, cw.W - WM.mouseX + cw.mouseX,undefined)
                 }	
                 else if (cw.mode == 're' && cw.resizable) {
-                    cw.place(undefined,undefined,cw.W + windowManager.mouseX- cw.mouseX,undefined)
+                    cw.place(undefined,undefined,cw.W + WM.mouseX- cw.mouseX,undefined)
                 }	
                 else if (cw.mode == 'rnw' && cw.resizable && cw.moveable) {
-                    cw.place(cw.X + windowManager.mouseX- cw.mouseX,cw.Y + windowManager.mouseY - cw.mouseY,cw.W - windowManager.mouseX + cw.mouseX,cw.H - windowManager.mouseY + cw.mouseY)
+                    cw.place(cw.X + WM.mouseX- cw.mouseX,cw.Y + WM.mouseY - cw.mouseY,cw.W - WM.mouseX + cw.mouseX,cw.H - WM.mouseY + cw.mouseY)
                 }	
                 else if (cw.mode == 'rne' && cw.resizable && cw.moveable) {
-                    cw.place(undefined,cw.Y + windowManager.mouseY - cw.mouseY,cw.W + windowManager.mouseX- cw.mouseX,cw.H - windowManager.mouseY + cw.mouseY)
+                    cw.place(undefined,cw.Y + WM.mouseY - cw.mouseY,cw.W + WM.mouseX- cw.mouseX,cw.H - WM.mouseY + cw.mouseY)
                 }	
                 else if (cw.mode == 'rsw' && cw.resizable  && cw.moveable) {
-                    cw.place(cw.X + windowManager.mouseX- cw.mouseX,undefined,cw.W - windowManager.mouseX + cw.mouseX,cw.H + windowManager.mouseY - cw.mouseY)
+                    cw.place(cw.X + WM.mouseX- cw.mouseX,undefined,cw.W - WM.mouseX + cw.mouseX,cw.H + WM.mouseY - cw.mouseY)
                 }	
                 else if (cw.mode == 'rse' && cw.resizable) {
-                    cw.place(undefined,undefined,cw.W + windowManager.mouseX- cw.mouseX,cw.H + windowManager.mouseY - cw.mouseY)
+                    cw.place(undefined,undefined,cw.W + WM.mouseX- cw.mouseX,cw.H + WM.mouseY - cw.mouseY)
                 }
            
             }
         } )
 
-        document.addEventListener("mouseup", windowManager.onMouseUp)
+        document.addEventListener("mouseup", WM.onMouseUp)
         
         top.addEventListener("resize", function(event) {
             var cw
@@ -194,20 +193,20 @@ windowManager.start = function() {
             }
 
         })
-        windowManager.started = true
+        WM.started = true
     }
 
     return(this)
 }
 
-windowManager.onWindowClose = function(elt) {
-    var w = windowManager.getWindowElement(elt)
+WM.onWindowClose = function(elt) {
+    var w = WM.getWindowElement(elt)
     if (w !=null)  w.close()
 }
 
-windowManager.createWindow = function(options) {
+WM.createWindow = function(options) {
     var w=$div()
-    windowManager.start()
+    WM.start()
 
     //if (id=='') id = 'wm-window' + WM.windowId++
     w.mode=''
@@ -226,7 +225,7 @@ windowManager.createWindow = function(options) {
     w.checkMinSize = function(){
         if (this.offsetWidth < this.minWidth ) this.style.width = this.minWidth + "px"
         if (this.offsetHeight < this.minHeight ) this.style.height = this.minHeight + "px"
-        if (this.offsetTop < windowManager.minTop ) this.style.top = windowManager.minTop + "px"
+        if (this.offsetTop < WM.minTop ) this.style.top = WM.minTop + "px"
     }
 
     w.resizeTo=function (width, height) {
@@ -238,13 +237,13 @@ windowManager.createWindow = function(options) {
     }  
 
     w.focus=function() {
-        windowManager.setFocusTo(this)
+        WM.setFocusTo(this)
     }
 
     w.place=function(left, top, width, height) {
         // No dragging outside of boundaries
         if ( ! this.maximized ) {
-            if (this.mode.substring(0,1)=='r' && ( left<windowManager.minLeft || top < windowManager.minTop || width < this.minWidth || height < this.minHeight ) ) return
+            if (this.mode.substring(0,1)=='r' && ( left<WM.minLeft || top < WM.minTop || width < this.minWidth || height < this.minHeight ) ) return
 
             if (left !== undefined) this.left=left
             if (top !== undefined) this.top=top
@@ -252,8 +251,8 @@ windowManager.createWindow = function(options) {
             if (height !== undefined) this.height=height
 
             // Check position and size
-            if (this.left<windowManager.minLeft) this.left=windowManager.minLeft
-            if (this.top<windowManager.minTop) this.top=windowManager.minTop
+            if (this.left<WM.minLeft) this.left=WM.minLeft
+            if (this.top<WM.minTop) this.top=WM.minTop
             if (this.width<w.minWidth) this.width=w.minWidth
             if (this.height<w.minHeight) this.height=w.minHeight
 
@@ -287,8 +286,8 @@ windowManager.createWindow = function(options) {
 
     w.center = function() {
         if (! this.maximized) {
-            this.top = (this.parentNode.offsetHeight-windowManager.minTop) /2 - this.height/2
-            this.left = (this.parentNode.offsetWidth-windowManager.minLeft) /2 - this.width/2
+            this.top = (this.parentNode.offsetHeight-WM.minTop) /2 - this.height/2
+            this.left = (this.parentNode.offsetWidth-WM.minLeft) /2 - this.width/2
             if ( this.top < 0 ) this.top = 0
             if ( this.left < 0 ) this.left = 0
             this.style.top = this.top + "px"
@@ -306,11 +305,11 @@ windowManager.createWindow = function(options) {
         w.maximized = state
         if (state) {
             w.setFrameSize(false)
-            this.style.top = windowManager.minTop + "px"
-            this.style.left = windowManager.minLeft + "px";   
+            this.style.top = WM.minTop + "px"
+            this.style.left = WM.minLeft + "px";   
             //this.style.width = (top.innerWidth-WM.minLeft) +"px"
-            this.style.width = (this.parentNode.offsetWidth-windowManager.minLeft) +"px"
-            this.style.height = (this.parentNode.offsetHeight-windowManager.minTop) +"px" 
+            this.style.width = (this.parentNode.offsetWidth-WM.minLeft) +"px"
+            this.style.height = (this.parentNode.offsetHeight-WM.minTop) +"px" 
             this.contentPane.style.overflow = "scroll"
             w.addClass('wm-maximized')
             w.setFrameSize(true)
@@ -341,7 +340,7 @@ windowManager.createWindow = function(options) {
     w.close = function() {
         if (this.locker && this.parentNode) this.parentNode.removeChild(this.locker)
         this.parentNode.removeChild(this)
-        windowManager.activeWindow = 0
+        WM.activeWindow = 0
         if (typeof(w.onCloseHandler) == "function") {
             w.onCloseHandler()
         }
@@ -361,25 +360,25 @@ windowManager.createWindow = function(options) {
     w.windowTitle = options.title || options.title || ""
 
     w.className='wm-window'
-    w.innerHTML=windowManager.windowTemplate(w)
+    w.innerHTML=WM.windowTemplate(w)
     w.contentPane = w.getElementsByClassName("content-pane")[0]    
 
-    if (windowManager.activeWindow)  if (windowManager.activeWindow.modal) w.modal = true
+    if (WM.activeWindow)  if (WM.activeWindow.modal) w.modal = true
 
     //w.id=id
     w.addClass(w.cssClass)
     if (w.moveable) w.addClass('wm-moveable'); else w.addClass('wm-unmoveable')
     if (w.resizable) w.addClass('wm-resizable'); else w.addClass('wm-unresizable')
     w.setTitle(w.windowTitle)
-    w.place(windowManager.minLeft +windowManager.positionCounter * 30,windowManager.minTop +windowManager.positionCounter * 30,w.width,w.height)
+    w.place(WM.minLeft +WM.positionCounter * 30,WM.minTop +WM.positionCounter * 30,w.width,w.height)
 
-    windowManager.positionCounter++
-    if (windowManager.positionCounter > 8 ) windowManager.positionCounter = 0
+    WM.positionCounter++
+    if (WM.positionCounter > 8 ) WM.positionCounter = 0
     if (w.modal) {
         let locker = $div()
         locker.className="wm-locker"
 
-        locker.style.zIndex = ++windowManager.zIndex
+        locker.style.zIndex = ++WM.zIndex
         w.locker = locker
         document.body.appendChild(w.locker);    
     } else {
@@ -387,45 +386,42 @@ windowManager.createWindow = function(options) {
     }
     document.body.appendChild(w)
 
-    windowManager.currentWindow = w
+    WM.currentWindow = w
     if (0 || options.maximized) w.setMaximized(true) 
     if (options.src ) {
         w.setInnerContent('<iframe class="wm-iframe" style="border: none; overflow: auto;" src="'+ options.src +'">')
     } else if (options.content) {
         w.setInnerContent(options.content)
     }
-    windowManager.setFocusTo(w)
+    WM.setFocusTo(w)
     return w
 }
 
-windowManager.windowTemplate = function (w){
+WM.windowTemplate = function (w){
     let maxBtn = ""
-    if (w.resizable ) maxBtn=`<div class="wm-window-button" style="color: #00ff00;" onmousedown="_nort_WM.onWindowButton(this,&#39;max&#39;)">&#x2B24;&nbsp;</div>`
+    if (w.resizable ) maxBtn=`<div class="wm-window-button" style="color: #00ff00;" onmousedown="WM.onWindowButton(this,&#39;max&#39;)">&#x2B24;&nbsp;</div>`
 
     return `
-    <table cellpadding=0 cellspacing=0 onmouseover="this.fi=_nort_WM.delayedSetFocusTo(this);" onmouseout="window.clearTimeout(this.fi)" >
+    <table cellpadding=0 cellspacing=0 onmouseover="this.fi=WM.delayedSetFocusTo(this);" onmouseout="window.clearTimeout(this.fi)" >
     <tbody>
-    <tr><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;rnw&#39;)"></td><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;rn&#39;)"></td><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;rne&#39;)"></td></tr>
-    <tr><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;rw&#39;)"></td><td>
+    <tr><td onmousedown="WM.OnMouseDown(this,event,&#39;rnw&#39;)"></td><td onmousedown="WM.OnMouseDown(this,event,&#39;rn&#39;)"></td><td onmousedown="WM.OnMouseDown(this,event,&#39;rne&#39;)"></td></tr>
+    <tr><td onmousedown="WM.OnMouseDown(this,event,&#39;rw&#39;)"></td><td>
     <table>
-    <tr><td class="wm-title-bar"  onmousedown="_nort_WM.OnMouseDown(this,event,&#39;mv&#39;)"><div class="wm-title">Title bar</div>
-    <div class="wm-window-button" style="color: #ff4040;" onmousedown="_nort_WM.onWindowButton(this,&#39;close&#39;)">&#x2B24;</div>
+    <tr><td class="wm-title-bar"  onmousedown="WM.OnMouseDown(this,event,&#39;mv&#39;)"><div class="wm-title">Title bar</div>
+    <div class="wm-window-button" style="color: #ff4040;" onmousedown="WM.onWindowButton(this,&#39;close&#39;)">&#x2B24;</div>
     ${maxBtn}
     </td></tr>
     <tr><td class="content-pane" id="content"></td></tr>
     </table>
-    </td><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;re&#39;)"></td></tr>
-    <tr><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;rsw&#39;)"></td><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;rs&#39;)"><td onmousedown="_nort_WM.OnMouseDown(this,event,&#39;rse&#39;)"></td></tr>
+    </td><td onmousedown="WM.OnMouseDown(this,event,&#39;re&#39;)"></td></tr>
+    <tr><td onmousedown="WM.OnMouseDown(this,event,&#39;rsw&#39;)"></td><td onmousedown="WM.OnMouseDown(this,event,&#39;rs&#39;)"><td onmousedown="WM.OnMouseDown(this,event,&#39;rse&#39;)"></td></tr>
     </tbody>
     </table>
     `  
 }
 
-windowManager.start()
+WM.start()
 
 
-export function WM(){
-    // Returns the window manager
-    return windowManager
-}
+export function noexport(){}
 

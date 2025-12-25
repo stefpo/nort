@@ -1,10 +1,10 @@
 
-import * as elements from "../nort/nort-elements.js" 
-import * as components from "../nort/nort-components-form.js" 
-import * as grid from "../nort/nort-components-grid.js" 
-import * as http from "../nort/nort-http-client.js" 
-import * as i18n from "../nort/nort-i18n.js" 
-import * as modal from "../nort/nort-elements-modal.js" 
+import * as elements from "./nort/nort-elements.js" 
+import * as components from "./nort/nort-components-form.js" 
+import * as grid from "./nort/nort-components-grid.js" 
+import * as http from "./nort/nort-http-client.js" 
+import * as i18n from "./nort/nort-i18n.js" 
+import * as modal from "./nort/nort-elements-modal.js" 
 
 export class GridDemo extends components.Form {
     constructor(properties) {

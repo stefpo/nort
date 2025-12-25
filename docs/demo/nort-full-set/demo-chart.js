@@ -1,5 +1,5 @@
-import * as components from "../nort/nort-components-form.js" 
-import * as charts from "../nort/nort-elements-chart.js" 
+import * as components from "./nort/nort-components-form.js" 
+import * as charts from "./nort/nort-elements-chart.js" 
 
 export class GraphDemo extends components.Form {
     constructor(properties) {

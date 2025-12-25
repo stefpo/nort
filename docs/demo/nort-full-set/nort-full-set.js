@@ -5,10 +5,10 @@ import { GraphDemo } from "./demo-chart.js"
 import { ClientDemo } from "./demo-client.js"
 import { GridDemo } from "./demo-grid.js"
 
-import * as nort from "../nort/nort.js"
-import * as elements from "../nort/nort-elements.js"
-import * as tabs from "../nort/nort-elements-tabber.js"
-import * as i18n from "../nort/nort-i18n.js"
+import * as nort from "./nort/nort.js"
+import * as elements from "./nort/nort-elements.js"
+import * as tabs from "./nort/nort-elements-tabber.js"
+import * as i18n from "./nort/nort-i18n.js"
 
 
 class Application   {

@@ -1,10 +1,11 @@
-import * as elements from "../nort/nort-elements.js" 
-import * as elements2 from "../nort/nort-elements-menu.js" 
-import * as elements3 from "../nort/nort-elements-dropdown.js" 
-import * as calendar from "../nort/nort-elements-calendar.js" 
-import * as tabs from "../nort/nort-elements-tabber.js" 
-import * as components from "../nort/nort-components-form.js" 
-import * as modal from "../nort/nort-elements-modal.js" 
+import * as elements from "./nort/nort-elements.js" 
+import * as elements2 from "./nort/nort-elements-menu.js" 
+import * as elements3 from "./nort/nort-elements-dropdown.js" 
+import * as calendar from "./nort/nort-elements-calendar.js" 
+import * as tabs from "./nort/nort-elements-tabber.js" 
+import * as components from "./nort/nort-components-form.js" 
+import * as modal from "./nort/nort-elements-modal.js" 
+import { WM } from "./nort/nort-elements-windows.js"
 
 
 export class AssetForm extends components.Form {
@@ -64,7 +65,7 @@ export class AssetForm extends components.Form {
             ])
         }) 
 
-        this.fields.btn7.on("click", function () { WM.createWindow( { title: "Form in a window", resizable: 1, content: $div({style:"width: 850px;"},new AssetForm()) }).pack() }) 
+        this.fields.btn7.on("click", function () { WM().createWindow( { title: "Form in a window", resizable: 1, content: $div({style:"width: 850px;"},new AssetForm()) }).pack() }) 
 
         this.fields.browser.value = navigator.userAgent     
     }

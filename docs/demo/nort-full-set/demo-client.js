@@ -1,6 +1,6 @@
 
-import * as components from "../nort/nort-components-form.js" 
-import * as http from "../nort/nort-http-client.js" 
+import * as components from "./nort/nort-components-form.js" 
+import * as http from "./nort/nort-http-client.js" 
 
 export class ClientDemo extends components.Form {
     constructor(properties) {

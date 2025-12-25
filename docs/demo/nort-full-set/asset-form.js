@@ -1,10 +1,10 @@
-import * as elements from "../nort/nort-elements.js" 
-import * as elements2 from "../nort/nort-elements-menu.js" 
-import * as elements3 from "../nort/nort-elements-dropdown.js" 
-import * as calendar from "../nort/nort-elements-calendar.js" 
-import * as tabs from "../nort/nort-elements-tabber.js" 
-import * as components from "../nort/nort-components-form.js" 
-import * as modal from "../nort/nort-elements-modal.js" 
+import * as elements from "./nort/nort-elements.js" 
+import * as elements2 from "./nort/nort-elements-menu.js" 
+import * as elements3 from "./nort/nort-elements-dropdown.js" 
+import * as calendar from "./nort/nort-elements-calendar.js" 
+import * as tabs from "./nort/nort-elements-tabber.js" 
+import * as components from "./nort/nort-components-form.js" 
+import * as modal from "./nort/nort-elements-modal.js" 
 
 
 export class AssetForm extends components.Form {

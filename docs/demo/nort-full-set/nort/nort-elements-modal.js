@@ -5,7 +5,6 @@
 */
 
 import * as elements from "./nort-elements.js"
-import { WM } from "./nort-elements-windows.js"
 
 export function alert(s, timeout) {
     choiceBox("", s, [ {text: "OK"}], timeout)
@@ -32,7 +31,7 @@ export function choiceBox(title, msg, buttons, timeout) {
         }, timeout*1000)
     }
 
-    w = WM().createWindow( { title: title , resizable: false, maximizable: false, modal: true } )
+    w = WM.createWindow( { title: title , resizable: false, maximizable: false, modal: true } )
     w.setInnerContent (
             $div({class: "inform"},
             $div({}, $div({},msg)),

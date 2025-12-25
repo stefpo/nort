@@ -1,0 +1,564 @@
+
+html {
+    height: 100%; width: 100%;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    font-family: "Microsoft Sans Serif Regular", Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    color: black;
+    /* Disable text selection in the top window */ 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div.allow-selection{
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+} 
+
+h1, h2, h3, h4 {
+    color: #376680;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+input, select, textarea {
+    box-sizing: border-box; 
+    font-family: Arial, sans-serif;
+    font-size: 100%;
+    color: black;
+    padding: 6px;
+    background-color: #fafafa;
+    border: 1px solid #d0d0d0;  
+    border-bottom: 1px solid #c0c0c0;
+}
+
+textarea {
+    height: 4.5em;
+    width: 100%;
+    resize: none;
+}
+
+select {
+    appearance: none;  
+    border-radius: 0px;
+    -webkit-appearance: none;    
+    -webkit-border-radius: 0px; 
+    background-image: url(combobtn.gif);
+    background-position: right; background-repeat: no-repeat; 
+    padding-right: 20px; 
+}
+
+input:focus, select:focus {
+    outline: none;
+}
+
+option { 
+    background-color: white;
+    color: black;
+}
+
+input.required-field, select.required-field { border-bottom : 1px solid orange ;}
+input.missing-field, select.missing-field { border : 1px solid red ;}    
+
+input.type-float, input.type-int, input.type-uint,
+input.type-decimal,  input.type-decimal2,  input.type-decimal4 { text-align: right }
+
+button {
+    font-size: 90%;
+    border: 1px solid silver;
+    /* border-radius: 3px; */
+    color: #404040;
+    background-color: #f0f0f0;
+    margin: 0px;
+    padding: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    cursor: pointer;
+}
+
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+button:active {
+    background-color: #d0d0d0;
+}
+
+button:focus {
+    outline: none;
+}
+
+button[disabled] {
+    border-color: silver;
+    background-color: #f0f0f0;
+    color: gray;
+}
+
+button:active {
+    /* border-color: orange; */
+}
+
+button.main {
+    border-color: gray;
+    background-color: gray;
+    color: white;
+}
+
+button.main:active {
+    /* border-color: silver; */
+}
+
+
+a, .link { color : #165d79; text-decoration: none; }
+a:visited { color : #4d327e }
+a:hover, .link:hover { text-decoration: underline; cursor: pointer; }
+
+
+
+
+div.fieldBox { display: inline-block; 
+    width: 180px;
+    margin: 0px;
+    margin-bottom: 0.9em;
+}    
+
+div.fieldBox>label { 
+    display: block; 
+    width: 100%;
+    font-size: 85%;
+    font-weight: bold;
+    color: #606060;
+}   
+
+div.fieldBox>label.link { color : #165d79; }
+
+
+div.fieldBox>div {
+    width: 100%;
+}
+
+div.fieldBox>div>input, .fieldBox>div>select{
+    width: 100%;
+}
+
+div.fieldBox.size-1 { width: calc(180px *1 ) ; margin-right: 1em;}                  
+div.fieldBox.size-2 { width: calc(180px *2 + 1em) ; margin-right: 1em;}                  
+div.fieldBox.size-3 { width: calc(180px *3 + 2 * 1em) ; margin-right: 1em;}                  
+div.fieldBox.size-4 { width: calc(180px *4 + 3 * 1em) ; margin-right: 1em;}   
+
+div.fieldBox.size-1p4 { width: calc(25% ) ; padding-right: 1em; }                  
+div.fieldBox.size-2p4 { width: calc(50% ) ; padding-right: 1em; }                  
+div.fieldBox.size-3p4 { width: calc(75% ) ; padding-right: 1em; }                  
+div.fieldBox.size-4p4 { width: calc(100% ) ; padding-right: 1em; } 
+
+div.fieldBox.size-1p5 { width: calc(20% ) ; padding-right: 1em; }                  
+div.fieldBox.size-2p5 { width: calc(40% ) ; padding-right: 1em; }                  
+div.fieldBox.size-3p5 { width: calc(60% ) ; padding-right: 1em; }                  
+div.fieldBox.size-4p5 { width: calc(80% ) ; padding-right: 1em; } 
+div.fieldBox.size-5p5 { width: calc(100% ) ; padding-right: 1em; } 
+
+
+
+div.fieldBox.horizontal { 
+    display: inline-block; 
+    width: 360px;
+    margin-right: 1em;
+    margin-bottom: 0.9em;
+}    
+
+div.fieldBox.horizontal>label { 
+    display: inline-block; 
+    /* box-sizing: border-box; */
+    width: 150px;
+    font-size: 85%;
+    font-weight: bold;
+    color: #606060;
+    text-align: right;
+    padding-right: 8px;
+}    
+
+div.fieldBox.horizontal>div {
+    display: inline-block; 
+    width: calc(100% - 150px - 1em);
+}
+
+div.fieldBox.horizontal>div>input, .fieldBox>div>select{
+    width: 100%;
+}
+
+div.fieldBox.horizontal.size-1 { width: calc(360px *1 ) ; }                  
+div.fieldBox.horizontal.size-2 { width: calc(360px *2 + 1em) ; }                  
+div.fieldBox.horizontal.size-3 { width: calc(360px *3 + 2 * 1em) ; }                  
+div.fieldBox.horizontal.size-4 { width: calc(360px *4 + 3 * 1em) ; }                  
+
+
+
+
+div.locker {
+    position: fixed;
+    top: 0px; left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: silver;
+    opacity: 0;
+}
+
+div.inform {
+    min-width: 350px;
+    min-height: 150px;    
+
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    /*border: 2px solid #e0e0e0;*/
+}
+
+div.inform>div:first-child {
+    flex-grow: 1;
+    text-align: center;
+    padding: 20px;
+}
+
+div.inform>div:last-child {
+    text-align: center;
+    white-space: nowrap;
+    padding: 6px;
+    background-color: #e0e0e0;
+}
+
+div.form { 
+    background-color: white; 
+    padding: 0px;
+    height: 100%; 
+    width: 100%;
+    /* box-sizing: border-box; */ 
+}
+
+div.form>form {
+    height: 100%; 
+    width: 100%;
+}
+
+div.tabber {
+    display: flex;
+    width: 100%;
+    padding: 0px;
+    flex-flow: column; 
+    flex-grow: 1;
+    /* box-sizing: border-box; */
+    overflow: hidden;
+}
+
+div.tabber>div {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;  
+    /* box-sizing: border-box; */ 
+}
+
+div.tabber>div:first-child{
+    white-space: nowrap; 
+    width: 100%;
+}
+
+div.tabber>div:first-child>div{
+    white-space: nowrap;
+    display: inline-block;
+}
+
+div.tabberbutton {
+    display: inline-block;
+    color: gray;
+}
+
+
+div.tabber>div:first-child>div:nth-child(2){
+    display: inline-block;
+    border: 1px solid silver;
+    background-color: #f0f0f0; 
+    margin-top: 1px;
+    margin-right: 0px;  
+    width: 16px;   
+    position: relative;
+    visibility: visible;
+    text-align: center;
+    font-size: 90%;;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    cursor: pointer;
+}
+
+div.tabber>div:first-child>div:last-child{
+    display: inline-block;
+    border: 1px solid silver;
+    background-color: #f0f0f0; 
+    margin-top: 1px;
+    margin-left: 2px;     
+    width: 16px;
+    position: relative;
+    visibility: visible;
+    text-align: center;
+    font-size: 90%;;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    cursor: pointer;
+}
+
+div.tabber>div:first-child>div:first-child {
+    width: calc(100% - 38px);
+    position: relative;
+}
+
+div.tabber>div:first-child>div:first-child>div {
+    /* box-sizing: border-box; */ 
+    display: inline-block;
+    padding: 6px;
+    padding-right: 8px;
+    padding-left: 8px;
+    margin-top: 1px;
+    margin-right: 2px;;  
+    position: relative;
+    top: 1px;
+    cursor: pointer;
+    border-style: solid;
+    border-width: 1px;
+    border-color: silver;
+    background-color: #f0f0f0; 
+}
+
+div.tabber>div:first-child>div>div>button {
+    padding: 0px;
+    border:none;
+    position: relative;
+    top: -0.1em;
+}
+
+div.tabber>div:first-child>div>div.tabber-active {
+    display: inline-block;
+    margin-top: 0px;
+    padding-top: 1px;
+    border-top-color: orange;
+    border-bottom-color: white; 
+    background-color: white;
+    padding-top: calc( 6px + 1px);    
+}
+
+div.tabber>div:last-child {
+    flex-grow : 1;
+    align-self: stretch;
+    flex-shrink: 0 ;
+    flex-basis: 0;
+    overflow: auto;
+    /* box-sizing: border-box; */
+    border-style: solid; 
+    border-width: 1px;
+    border-color: silver; 
+    background-color: white;
+}
+
+div.tabber>div:last-child>div {
+    display: none;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    /* box-sizing: border-box; */ 
+    margin-bottom: -4px; 
+    padding-bottom: 4px; 
+}
+
+div.tabber-active{
+    display: inline-block !important;
+}
+
+div.scroll-pane {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin-bottom: 0px;
+    border: none;
+    overflow: auto;
+    /* box-sizing: border-box; */ 
+}
+
+
+div.calendar {  border: 1px solid silver; 
+    background-color: #f0f0f0; 
+    font-size: 100%;
+    color: black;
+    /* font-family: helvetica; font-size: 9pt; */
+    display: inline-block;
+    font-weight: normal;
+    cursor: pointer;
+    padding: 3px;
+    }
+
+div.calendar>div:first-child{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;   
+}
+
+div.calendar>div:first-child>div {
+    margin-left: 3px;
+}
+
+div.calendar>div:first-child>div:first-child {
+    margin-left: 0px;
+}
+
+div.calendar>div:first-child>div:nth-child(2){
+    flex-grow: 1;
+    text-align: center;
+    overflow: hidden;
+}
+
+div.calendar>div:first-child>div{
+}  
+
+div.hidden {
+    display: none;
+}
+            
+    
+div.calendar table { background-color: white; font-size: 95%; width: 100%; border-spacing: 0px; border-collapse: separate; font-weight: normal; border: none; }
+div.calendar table tr th { border-spacing: 1px; text-align: center; border: none; padding: 3px;} 
+div.calendar table tr td { border-spacing: 1px; text-align: center; border: 1px solid white; padding: 3px;}
+ div.calendar table tr td:hover {  border:1px solid silver; } 
+div.calendar table tr td.cal-today {  border:1px solid blue; }
+
+input.calendar { background-image: url(calbtn.gif); 
+     background-position: right; background-repeat: no-repeat; 
+     cursor: default;
+     padding-right: 20px; }
+                    
+input.calendar:focus { cursor: text; } 
+
+input.combobox { background-image: url(combobtn.gif); 
+    background-position: right; background-repeat: no-repeat; 
+    cursor: default;
+    padding-right: 20px; }
+                   
+input.combobox:focus { cursor: text; } 
+
+input.search { 
+    background-image: url(magnifying-glass.png); 
+    background-position-x: 8px; 
+    background-position-y: center; 
+    background-repeat: no-repeat; 
+    cursor: default;
+    padding-left: 25px; }
+
+div.nort-grid>table{ 
+    border: none;
+    border-collapse: collapse;
+    min-width: 100%;
+    border-spacing: 0px;
+}
+
+div.nort-grid>table th{ 
+    background-color: #f0f0f0;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    font-size: 90%;
+    color: #606060;
+    white-space: nowrap;
+}
+
+
+div.nort-grid input, div.nort-grid select{
+    background-color: white;
+    border: none;
+    padding: 2px;
+    white-space: nowrap;
+}
+
+div.nort-grid>table tr:hover{ 
+    background-color: #f0f0ff;
+}
+
+div.nort-grid>table td{ 
+    margin: 0px;
+    font-size: 90%;;
+    border-bottom: 1px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+}
+
+div.nort-grid>table td:hover{ 
+    background-color: #e0e0f0;
+}
+
+
+div.nort-grid.fix-first-col>table th:first-child{ 
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #f0f0f0;
+    z-index:3;
+}
+
+div.nort-grid.fix-first-col>table td:first-child{ 
+    position: sticky;
+    left: 0;
+    background-color: #f0f0f0;
+}
+
+div.nort-grid>table td>div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;    
+    display: inline-block;
+    padding: 4px;
+}
+
+div.nort-grid>table th>div {
+    width: 100%;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;       
+}
+
+div.nort-grid>table th>div>div:first-child {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding:4px;
+    flex-grow: 1;
+}
+
+div.nort-grid>table th>div>div.colsep {
+    width: 2px !important;
+    min-width: 2px;
+    background-color: white;
+    align-self: stretch;
+}
+
+div.nort-grid div.colsep:hover {
+    cursor:col-resize;
+}
+
+.valign-top { vertical-align: top;}
+.valign-middle { vertical-align:middle;}
+.valign-bottom { vertical-align:bottom;}
+

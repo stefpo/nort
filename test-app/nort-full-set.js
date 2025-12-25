@@ -46,7 +46,11 @@ class Application   {
 
     render() {
         return  elements.scrollPane({style: 'padding: 20px; display: flex; flex-direction:column; max-width: 1024px; margin:auto;'}, 
-        $div ({style: "display: flex; "}, $img({src:"css/nort-logo.png",style:"align-self: center;"} ), $h2({style:"align-self: center;"}," Nort full set demo") ),
+        $div({ style: "display: flex; width: 100%; justify-content: space-between;"},
+            $div ({style: "display: flex;"}, $img({src:"css/nort-logo.png",style:"align-self: center;"} ), 
+                $h2({style:"align-self: center;"}," Nort full set demo") ),
+                $div({style:"align-self: center;"}, $a({ href: "nort/apidoc.html", "target": "_blank"}, "See API documentation"))
+            ),
         tabs.tabber({ style: "flex-grow:1"}, [
                 { label: "A form",  page: this.f1 } ,
                 { label: "Another form",  page: this.f2 },

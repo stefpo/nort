@@ -1,7 +1,7 @@
 
 // First you need to import the Nort library. 
 // This will also initialize the framework.
-import * as nort from "../nort/nort.js"
+import * as nort from "./nort/nort.js"
 
 export class Application {
     init() {

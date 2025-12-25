@@ -1,0 +1,132 @@
+/*!
+ * NORT web UI component library
+ * Copyright(c) 2019-2020 Stephane Potelle 
+ * MIT Licensed
+*/
+
+import * as nort from "./nort.js"
+import { Locale } from "./nort-i18n-dates.js"
+
+let translations = []
+
+export function setTranslation(translationTable) {
+    translations = translationTable
+}
+
+export function getBrowserLanguage () {
+    let lang = window.navigator.languages ? window.navigator.languages[0] : null;
+    lang = lang || window.navigator.language || window.navigator.browserLanguage || window.navigator.userLanguage;
+    lang = lang.substring(0,5)
+    return lang
+}
+
+export function makeTranslatable(s) {
+    return "[" + s + "]"
+}
+
+export function translate(s) {
+    let re = /\[([a-z]|[0-9]|[_ .])*\]/i
+    let match=re.exec(s)
+    let istr = s
+    let b = []
+
+    function getTr(tid) {
+        let lang5 = getBrowserLanguage().substring(0,5)
+        let lang2 = lang5.substring(0,2)
+        let key = tid.substring(1,tid.length-1)
+        let kp = key.split(".")
+
+        let item 
+        let area
+        if (kp.length == 2) { 
+            area= kp[0] 
+            item = kp[1]
+        } else {
+            area = 'general'
+            item = key
+        }
+
+        if (nort && translations ) {
+            if (translations[lang5] && translations[lang5][area] && translations[lang5][area][item]) return translations[lang5][area][item]
+            else if (translations[lang2] && translations[lang2][area] && translations[lang2][area][item]) return translations[lang2][area][item]
+            else if (translations.default && translations.default[area] && translations.default[area][item]) return translations.default[area][item]
+        }
+
+        return pc(key)
+    }
+
+    function pc(tid) {
+        return tid.substr(0,1).toUpperCase() + tid.substr(1).toLowerCase().replace(/[_]/g," ")
+    }
+    let depth=0
+    while (re.test(istr) && depth < 5 ) {
+        b=[]
+        while (match = re.exec(istr) ) {
+            let prefix = istr.substring(0,match.index)
+            let tid = match[0].toLowerCase()
+            b.push(prefix)
+            b.push(getTr(tid))
+            istr = istr.substring(match.index+tid.length)
+        }
+        b.push(istr)
+        istr = b.join("")
+        depth++
+    }
+    return istr
+}
+
+export function translateX(key) {
+    if (key.startsWith("[") && key.endsWith("]")) {
+        key = key.substring(1,key.length-1).toLowerCase()
+        let kp = key.split(".")
+        let item
+        let area
+        if (kp.length == 2) { 
+            area= kp[0] 
+            item = kp[1]
+        } else {
+            area = 'general'
+            item = key
+        }
+
+        let lang5 = getBrowserLanguage().substring(0,5)
+        let lang2 = lang5[0,2]
+
+        if (translations[lang5] && translations[lang5][area] && translations[lang5][area][item]) return translations[lang5][area][item]
+        else if (translations[lang2] && translations[lang2][area] && translations[lang2][area][item]) return translations[lang2][area][item]
+        else if (translations.default && translations.default[area] && translations.default[area][item]) return translations.default[area][item]
+
+        let out = []
+        let ucase = true
+        for (let i=0; i< item.length; i++ ) {
+            let c = item.substring(i,i+1)
+            if ( c=='_') {
+                out.push(' ')
+                ucase = true
+            } else {
+                if (ucase) out.push(c.toUpperCase())
+                else out.push(c)
+                ucase = false
+            }
+        }
+        return out.join('')
+    } else {
+        return key
+    }
+}
+
+export var currentLocale
+
+export function setLocale(lang) {
+   currentLocale = new Locale(lang)
+}
+
+export function dateToString(d) {
+   return currentLocale.dateToString(d)
+}
+
+export function stringToDate(d) {
+   return currentLocale.stringToDate(d)
+}
+
+setLocale(getBrowserLanguage())
