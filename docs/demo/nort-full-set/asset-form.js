@@ -5,7 +5,7 @@ import * as calendar from "./nort/nort-elements-calendar.js"
 import * as tabs from "./nort/nort-elements-tabber.js" 
 import * as components from "./nort/nort-components-form.js" 
 import * as modal from "./nort/nort-elements-modal.js" 
-import { WM } from "./nort/nort-elements-windows.js"
+import * as WM from "./nort/nort-elements-windows.js"
 
 
 export class AssetForm extends components.Form {

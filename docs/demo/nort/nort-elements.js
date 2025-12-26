@@ -8,6 +8,7 @@ import * as dom from "./nort-dom.js"
 import * as i18n from "./nort-i18n.js"
 
 export function bindFieldMethods(e) {
+    // Add a set of nort methods to HTMLElement e
     e.validationErrorMsg = ""
 
     e.setRendered = function(b) { 
@@ -53,6 +54,7 @@ export function bindFieldMethods(e) {
 }
 
 export function textBox(attributes) {
+    // Returns a nort-improved text input element.
     let e= bindFieldMethods(dom.createElement("input", {type: "text", "nort-element":"textbox"}, [attributes])) 
     
 
@@ -110,6 +112,7 @@ export function textBox(attributes) {
 }
 
 export function textarea(attributes) {
+    // Returns a nort-improved textarea element.
     let e= bindFieldMethods(dom.createElement("textarea", {type: "text", "nort-element":"textbox"}, [attributes])) 
 
     let fieldValue = ""
@@ -147,6 +150,7 @@ export function textarea(attributes) {
 }
 
 export function passwordBox(attributes) {
+    // Returns a nort-improved password input element.
     let e = bindFieldMethods(dom.createElement("input", {type: "password", "nort-element":"textbox"}, [attributes])) 
 
     e.setValue = function(v) {
@@ -164,6 +168,7 @@ export function passwordBox(attributes) {
 
 
 export function checkBox(attributes) {
+    // Returns a nort-improved checkbox element.
     let e = bindFieldMethods(dom.createElement("input", {type: "checkbox", "nort-element":"checkbox"}, [attributes])) 
 
     e.isValid = function() {
@@ -183,6 +188,7 @@ export function checkBox(attributes) {
 }
 
 export function button(attributes) { 
+    // Returns a nort-improved button element.
     let e =  bindFieldMethods( dom.createElement( "button" , { "nort-element" : "button"}, arguments)  ) 
 
     e.setText = function(s) {
@@ -193,7 +199,7 @@ export function button(attributes) {
 
 
 export function select(attributes, optionList) {
- 
+    // Returns a nort-improved select element.
     let fieldValue = ""
 
     if (! attributes) attributes = {}
@@ -293,6 +299,7 @@ export function select(attributes, optionList) {
 }
 
 export function fieldBox(attributes, fieldElement) { 
+    // Returns fieldElement boxed with translated field name as field label.
     let css = attributes.class || ""
     let label
     if ( attributes["n-label"] ) label = attributes["n-label"]    
@@ -320,7 +327,7 @@ export function fieldBox(attributes, fieldElement) {
 }
 
 export function scrollPane() {
-        return dom.createElement("div", { class: "scroll-pane", "nort-element":"scrollPane"}, arguments )
+    return dom.createElement("div", { class: "scroll-pane", "nort-element":"scrollPane"}, arguments )
 }
 
 export function popup(contentElement) {

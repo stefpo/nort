@@ -420,12 +420,10 @@ let windowManager = {
     }
 }
 
-export class WM {
-    // Returns the window manager
-
-    static createWindow(options) {
-        let wm = windowManager.start()
-        return wm.createWindow(options)
-    }
+export function createWindow(options) {
+    // Creates a new window and returns the top div HTMLelement.
+    // "options" is an object with the following optional properties:  title string, resizable bool, maximizable bool, modal bool
+    let wm = windowManager.start()
+    return wm.createWindow(options)
 }
 

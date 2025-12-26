@@ -5,13 +5,20 @@
 */
 
 import * as elements from "./nort-elements.js"
-import { WM } from "./nort-elements-windows.js"
+import * as WM from "./nort-elements-windows.js"
 
 export function alert(s, timeout) {
+    // Opens a modal alert window with a single "OK" button.
+    // When timeout expires, the window closes automatically.
     choiceBox("", s, [ {text: "OK"}], timeout)
 }
 
 export function choiceBox(title, msg, buttons, timeout) {
+    // Opens a modal window with multiple choice buttons.
+    // title: Window title;
+    // msg: a text prompt to be displayed in the window;
+    // buttons: an array of objects { text, callback };
+    // timeout: optional time limit before the window closes automatically.
     let btns = []
     let w
     let firstBtn = null

@@ -9,15 +9,22 @@ import { Locale } from "./nort-i18n-dates.js"
 
 let translations = []
 
-export function setTranslation(translationTable) {
-    translations = translationTable
+export function setLocale(lang) {
+    // Sets application locale (Language + country)
+    currentLocale = new Locale(lang)
 }
 
 export function getBrowserLanguage () {
+    // Returns the browser configured locale id. 
     let lang = window.navigator.languages ? window.navigator.languages[0] : null;
     lang = lang || window.navigator.language || window.navigator.browserLanguage || window.navigator.userLanguage;
     lang = lang.substring(0,5)
     return lang
+}
+
+export function setTranslation(translationTable) {
+    // Sets the translation table for use by translate()
+    translations = translationTable
 }
 
 export function makeTranslatable(s) {
@@ -25,6 +32,7 @@ export function makeTranslatable(s) {
 }
 
 export function translate(s) {
+    // Returns a translated version of s using the previously loaded translation table 
     let re = /\[([a-z]|[0-9]|[_ .])*\]/i
     let match=re.exec(s)
     let istr = s
@@ -75,58 +83,16 @@ export function translate(s) {
     return istr
 }
 
-export function translateX(key) {
-    if (key.startsWith("[") && key.endsWith("]")) {
-        key = key.substring(1,key.length-1).toLowerCase()
-        let kp = key.split(".")
-        let item
-        let area
-        if (kp.length == 2) { 
-            area= kp[0] 
-            item = kp[1]
-        } else {
-            area = 'general'
-            item = key
-        }
-
-        let lang5 = getBrowserLanguage().substring(0,5)
-        let lang2 = lang5[0,2]
-
-        if (translations[lang5] && translations[lang5][area] && translations[lang5][area][item]) return translations[lang5][area][item]
-        else if (translations[lang2] && translations[lang2][area] && translations[lang2][area][item]) return translations[lang2][area][item]
-        else if (translations.default && translations.default[area] && translations.default[area][item]) return translations.default[area][item]
-
-        let out = []
-        let ucase = true
-        for (let i=0; i< item.length; i++ ) {
-            let c = item.substring(i,i+1)
-            if ( c=='_') {
-                out.push(' ')
-                ucase = true
-            } else {
-                if (ucase) out.push(c.toUpperCase())
-                else out.push(c)
-                ucase = false
-            }
-        }
-        return out.join('')
-    } else {
-        return key
-    }
-}
-
 export var currentLocale
 
-export function setLocale(lang) {
-   currentLocale = new Locale(lang)
-}
-
 export function dateToString(d) {
-   return currentLocale.dateToString(d)
+    // Returns a string representation of a date using current locale
+    return currentLocale.dateToString(d)
 }
 
-export function stringToDate(d) {
-   return currentLocale.stringToDate(d)
+export function stringToDate(str) {
+    // Converts str to a date object using locale date format. 
+   return currentLocale.stringToDate(str)
 }
 
 setLocale(getBrowserLanguage())
