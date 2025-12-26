@@ -65,7 +65,7 @@ export class AssetForm extends components.Form {
             ])
         }) 
 
-        this.fields.btn7.on("click", function () { WM().createWindow( { title: "Form in a window", resizable: 1, content: $div({style:"width: 850px;"},new AssetForm()) }).pack() }) 
+        this.fields.btn7.on("click", function () { WM.createWindow( { title: "Form in a window", resizable: 1, content: $div({style:"width: 850px;"},new AssetForm()) }).pack() }) 
 
         this.fields.browser.value = navigator.userAgent     
     }

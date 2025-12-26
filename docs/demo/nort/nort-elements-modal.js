@@ -32,7 +32,7 @@ export function choiceBox(title, msg, buttons, timeout) {
         }, timeout*1000)
     }
 
-    w = WM().createWindow( { title: title , resizable: false, maximizable: false, modal: true } )
+    w = WM.createWindow( { title: title , resizable: false, maximizable: false, modal: true } )
     w.setInnerContent (
             $div({class: "inform"},
             $div({}, $div({},msg)),
