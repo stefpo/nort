@@ -37,23 +37,19 @@
 
                     
                 </ul>
-                <h2>Options for getting NORT library</h2>
-                <p>If you are doing development and do not want to worry about installing NORT, 
-                    you may just include the scripts from github. Simply add the following to 
-                    your main page HEAD section:
-                </p>
-                <pre><code class="html">
-    &lt;script src=&quot;https://stefpo.github.io/nort/nort/nort.js&quot;&gt;&lt;/script&gt;
-                </code></pre>
-                <p>For production, it is better to get a static version of NORT, and add it to
+                <h2>Including the NORT library</h2>
+                <p>NORT is fully compliant with ECMAscript 2020 modules.</p>
+                <p>The best method is to get a static version of NORT, and add it to
                     your application assets. You can download it from <a href="https://stefpo.github.io/nort/dist/nort.tgz">
                     https://stefpo.github.io/nort/dist/nort.tgz</a> or <a href="https://stefpo.github.io/nort/dist/nort.zip">
                         https://stefpo.github.io/nort/dist/nort.zip</a><br>
-                    You can then include it in your app.
-                </p>
-                <pre><code class="html">
-    &lt;script src=&quot;./nort/nort.js&quot;&gt;&lt;/script&gt;
+                    You can then import it in your application code.
+                </p>                
+
+                <pre><code class="javascript">
+    import * as nort from "./nort/nort.js"
                 </code></pre>
+                <p>Make sure you also import the other modules you needs. (See <a href="demo/nort-full-set/nort/apidoc.html" target="nort-doc">API</a>)</p>
                 <div class="docnav-panel">
                     <a class="green-button" href="tutorial.html">Back to "NORT tutorial"</a>
                     <a class="green-button" href="tutorial2.html">Next to "Your first application"</a>

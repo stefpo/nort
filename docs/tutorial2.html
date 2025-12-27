@@ -26,57 +26,60 @@
                 index.html:
                 <pre><code class="html">
     &lt;!DOCTYPE html&gt;
-    &lt;html style=&quot;height: 100%&quot;&gt;
-    
+    &lt;html&gt;
+
     &lt;head&gt;
-    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+    &lt;meta http-equiv="content-type" content="text/html; charset=UTF-8"&gt;
     &lt;meta name='viewport' content='target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' /&gt;
-    
-    &lt;title&gt;Your first application&lt;/title&gt;
-    
-    &lt;script src=&quot;https://stefpo.github.io/nort/nort/nort.js&quot;&gt;&lt;/script&gt;
-    &lt;script&gt;loadStyleSheet(&quot;./style.css&quot;)&lt;/script&gt;
-    &lt;script&gt;
-        loadJS(&quot;./appcode.js&quot;)
-    
-    &lt;/script&gt;
+
+    &lt;title&gt;NORT full component set demo&lt;/title&gt;
+
+    &lt;!-- Simply import your application main module --&gt;
+    &lt;script type="module" src="./appcode.js"&gt;&lt;/script&gt;
+
     &lt;/head&gt;
     &lt;/html&gt;
                 </code></pre>
                 <p>You then need an application main code.</p>
                 appcode.js:
                 <pre><code class="javascript">
-    // You can write your application initialization code.
-    function initializeMyApplication() {
-        // Do something
-    }
 
-    // This is the entry point of your application
-    nort.main = function() {                    
-        initializeMyApplication()
+    // First you need to import the Nort library. 
+    // This will also initialize the framework.
+    import * as nort from "./nort/nort.js"
 
-        // You need to render something.
-        nort.render(
-            $div({ style: "padding: 30px"},
+    export class Application {
+        init() {
+            // Place here your pre-rendering initialization code
+        }
+
+        render() {
+            // This is your page layout.
+            return $div({ style: "padding: 30px"},
                 [
                 $h1({ style: "color: red"}, "Your first NORT application" ),
                 $p({}, "Some text here" )
-                ])
-        )
+                ]) 
+        }
+
+        activate() {
+            // Place here your post-rendering initialization code
+        }                        
     }
+
+    // This will add Nort default look and feel to your page
+    nort.useDefaultStyleSheets() 
+    // Don't forget to render your application
+    nort.render( new Application() ) 
+                </code></pre>
                     
                 </code></pre>
                 <h3>The code explained</h3>
                 <h4>In the HTML file</h4>
-                <p>To load a NORT application into your page, you need to:</p>
-                <ul>
-                    <li>Load the NORT library. It is best to do it in the HEAD section of your page.</li>
-                    <li>Load you application code. Note your pages does not even need a BODY section</li>                 </li>
-                </ul>
+                <p>To load a NORT application into your page, simply need to import the appcode.js file</p>
                 <h4>The Javascript code</h4>
-                <p>After loading the page, the browser will run the function <b>nort.main()</b>. 
-                    This function is your application entry point. You may perform any initialization here.
-                    After that, your are ready to render your first UI, by calling <b>nort.render()</b>.
+                <p>While importing appcode.js, the Application class will be instanciated then the call to <b>nort.render()</b> causes the 
+                    application to be displayed.
                 </p>
                 <p><b>nort.render( element, target)</b> appends the <b>element</b> to the <b>target</b> element.
                     When no target is specified, the element is inserted at the root of the document.</p>
