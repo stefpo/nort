@@ -193,7 +193,8 @@ let windowManager = {
 
             })
             windowManager.started = true
-            window._nort_WM=windowManager        
+            window._nort_WM=windowManager   
+            window.WM = windowManager     
         }
 
         return(this)
@@ -423,7 +424,15 @@ let windowManager = {
 export function createWindow(options) {
     // Creates a new window and returns the top div HTMLelement.
     // "options" is an object with the following optional properties:  title string, resizable bool, maximizable bool, modal bool
-    let wm = windowManager.start()
-    return wm.createWindow(options)
+    return windowManager.createWindow(options)
 }
 
+export function getWindowElement(elt) {
+    return windowManager.getWindowElement(elt)
+}
+
+export function getTabberElement(elt) {
+    return windowManager.getTabberElement(elt)
+}
+
+windowManager.start()

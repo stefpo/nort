@@ -50,26 +50,6 @@ export class Grid extends Component{
         }
     }
 
-    /*
-    refreshData(o, tabledef) {
-        if (this.dataLoadedOnce ) {
-            this.data = o
-
-            this.loadGroupValues() 
-            for ( let c in this.columns ) {
-                let e
-                let col = this.columns[c]
-                if ( e = col.filterElement) {
-                    e.setOptions(this.getFilterOptions(col.groupValues, col.transformFunc))
-                } 
-            }
-
-            this.applyFilters()
-        } else {
-            this.setData(o, tabledef)           
-        }
-    }*/
-
     loadGroupValues() {
         for ( let c in this.columns ) {
             let col = this.columns[c]
@@ -142,50 +122,59 @@ export class Grid extends Component{
 
     applyFilters() {
         let me = this
-        document.body.style.cursor = "hourglass"
+        document.body.style.cursor = "progress"
         setTimeout( function() {me.applyFiltersReal()},50 )
     }
 
     applyFiltersReal() {
         let me = this
-        
+        let filters = {}
+
+        for( let c in me.columns) {
+            if (this.columns[c].visible) {
+                let v = String(this.columns[c].filter.getValue() || "").toUpperCase() 
+                if (v != "" ) {
+                    filters[c] = {
+                        tagName: this.columns[c].filter.tagName,
+                        value: v
+                    }
+                }
+            } 
+        }
+
+        this.fullTextSearch = this.fullTextSearch.toUpperCase()
 
         for( let r of me.data) {
             r._visible = true
             r._checked = false
             if ( this.fullTextSearch != "") {
-                r._visible  = false
+                r._visible = false
                 for( let c in me.columns) {
-                    if ( !r._visible && (""+r[c]).toUpperCase().includes(this.fullTextSearch.toUpperCase() )) {
+                    if ( String(r[c]).toUpperCase().includes(this.fullTextSearch)) {
                         r._visible = true
+                        break
+                    }
+                }
+            } 
+
+            for( let c in filters) {
+                if (this.columns[c].visible && filters[c].value!= ""){
+                    if (filters[c]=="SELECT") {
+                        if ( (String(r[c])).toUpperCase() != filters[c].value) {
+                            r._visible = false      
+                            break              
+                        }
+                    } else {
+                        if (! (String(r[c])).toUpperCase().includes(filters[c].value)) {
+                            r._visible = false      
+                            break              
+                        }
                     }
                 }
             }
         }            
-        for( let c in me.columns) {
-            if (this.columns[c].visible) {
-                let fltr = this.columns[c].filter
-                let fv = fltr.getValue()
 
-                let selected = false
-                if (fv !="" ) {
-                    if (fltr.tagName=="SELECT") {
-                        for( let r=0; r < me.data.length; r++) { 
-                            if (fv != me.data[r][c]) {
-                                this.data[r]._visible = false
-                            } 
-                        }
-                    } else {
-                        for( let r=0; r < me.data.length; r++) { 
-                                if (! (""+me.data[r][c]).toUpperCase().includes(fv.toUpperCase())) {
-                                this.data[r]._visible = false
-                            } 
-                        }
-                    }
-                }
-            }
-        }
-        this.sortData()
+        //this.sortData()
         
         let newBody = this.renderBody()
         this.table.replaceChild(newBody, this.tbody )
@@ -197,7 +186,7 @@ export class Grid extends Component{
 
     sort(column) {
         let me = this
-        document.body.style.cursor = "hourglass"
+        document.body.style.cursor = "progress"
         setTimeout( function() {me.sortReal(column)},50 )
     }    
 
@@ -252,7 +241,6 @@ export class Grid extends Component{
         for (let i=0; i<values.length; i++) {
             options[values[i]] = transformFunc(values[i], true)
         }
-        //console.log(JSON.stringify(options))
         return options
     }
 
@@ -386,7 +374,7 @@ export class Grid extends Component{
                         f.setValue("")
                     } else {
                         f = elements.textBox({style: `display: block; width: 100%`, autocomplete: "off" } )
-                        f.onchange = function() { me.applyFilters() }
+                        f.on("keydown", function(event) { if (event.key === 'Enter') me.applyFilters() } )
                         f.setValue("")
                     }
                     col.filter=f
@@ -454,7 +442,7 @@ export class Grid extends Component{
 
             this.tbody = this.renderBody()
             this.table = $table({style: "table-layout: fixed"}, thead, this.tbody )
-            document.body.style.cursor = "default"
+            document.body.style.cursor = ""
 
             // This must be call once synchronous rendering is complete
             setTimeout( captureInitialColumnWidths , 0 ) 

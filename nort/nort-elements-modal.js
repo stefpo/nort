@@ -5,7 +5,6 @@
 */
 
 import * as elements from "./nort-elements.js"
-import * as WM from "./nort-elements-windows.js"
 
 export function alert(s, timeout) {
     // Opens a modal alert window with a single "OK" button.
