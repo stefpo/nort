@@ -247,8 +247,8 @@ export class Grid extends Component{
     getColumnHeader(c) {
         let postfix = ""
         if (c === this.sortColumn) postfix = this.sortDescending ? " \u25b4" : " \u25be"
-        if (c.headerTransformFunc) return i18n.translate(c.headerTransformFunc(c.name)) + postfix
-        else return i18n.translate( c.name )+ postfix
+        if (c.headerTransformFunc) return c.headerTransformFunc(c.name) + postfix
+        else return i18n.translate( i18n.makeTranslatable(c.name) )+ postfix
     }
 
     firecheckboxEvent() {
@@ -384,7 +384,6 @@ export class Grid extends Component{
                 let hc 
                 let colsep
                 col.labelElement = $label({},this.getColumnHeader(col) ).on("click", function(evt) { me.sort(col)} )
-                // row.push($th({}, col.labelElement , f, $div({style: `display: block; min-width: ${col.maxColTextLength*.6}em`})))
                 row.push( $th({}, $div({}, hc = $div({},col.labelElement,f), colsep=$div({class: "colsep"}))))
 
                 let ix = this.headerCellDivs.length

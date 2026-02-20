@@ -33,7 +33,7 @@ export function makeTranslatable(s) {
 
 export function translate(s) {
     // Returns a translated version of s using the previously loaded translation table 
-    let re = /\[([a-z]|[0-9]|[_ .])*\]/i
+    let re = /\[((?:[a-z]|[0-9]|[_ .])*)\]/i
     let match=re.exec(s)
     let istr = s
     let b = []
@@ -54,7 +54,7 @@ export function translate(s) {
             item = key
         }
 
-        if (nort && translations ) {
+        if (translations ) {
             if (translations[lang5] && translations[lang5][area] && translations[lang5][area][item]) return translations[lang5][area][item]
             else if (translations[lang2] && translations[lang2][area] && translations[lang2][area][item]) return translations[lang2][area][item]
             else if (translations.default && translations.default[area] && translations.default[area][item]) return translations.default[area][item]
@@ -66,6 +66,7 @@ export function translate(s) {
     function pc(tid) {
         return tid.substr(0,1).toUpperCase() + tid.substr(1).toLowerCase().replace(/[_]/g," ")
     }
+
     let depth=0
     while (re.test(istr) && depth < 5 ) {
         b=[]
