@@ -53,7 +53,7 @@ export function loadStyleSheet(cssFileName) {
     // Loads a style sheet for your nort application (Assuming it was not done using the application HTML file)
     // cssFileName should be a relative path from your HTML page (starting with "./") or a cssFileName found in Nort css folder.
     let src
-    if (cssFileName.startsWith("./") || /http[s]{0,1}\:\/\//.test() ) {
+    if (cssFileName.startsWith("./") || /https?:\/\//.test(cssFileName) ) {
         src = `${cssFileName}?version=${version.info.version}`
     } else {
         let appDir=new URL( window.location.href).pathname 
@@ -117,4 +117,3 @@ import {}  from "./nort-elements-chart.js"
 import {}  from "./nort-elements-dropdown.js"
 import {}  from "./nort-elements-calendar.js"
 import {}  from "./nort-elements-modal.js"
-
